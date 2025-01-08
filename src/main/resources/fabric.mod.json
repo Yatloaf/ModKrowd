@@ -1,0 +1,38 @@
+{
+	"schemaVersion": 1,
+	"id": "modkrowd",
+	"version": "${version}",
+	"name": "ModKrowd",
+	"description": "Overengineered for CubeKrowd!",
+	"authors": [
+		"Yatloaf"
+	],
+	"contact": {
+	},
+	"license": "LGPL-3.0-only",
+	"icon": "assets/modkrowd/icon.png",
+	"environment": "client",
+	"entrypoints": {
+		"client": [
+			"dev.yatloaf.modkrowd.ModKrowd"
+		],
+		"modmenu": [
+			"dev.yatloaf.modkrowd.config.ModMenuIntegration"
+		]
+	},
+	"mixins": [
+		"modkrowd.mixins.json"
+	],
+	"depends": {
+		"fabricloader": ">=0.14.22",
+		"minecraft": "~1.21",
+		"java": ">=21",
+		"fabric-api": "*"
+	},
+	"suggests": {
+		"modmenu": "*"
+	},
+	"breaks": {
+		"betterpingdisplay": "*"
+	}
+}
