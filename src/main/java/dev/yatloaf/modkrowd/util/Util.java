@@ -63,6 +63,7 @@ public final class Util {
         return Arrays.stream(arr).collect(Collectors.toMap(keyMapper, valueMapper));
     }
 
+    @Deprecated(forRemoval = true, since = "0.1.1")
     public static SemanticVersion constVersion(String s) {
         try {
             return SemanticVersion.parse(s);
