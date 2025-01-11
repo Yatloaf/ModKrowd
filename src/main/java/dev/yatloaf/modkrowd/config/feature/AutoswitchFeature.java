@@ -19,6 +19,8 @@ import net.minecraft.text.Text;
 import net.minecraft.util.JsonHelper;
 
 public class AutoswitchFeature extends Feature {
+    public static final int MAX_DELAY = 280; // 14 seconds
+
     public final Text delayName;
     public final Tooltip delayTooltip;
 
@@ -47,6 +49,7 @@ public class AutoswitchFeature extends Feature {
                         this.delayName,
                         this.delayTooltip,
                         this.delay,
+                        MAX_DELAY,
                         () -> this.delay,
                         value -> this.delay = value
                 )

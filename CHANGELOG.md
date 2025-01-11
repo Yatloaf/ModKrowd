@@ -5,6 +5,7 @@
 ### Fixed
 
 - Wrong allowed predicates for Uninvisibility.
+- No upper bound on Autoswitch delay.
 
 ## 0.1.0: 2025-01-08
 
