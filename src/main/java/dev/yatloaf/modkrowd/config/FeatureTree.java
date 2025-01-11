@@ -93,7 +93,7 @@ public class FeatureTree {
     // ----------------
 
     public final Feature UNINVISIBILITY = this.CREATIVE.feature(new Feature(
-            "anti_invisibility", PredicateIndex.TERNARY_CK
+            "anti_invisibility", PredicateIndex.BINARY_CR
     ));
     public final BlockCutoutFeature TANGIBLE_BARRIERS = this.CREATIVE.feature(new BlockCutoutFeature(
             "tangible_barrier", PredicateIndex.BINARY_CR,
