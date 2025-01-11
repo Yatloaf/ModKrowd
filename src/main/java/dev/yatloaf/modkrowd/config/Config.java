@@ -13,7 +13,6 @@ import dev.yatloaf.modkrowd.config.exception.UnsupportedVersionConfigException;
 import dev.yatloaf.modkrowd.config.exception.WriteConfigException;
 import dev.yatloaf.modkrowd.config.feature.Feature;
 import net.fabricmc.loader.api.SemanticVersion;
-import net.fabricmc.loader.api.Version;
 import net.fabricmc.loader.api.VersionParsingException;
 import net.minecraft.util.JsonHelper;
 
@@ -48,8 +47,10 @@ public class Config extends FeatureTree {
             JsonObject root = JsonParser.parseReader(jsonReader).getAsJsonObject();
 
             SemanticVersion version = getSemanticVersion(root, "version");
-            if (version.compareTo((Version) ModKrowd.VERSION) > 0) {
-                throw new UnsupportedVersionConfigException("Expected version %s or lower, found %s".formatted(ModKrowd.VERSION, version.getFriendlyString()));
+            if (version.compareTo(ModKrowd.VERSION) > 0) {
+                throw new UnsupportedVersionConfigException(
+                        "Expected version %s or lower, found %s".formatted(ModKrowd.VERSION.getFriendlyString(), version.getFriendlyString())
+                );
             }
 
             this.selectedTab = this.idToTab.getOrDefault(JsonHelper.getString(root, "selected_tab", ""), this.APPEARANCE);

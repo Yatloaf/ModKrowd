@@ -24,7 +24,7 @@ import net.fabricmc.fabric.api.client.message.v1.ClientReceiveMessageEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.fabricmc.loader.api.FabricLoader;
-import net.fabricmc.loader.api.SemanticVersion;
+import net.fabricmc.loader.api.Version;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
@@ -42,7 +42,8 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class ModKrowd implements ClientModInitializer {
 	public static final String MODID = "modkrowd";
-	public static final SemanticVersion VERSION = Util.constVersion("0.1.0");
+	public static final Version VERSION = FabricLoader.getInstance()
+			.getModContainer(MODID).orElseThrow(AssertionError::new).getMetadata().getVersion();
     public static final Object USELESS = new Object();
 
 	// This logger is used to write text to the console and the log file.
