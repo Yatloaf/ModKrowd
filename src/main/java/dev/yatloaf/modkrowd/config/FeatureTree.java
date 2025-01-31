@@ -80,7 +80,7 @@ public class FeatureTree {
     ));
     public final SeperateChatHistoryFeature SEPERATE_CHAT_HISTORY = this.CHAT.feature(new SeperateChatHistoryFeature(
             "seperate_chat_history", PredicateIndex.BINARY
-    ));
+    )); // TODO: Fix typo
     public final ClickResponseFeature CLICK_RESPOND = this.CHAT.feature(new ClickResponseFeature(
             "click_to_respond", PredicateIndex.BINARY_CK
     ));

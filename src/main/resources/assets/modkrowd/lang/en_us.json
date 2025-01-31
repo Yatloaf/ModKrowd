@@ -33,7 +33,7 @@
     "modkrowd.config.feature.no_reconfiguration_screen.tooltip": "Remove the reconfiguration screen",
     "modkrowd.config.feature.no_chat_clear_on_rejoin": "Dejoin",
     "modkrowd.config.feature.no_chat_clear_on_rejoin.tooltip": "Keep chat through rejoins",
-    "modkrowd.config.feature.seperate_chat_history": "Seperate Chat History",
+    "modkrowd.config.feature.seperate_chat_history": "Separate Chat History",
     "modkrowd.config.feature.seperate_chat_history.tooltip": "",
     "modkrowd.config.feature.click_to_respond": "Click to Respond",
     "modkrowd.config.feature.click_to_respond.tooltip": "Allow clicking direct messages to respond",

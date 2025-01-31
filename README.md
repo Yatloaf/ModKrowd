@@ -31,7 +31,7 @@ CubeKrowd has strict rules regarding allowed mods, which means some aren’t all
 ### Chat
 
 - Dejoin
-- Seperate Chat History
+- Separate Chat History
 - Click to Respond
 - Message Preview
 

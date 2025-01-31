@@ -21,7 +21,7 @@ import java.util.List;
 @Mixin(ChatHud.class)
 public abstract class ChatHudMixin {
     // DEJOIN
-    // SEPERATE_CHAT_HISTORY
+    // SEPARATE_CHAT_HISTORY
     // MESSAGE_PREVIEW
 
     @Shadow @Final private MinecraftClient client;
