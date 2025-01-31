@@ -162,15 +162,13 @@ public class ModKrowd implements ClientModInitializer {
 		mwSwitchIndex = 0;
 
 		ServerInfo info = handler.getServerInfo();
-		if (info != null) {
-			if (CKStuff.addressIsCubeKrowd(info.address)) {
-				currentSubserver = Subservers.PENDING;
-				Util.sendCommandPacket(handler, CKStuff.SUBSERVER_COMMAND);
-			} else {
-				currentSubserver = Subservers.NONE;
-			}
-			CONFIG.onJoin(handler, client);
+		if (info != null && CKStuff.addressIsCubeKrowd(info.address)) {
+			currentSubserver = Subservers.PENDING;
+			Util.sendCommandPacket(handler, CKStuff.SUBSERVER_COMMAND);
+		} else {
+			currentSubserver = Subservers.NONE;
 		}
+		CONFIG.onJoin(handler, client);
 	}
 
 	private static void onDisconnect(ClientPlayNetworkHandler handler, MinecraftClient client) {
