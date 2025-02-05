@@ -3,6 +3,7 @@ package dev.yatloaf.modkrowd.config;
 import dev.yatloaf.modkrowd.config.api.FeatureExtender;
 import dev.yatloaf.modkrowd.config.feature.AutoswitchFeature;
 import dev.yatloaf.modkrowd.config.feature.BlockCutoutFeature;
+import dev.yatloaf.modkrowd.config.feature.CherryLiteThemeFeature;
 import dev.yatloaf.modkrowd.config.feature.CherryThemeFeature;
 import dev.yatloaf.modkrowd.config.feature.ClickResponseFeature;
 import dev.yatloaf.modkrowd.config.feature.Feature;
@@ -134,6 +135,9 @@ public class FeatureTree {
 
     public final HighContrastThemeFeature HIGH_CONTRAST = this.THEME.feature(new HighContrastThemeFeature(
             "theme_high_contrast", PredicateIndex.TERNARY_CK
+    ));
+    public final CherryLiteThemeFeature CHERRY_LITE = this.THEME.feature(new CherryLiteThemeFeature(
+            "theme_cherry_lite", PredicateIndex.TERNARY_CK
     ));
     public final CherryThemeFeature CHERRY = this.THEME.feature(new CherryThemeFeature(
             "theme_cherry", PredicateIndex.TERNARY_CK

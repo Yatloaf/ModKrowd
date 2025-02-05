@@ -59,6 +59,8 @@
     "modkrowd.config.feature.respectate.tooltip": "Schaut Spielern weiter zu, wenn sie sterben",
     "modkrowd.config.feature.theme_high_contrast": "Hoher Kontrast",
     "modkrowd.config.feature.theme_high_contrast.tooltip": "Ändert Textformatierung für Barrierefreiheit",
+    "modkrowd.config.feature.theme_cherry_lite": "Kirschgetönt",
+    "modkrowd.config.feature.theme_cherry_lite.tooltip": "Ein bisschen Pink",
     "modkrowd.config.feature.theme_cherry": "Kirschfarben",
     "modkrowd.config.feature.theme_cherry.tooltip": "Willkommen in Cherrytown!",
     "modkrowd.config.predicate.never": "AUS",

@@ -59,6 +59,8 @@
     "modkrowd.config.feature.respectate.tooltip": "Keep spectating players after they die",
     "modkrowd.config.feature.theme_high_contrast": "High Contrast",
     "modkrowd.config.feature.theme_high_contrast.tooltip": "Adjust text formatting for accessibility",
+    "modkrowd.config.feature.theme_cherry_lite": "Cherry Lite",
+    "modkrowd.config.feature.theme_cherry_lite.tooltip": "A hint of pink",
     "modkrowd.config.feature.theme_cherry": "Cherry",
     "modkrowd.config.feature.theme_cherry.tooltip": "Welcome to Cherrytown!",
     "modkrowd.config.predicate.never": "OFF",

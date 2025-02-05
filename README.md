@@ -62,4 +62,4 @@ CubeKrowd has strict rules regarding allowed mods, which means some aren’t all
 
 <hr/>
 
-Special thanks to CatAndComparator, Hydrintegral, TheAI, Kaybeo, Hardfg5000, encodeous and CubeKrowd staff.
+Special thanks to CatAndComparator, Hydrintegral, TheAI, Kaybeo, Hardfg5000, encodeous, DIMM4 and CubeKrowd staff.
