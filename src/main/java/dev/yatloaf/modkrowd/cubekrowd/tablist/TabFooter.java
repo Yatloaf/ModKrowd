@@ -15,6 +15,7 @@ public record TabFooter(TabFooterSection[] sections, boolean isReal) {
             sections.add(section);
             isReal &= section.isReal();
         }
+        isReal &= !sections.isEmpty();
 
         return new TabFooter(sections.toArray(TabFooterSection[]::new), isReal);
     }
