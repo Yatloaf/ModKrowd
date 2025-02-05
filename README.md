@@ -52,6 +52,7 @@ CubeKrowd has strict rules regarding allowed mods, which means some aren’t all
 ### Theme
 
 - High Contrast
+- Cherry Lite
 - Cherry
 
 </details>
