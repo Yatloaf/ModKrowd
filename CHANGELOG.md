@@ -1,6 +1,8 @@
 # ModKrowd changelog
 
-## 0.1.2: Unreleased
+## 0.1.3: Unreleased
+
+## 0.1.2: 2025-02-05
 
 ### Added
 
