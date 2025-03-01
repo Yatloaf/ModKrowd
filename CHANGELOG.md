@@ -2,6 +2,10 @@
 
 ## 0.1.3: Unreleased
 
+### Fixed
+
+- Message Preview coloring direct messages wrong.
+
 ## 0.1.2: 2025-02-05
 
 ### Added
