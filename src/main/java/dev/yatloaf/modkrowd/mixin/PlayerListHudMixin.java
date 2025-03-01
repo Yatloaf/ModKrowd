@@ -9,7 +9,6 @@ import dev.yatloaf.modkrowd.mixinduck.PlayerListHudDuck;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.PlayerSkinDrawer;
 import net.minecraft.client.gui.hud.PlayerListHud;
 import net.minecraft.client.network.PlayerListEntry;
 import net.minecraft.scoreboard.Scoreboard;
@@ -18,7 +17,6 @@ import net.minecraft.text.MutableText;
 import net.minecraft.text.OrderedText;
 import net.minecraft.text.StringVisitable;
 import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
@@ -27,6 +25,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
@@ -34,7 +33,6 @@ import java.util.List;
 
 @Mixin(PlayerListHud.class)
 public abstract class PlayerListHudMixin implements PlayerListHudDuck {
-	// TAB_HATS
 	// PING_DISPLAY
 	// DINNERBONE_GRUMM
 
@@ -134,15 +132,10 @@ public abstract class PlayerListHudMixin implements PlayerListHudDuck {
 		return element;
 	}
 
-	// Assume the hat is visible or the face is upside-down
-	@Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/PlayerSkinDrawer;draw(Lnet/minecraft/client/gui/DrawContext;Lnet/minecraft/util/Identifier;IIIZZI)V"))
-	private void drawRedirect(DrawContext context, Identifier texture, int x, int y, int size, boolean hatVisible, boolean upsideDown, int color) {
-		PlayerSkinDrawer.draw(
-				context, texture, x, y, size,
-                hatVisible || ModKrowd.CONFIG.TAB_HATS.enabled,
-                upsideDown || ModKrowd.CONFIG.DINNERBONE_GRUMM.enabled && this.currentEntry.isPlayer(),
-				color
-		);
+	// Assume the face is upside-down
+	@ModifyArg(method = "render", index = 6, at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/PlayerSkinDrawer;draw(Lnet/minecraft/client/gui/DrawContext;Lnet/minecraft/util/Identifier;IIIZZI)V"))
+	private boolean upsideDownArg(boolean upsideDown) {
+		return upsideDown || ModKrowd.CONFIG.DINNERBONE_GRUMM.enabled && this.currentEntry.isPlayer();
 	}
 
 	// Draw ping instead

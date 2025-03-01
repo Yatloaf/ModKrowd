@@ -44,9 +44,6 @@ public class FeatureTree {
     public final Feature DEVOID = this.APPEARANCE.feature(new Feature(
             "devoid", PredicateIndex.TERNARY_CK
     ));
-    public final Feature TAB_HATS = this.APPEARANCE.feature(new Feature(
-            "tab_hats", PredicateIndex.TERNARY_CK
-    ));
     public final Feature PING_DISPLAY = this.APPEARANCE.feature(new Feature(
             "ping_display", PredicateIndex.TERNARY_CK
     ));

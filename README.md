@@ -18,7 +18,6 @@ CubeKrowd has strict rules regarding allowed mods, which means some aren’t all
 ### Appearance
 
 - Devoid
-- Tab Hats
 - Ping Display
 - Slim Armor
 - Dinnerbone/Grumm

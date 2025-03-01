@@ -11,8 +11,6 @@
     "modkrowd.config.tab.theme": "Theme",
     "modkrowd.config.feature.devoid": "Devoid",
     "modkrowd.config.feature.devoid.tooltip": "Remove the dark horizon in lower Y levels",
-    "modkrowd.config.feature.tab_hats": "Tab Hats",
-    "modkrowd.config.feature.tab_hats.tooltip": "Show the second skin layer in the tab list",
     "modkrowd.config.feature.ping_display": "Ping Display",
     "modkrowd.config.feature.ping_display.tooltip": "Display the exact latency in the tab list",
     "modkrowd.config.feature.slim_armor": "Slim Armor",

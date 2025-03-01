@@ -4,6 +4,10 @@
 
 - Update to 1.21.4.
 
+### Removed
+
+- Tab Hats, made obsolete by the fix of [MC-71990](https://bugs.mojang.com/browse/MC/issues/MC-71990).
+
 ## 0.1.2: 2025-02-05
 
 ### Added

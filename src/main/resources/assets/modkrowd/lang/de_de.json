@@ -11,8 +11,6 @@
     "modkrowd.config.tab.theme": "Theme",
     "modkrowd.config.feature.devoid": "Halbleer",
     "modkrowd.config.feature.devoid.tooltip": "Entfernt den dunklen Horizont in niedrigen Y-Ebenen",
-    "modkrowd.config.feature.tab_hats": "Tab-Hüte",
-    "modkrowd.config.feature.tab_hats.tooltip": "Zeigt die äußere Skin-Ebene in der Tabliste an",
     "modkrowd.config.feature.ping_display": "Ping-Anzeige",
     "modkrowd.config.feature.ping_display.tooltip": "Zeigt die genaue Latenz in der Tabliste an",
     "modkrowd.config.feature.slim_armor": "Schlanke Rüstung",
