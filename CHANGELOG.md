@@ -5,6 +5,7 @@
 ### Fixed
 
 - Message Preview coloring direct messages wrong.
+- Message Preview mishandling looping direct messages.
 
 ## 0.1.2: 2025-02-05
 

@@ -2,6 +2,7 @@ package dev.yatloaf.modkrowd.cubekrowd.message;
 
 import dev.yatloaf.modkrowd.cubekrowd.common.CKColor;
 import dev.yatloaf.modkrowd.cubekrowd.common.CKStuff;
+import dev.yatloaf.modkrowd.cubekrowd.common.SelfPlayer;
 import dev.yatloaf.modkrowd.util.text.StyledString;
 import dev.yatloaf.modkrowd.util.text.StyledStringReader;
 
@@ -44,8 +45,9 @@ public record DirectMessage(Direction direction, String sender, String recipient
 
     public String other() {
         return switch (this.direction) {
-            case INCOMING, LOOP -> this.sender;
+            case INCOMING -> this.sender;
             case OUTGOING -> this.recipient;
+            case LOOP -> SelfPlayer.username();
             default -> "";
         };
     }

@@ -36,13 +36,23 @@ public final class PreviewCommands {
                                         .executes(context -> {
                                             String target = StringArgumentType.getString(context, "target");
                                             String message = StringArgumentType.getString(context, "message");
-                                            throw result(new DirectMessage(
-                                                    Direction.OUTGOING,
-                                                    DirectMessage.ME,
-                                                    target,
-                                                    StyledString.fromString(message, CKColor.GOLD.style),
-                                                    true
-                                            ).appearance());
+                                            if (SelfPlayer.username().equals(target)) {
+                                                throw result(new DirectMessage(
+                                                        Direction.LOOP,
+                                                        DirectMessage.ME,
+                                                        DirectMessage.ME,
+                                                        StyledString.fromString(message, CKColor.GOLD.style),
+                                                        true
+                                                ).appearance());
+                                            } else {
+                                                throw result(new DirectMessage(
+                                                        Direction.OUTGOING,
+                                                        DirectMessage.ME,
+                                                        target,
+                                                        StyledString.fromString(message, CKColor.GOLD.style),
+                                                        true
+                                                ).appearance());
+                                            }
                                         }))),
                 "msg", "m"
         );
@@ -55,13 +65,23 @@ public final class PreviewCommands {
                                     }
                                     String target = ModKrowd.CONFIG.MESSAGE_PREVIEW.replyTarget;
                                     String message = StringArgumentType.getString(context, "message");
-                                    throw result(new DirectMessage(
-                                            Direction.OUTGOING,
-                                            DirectMessage.ME,
-                                            target,
-                                            StyledString.fromString(message, CKColor.GOLD.style),
-                                            true
-                                    ).appearance());
+                                    if (SelfPlayer.username().equals(target)) {
+                                        throw result(new DirectMessage(
+                                                Direction.LOOP,
+                                                DirectMessage.ME,
+                                                DirectMessage.ME,
+                                                StyledString.fromString(message, CKColor.GOLD.style),
+                                                true
+                                        ).appearance());
+                                    } else {
+                                        throw result(new DirectMessage(
+                                                Direction.OUTGOING,
+                                                DirectMessage.ME,
+                                                target,
+                                                StyledString.fromString(message, CKColor.GOLD.style),
+                                                true
+                                        ).appearance());
+                                    }
                                 })),
                 "r"
         );
