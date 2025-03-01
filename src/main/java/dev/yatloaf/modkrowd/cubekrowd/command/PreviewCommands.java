@@ -40,7 +40,7 @@ public final class PreviewCommands {
                                                     Direction.OUTGOING,
                                                     DirectMessage.ME,
                                                     target,
-                                                    StyledString.fromString(message, CKColor.GRAY.style),
+                                                    StyledString.fromString(message, CKColor.GOLD.style),
                                                     true
                                             ).appearance());
                                         }))),
@@ -59,7 +59,7 @@ public final class PreviewCommands {
                                             Direction.OUTGOING,
                                             DirectMessage.ME,
                                             target,
-                                            StyledString.fromString(message, CKColor.GRAY.style),
+                                            StyledString.fromString(message, CKColor.GOLD.style),
                                             true
                                     ).appearance());
                                 })),

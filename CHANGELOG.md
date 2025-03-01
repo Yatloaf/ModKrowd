@@ -8,6 +8,10 @@
 
 - Tab Hats, made obsolete by the fix of [MC-71990](https://bugs.mojang.com/browse/MC/issues/MC-71990).
 
+### Fixed
+
+- Message Preview coloring direct messages wrong.
+
 ## 0.1.2: 2025-02-05
 
 ### Added
