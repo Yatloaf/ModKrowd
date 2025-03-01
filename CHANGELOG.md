@@ -2,6 +2,8 @@
 
 ## 0.1.3: Unreleased
 
+- Update to 1.21.4.
+
 ## 0.1.2: 2025-02-05
 
 ### Added

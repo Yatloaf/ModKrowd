@@ -29,21 +29,21 @@ public class LivingEntityRendererMixin<T extends LivingEntity> {
 
 	// Hud appears always disabled
 	// This overrides the other mixins below
-	@Inject(method = "hasLabel(Lnet/minecraft/entity/LivingEntity;)Z", at = @At("HEAD"), cancellable = true)
-	private void hasLabelInject(T livingEntity, CallbackInfoReturnable<Boolean> cir) {
+	@Inject(method = "hasLabel(Lnet/minecraft/entity/LivingEntity;D)Z", at = @At("HEAD"), cancellable = true)
+	private void hasLabelInject(T livingEntity, double d, CallbackInfoReturnable<Boolean> cir) {
 		if (ModKrowd.CONFIG.ALWAYS_HIDE_LABELS.enabled) {
 			cir.setReturnValue(false);
 		}
 	}
 
 	// Sabotage attempts to figure out if the entity in question happens to be the player
-	@Redirect(method = "hasLabel(Lnet/minecraft/entity/LivingEntity;)Z", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;getCameraEntity()Lnet/minecraft/entity/Entity;"))
+	@Redirect(method = "hasLabel(Lnet/minecraft/entity/LivingEntity;D)Z", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;getCameraEntity()Lnet/minecraft/entity/Entity;"))
 	private Entity getCameraEntityRedirect(MinecraftClient instance) {
         return ModKrowd.CONFIG.SHOW_OWN_LABEL.enabled ? null : instance.getCameraEntity(); // Only for ==, no danger of NullPointerException
 	}
 
 	// Hud appears always enabled
-	@Redirect(method = "hasLabel(Lnet/minecraft/entity/LivingEntity;)Z", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;isHudEnabled()Z"))
+	@Redirect(method = "hasLabel(Lnet/minecraft/entity/LivingEntity;D)Z", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;isHudEnabled()Z"))
 	private boolean isHudEnabledRedirect() {
         return ModKrowd.CONFIG.ALWAYS_SHOW_LABELS.enabled || MinecraftClient.isHudEnabled();
 	}

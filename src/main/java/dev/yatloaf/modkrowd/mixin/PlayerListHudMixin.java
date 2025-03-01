@@ -135,12 +135,13 @@ public abstract class PlayerListHudMixin implements PlayerListHudDuck {
 	}
 
 	// Assume the hat is visible or the face is upside-down
-	@Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/PlayerSkinDrawer;draw(Lnet/minecraft/client/gui/DrawContext;Lnet/minecraft/util/Identifier;IIIZZ)V"))
-	private void drawRedirect(DrawContext context, Identifier texture, int x, int y, int size, boolean hatVisible, boolean upsideDown) {
+	@Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/PlayerSkinDrawer;draw(Lnet/minecraft/client/gui/DrawContext;Lnet/minecraft/util/Identifier;IIIZZI)V"))
+	private void drawRedirect(DrawContext context, Identifier texture, int x, int y, int size, boolean hatVisible, boolean upsideDown, int color) {
 		PlayerSkinDrawer.draw(
 				context, texture, x, y, size,
                 hatVisible || ModKrowd.CONFIG.TAB_HATS.enabled,
-                upsideDown || ModKrowd.CONFIG.DINNERBONE_GRUMM.enabled && this.currentEntry.isPlayer()
+                upsideDown || ModKrowd.CONFIG.DINNERBONE_GRUMM.enabled && this.currentEntry.isPlayer(),
+				color
 		);
 	}
 

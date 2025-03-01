@@ -18,7 +18,13 @@ public record VanillaTabList(EntryCache[] entries, EntryCache[] players, EntryCa
 
     public static VanillaTabList parseFast(TabListCache source) {
         List<PlayerListEntry> playerListEntries = source.playerListEntries();
-        if (playerListEntries.isEmpty() || playerListEntries.getFirst().getProfile().getName().contains("~")) {
+        if (playerListEntries.isEmpty()) {
+            return FAILURE;
+        }
+
+        // Fake tab list players either have an empty name or one containing "~"
+        String firstProfileName = playerListEntries.getFirst().getProfile().getName();
+        if (firstProfileName.isBlank() || firstProfileName.contains("~")) {
             return FAILURE;
         }
 

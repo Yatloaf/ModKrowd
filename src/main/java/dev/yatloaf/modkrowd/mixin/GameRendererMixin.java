@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class GameRendererMixin {
     // RESPECTATE
 
-    @Shadow @Final MinecraftClient client;
+    @Shadow @Final private MinecraftClient client;
 
     // If the camera entity is removed, start spectating the entity with the same network ID again
     @Inject(method = "tick", at = @At("HEAD"))
