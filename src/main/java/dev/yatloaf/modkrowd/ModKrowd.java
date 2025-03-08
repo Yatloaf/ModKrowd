@@ -174,7 +174,7 @@ public class ModKrowd implements ClientModInitializer {
 	private static void onDisconnect(ClientPlayNetworkHandler handler, MinecraftClient client) {
 		currentSubserver = Subservers.NONE;
 		CONFIG.onDisconnect(handler, client);
-		CONFIG.updateFeatures(client, currentSubserver);
+		CONFIG.updateFeatures();
 	}
 
 	private static void onEndClientTick(MinecraftClient client) {
@@ -208,7 +208,7 @@ public class ModKrowd implements ClientModInitializer {
 				WhereamiMessage whereamiMessage = ckCache.whereamiMessageFast();
 				if (whereamiMessage.isReal()) {
 					currentSubserver = whereamiMessage.subserver();
-					CONFIG.updateFeatures(client, currentSubserver);
+					CONFIG.updateFeatures();
 					CONFIG.onJoinUpdated(client.getNetworkHandler(), client);
 					return false;
 				}

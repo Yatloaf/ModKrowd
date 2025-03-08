@@ -2,6 +2,10 @@
 
 ## 0.1.3: Unreleased
 
+### Changed
+
+- Creative predicate now passes on other servers with permission level 2 or higher.
+
 ### Fixed
 
 - Message Preview coloring direct messages wrong.

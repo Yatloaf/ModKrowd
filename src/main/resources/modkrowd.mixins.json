@@ -16,6 +16,7 @@
         "EndPortalBlockEntityRendererMixin",
         "EndPortalBlockMixin",
         "EntityMixin",
+        "EntityAccessor",
         "EntityModelsMixin",
         "EntityRendererMixin",
         "GameRendererMixin",

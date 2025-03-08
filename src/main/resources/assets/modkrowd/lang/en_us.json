@@ -68,7 +68,7 @@
     "modkrowd.config.predicate.cubekrowd": "CubeKrowd",
     "modkrowd.config.predicate.cubekrowd.tooltip": "",
     "modkrowd.config.predicate.creative": "Creative",
-    "modkrowd.config.predicate.creative.tooltip": "Creative and BuildTeam",
+    "modkrowd.config.predicate.creative.tooltip": "Creative, BuildTeam, other servers as operator",
     "modkrowd.config.predicate.missilewars": "MissileWars",
     "modkrowd.config.predicate.missilewars.tooltip": "MissileWars 0 - MissileWars 9",
     "modkrowd.config.predicate.always": "ON",

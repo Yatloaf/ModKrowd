@@ -3,7 +3,6 @@ package dev.yatloaf.modkrowd.mixin;
 import dev.yatloaf.modkrowd.ModKrowd;
 import dev.yatloaf.modkrowd.config.feature.Feature;
 import dev.yatloaf.modkrowd.cubekrowd.command.PreviewCommands;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.ChatScreen;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.TextFieldWidget;
@@ -40,7 +39,7 @@ public class ChatScreenMixin extends Screen {
             Feature f = ModKrowd.CONFIG.MESSAGE_PREVIEW;
             // Next predicate
             f.predicate = f.allowedPredicates.index.get((f.allowedPredicates.index.indexOf(f.predicate) + 1) % f.allowedPredicates.index.size());
-            ModKrowd.CONFIG.updateFeatures(MinecraftClient.getInstance(), ModKrowd.currentSubserver);
+            ModKrowd.CONFIG.updateFeatures();
             if (f.enabled) {
                 updatePreview(this.chatField.getText());
             }
