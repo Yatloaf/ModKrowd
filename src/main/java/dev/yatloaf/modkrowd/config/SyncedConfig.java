@@ -53,7 +53,7 @@ public class SyncedConfig extends Config {
         this.selectedTab = source.selectedTab;
 
         this.dirty = true;
-        this.updateFeatures(MinecraftClient.getInstance(), ModKrowd.currentSubserver);
+        this.updateFeatures();
     }
 
     public void updateTab(Config source) {
@@ -61,14 +61,23 @@ public class SyncedConfig extends Config {
         this.dirty = true;
     }
 
-    public synchronized void updateFeatures(MinecraftClient client, Subserver subserver) {
+    public void updateFeatures(MinecraftClient client, Subserver subserver) {
+        this.updateFeatures(client, subserver, client.player != null ? client.player.getPermissionLevel() : 0);
+    }
+
+    public void updateFeatures() {
+        MinecraftClient client = MinecraftClient.getInstance();
+        this.updateFeatures(client, ModKrowd.currentSubserver, client.player != null ? client.player.getPermissionLevel() : 0);
+    }
+
+    public synchronized void updateFeatures(MinecraftClient client, Subserver subserver, int permissionLevel) {
         if (subserver == Subservers.PENDING) {
             return;
         }
         List<Feature> eventEnable = new ArrayList<>();
         List<Feature> eventDisable = new ArrayList<>();
         for (Feature f : this.features) {
-            if (f.predicate.enabled(subserver)) {
+            if (f.predicate.enabled(subserver, permissionLevel)) {
                 if (!f.enabled) {
                     f.enabled = true;
                     this.enabledFeatures.add(f);
@@ -96,7 +105,7 @@ public class SyncedConfig extends Config {
         this.enabledFeatures.clear();
         ActionQueue queue = new ActionQueue();
         for (Feature f : this.features) {
-            if (f.predicate.enabled(Subservers.NONE)) {
+            if (f.predicate.enabled(Subservers.NONE, 0)) {
                 f.enabled = true;
                 this.enabledFeatures.add(f);
                 f.onInitEnable(client, queue);

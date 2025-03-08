@@ -4,6 +4,10 @@
 
 - Update to 1.21.4.
 
+### Changed
+
+- Creative predicate now passes on other servers with permission level 2 or higher.
+
 ### Removed
 
 - Tab Hats, made obsolete by the fix of [MC-71990](https://bugs.mojang.com/browse/MC/issues/MC-71990).
