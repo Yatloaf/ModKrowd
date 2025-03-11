@@ -11,6 +11,7 @@ import dev.yatloaf.modkrowd.config.feature.HighContrastThemeFeature;
 import dev.yatloaf.modkrowd.config.feature.MessagePreviewFeature;
 import dev.yatloaf.modkrowd.config.feature.ReloadResourcesFeature;
 import dev.yatloaf.modkrowd.config.feature.SeperateChatHistoryFeature;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.block.Blocks;
 
 import java.util.ArrayList;
@@ -19,9 +20,6 @@ import java.util.List;
 import java.util.Map;
 
 public class FeatureTree {
-    private static final List<FeatureExtender> EXTENDERS = new ArrayList<>();
-    private static List<FeatureTree> requiresInitExtenders = new ArrayList<>();
-
     protected static final int FEATURE_ESTIMATION = 40;
     protected static final int TAB_ESTIMATION = 6;
 
@@ -140,13 +138,7 @@ public class FeatureTree {
             "theme_cherry", PredicateIndex.TERNARY_CK
     ));
 
-    {
-        if (requiresInitExtenders == null) {
-            this.initExtenders();
-        } else {
-            requiresInitExtenders.add(this);
-        }
-    }
+    private boolean initExtenders = false;
 
     public FeatureTab tab(String id) {
         FeatureTab tab = new FeatureTab(this, this.tabs.size(), id);
@@ -156,31 +148,21 @@ public class FeatureTree {
     }
 
     public void mergeState(FeatureTree source) {
+        this.initExtenders();
         for (int i = 0; i < this.features.size(); i++) {
             this.features.get(i).mergeState(source.features.get(i));
         }
     }
 
-    public static void registerExtender(FeatureExtender extender) {
-        if (requiresInitExtenders == null) {
-            throw new IllegalStateException("Tried to register FeatureExtender too late!");
-        } else {
-            EXTENDERS.add(extender);
-        }
-    }
-
-    public static void closeRegisteringExtensions() {
-        List<FeatureTree> requires = requiresInitExtenders;
-        requiresInitExtenders = null; // Just in case of threading issues
-
-        for (FeatureTree tree : requires) {
-            tree.initExtenders();
-        }
-    }
-
-    private void initExtenders() {
-        for (FeatureExtender extender : EXTENDERS) {
-            extender.extend(this);
+    protected synchronized void initExtenders() {
+        // If this is done in the constructor, there may be issues with circular references
+        if (!this.initExtenders) {
+            FabricLoader.getInstance().invokeEntrypoints(
+                    "modkrowd:feature_extender",
+                    FeatureExtender.class,
+                    extender -> extender.extend(this)
+            );
+            this.initExtenders = true;
         }
     }
 }

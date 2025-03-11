@@ -1,6 +1,5 @@
 package dev.yatloaf.modkrowd;
 
-import dev.yatloaf.modkrowd.config.FeatureTree;
 import dev.yatloaf.modkrowd.config.Config;
 import dev.yatloaf.modkrowd.config.screen.ConfigScreen;
 import dev.yatloaf.modkrowd.config.SyncedConfig;
@@ -147,9 +146,6 @@ public class ModKrowd implements ClientModInitializer {
 	}
 
 	private static void onClientStarted(MinecraftClient client) {
-		// Every mod should have had a chance to register within onInitialize or onInitializeClient by now
-		FeatureTree.closeRegisteringExtensions();
-
 		CONFIG.tryDeserialize(CONFIG_FILE);
 		CONFIG.onInitEnable(client);
 	}
