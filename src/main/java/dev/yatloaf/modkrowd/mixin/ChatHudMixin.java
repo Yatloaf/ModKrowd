@@ -51,7 +51,7 @@ public abstract class ChatHudMixin {
 
     @Inject(method = "clear", cancellable = true, at = @At("HEAD"))
     private void clearInject(CallbackInfo ci) {
-        if (ModKrowd.CONFIG.DEJOIN.enabled || ModKrowd.CONFIG.SEPERATE_CHAT_HISTORY.enabled) {
+        if (ModKrowd.CONFIG.DEJOIN.enabled || ModKrowd.CONFIG.SEPARATE_CHAT_HISTORY.enabled) {
             ci.cancel();
         }
     }

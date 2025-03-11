@@ -10,7 +10,7 @@ import dev.yatloaf.modkrowd.config.feature.Feature;
 import dev.yatloaf.modkrowd.config.feature.HighContrastThemeFeature;
 import dev.yatloaf.modkrowd.config.feature.MessagePreviewFeature;
 import dev.yatloaf.modkrowd.config.feature.ReloadResourcesFeature;
-import dev.yatloaf.modkrowd.config.feature.SeperateChatHistoryFeature;
+import dev.yatloaf.modkrowd.config.feature.SeparateChatHistoryFeature;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.block.Blocks;
 
@@ -74,9 +74,9 @@ public class FeatureTree {
     public final Feature DEJOIN = this.CHAT.feature(new Feature(
             "no_chat_clear_on_rejoin", PredicateIndex.BINARY
     ));
-    public final SeperateChatHistoryFeature SEPERATE_CHAT_HISTORY = this.CHAT.feature(new SeperateChatHistoryFeature(
-            "seperate_chat_history", PredicateIndex.BINARY
-    )); // TODO: Fix typo
+    public final SeparateChatHistoryFeature SEPARATE_CHAT_HISTORY = this.CHAT.feature(new SeparateChatHistoryFeature(
+            "separate_chat_history", PredicateIndex.BINARY
+    ));
     public final ClickResponseFeature CLICK_RESPOND = this.CHAT.feature(new ClickResponseFeature(
             "click_to_respond", PredicateIndex.BINARY_CK
     ));
