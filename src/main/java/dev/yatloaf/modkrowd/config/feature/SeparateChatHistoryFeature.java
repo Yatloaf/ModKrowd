@@ -14,13 +14,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class SeperateChatHistoryFeature extends Feature {
+public class SeparateChatHistoryFeature extends Feature {
     private static final ChatHud.ChatState EMPTY_CHAT_STATE = new ChatHud.ChatState(List.of(), List.of(), List.of());
 
     private final Map<Location, ChatHud.ChatState> chatStates = new HashMap<>();
     private Location currentLocation = null;
 
-    public SeperateChatHistoryFeature(String id, PredicateIndex allowedPredicates) {
+    public SeparateChatHistoryFeature(String id, PredicateIndex allowedPredicates) {
         super(id, allowedPredicates);
     }
 
