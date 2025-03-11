@@ -1,6 +1,6 @@
 package dev.yatloaf.modkrowd.config.feature;
 
-import dev.yatloaf.modkrowd.config.queue.ActionQueue;
+import dev.yatloaf.modkrowd.config.ActionQueue;
 import dev.yatloaf.modkrowd.config.PredicateIndex;
 import net.minecraft.client.MinecraftClient;
 

@@ -6,7 +6,7 @@ import com.google.gson.JsonSyntaxException;
 import dev.yatloaf.modkrowd.config.Predicate;
 import dev.yatloaf.modkrowd.config.PredicateIndex;
 import dev.yatloaf.modkrowd.config.exception.MalformedConfigException;
-import dev.yatloaf.modkrowd.config.queue.ActionQueue;
+import dev.yatloaf.modkrowd.config.ActionQueue;
 import dev.yatloaf.modkrowd.config.screen.AbstractEntry;
 import dev.yatloaf.modkrowd.config.screen.PredicateEntry;
 import dev.yatloaf.modkrowd.cubekrowd.common.cache.TextCache;

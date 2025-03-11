@@ -1,7 +1,7 @@
 package dev.yatloaf.modkrowd.config.feature;
 
 import dev.yatloaf.modkrowd.config.PredicateIndex;
-import dev.yatloaf.modkrowd.config.queue.ActionQueue;
+import dev.yatloaf.modkrowd.config.ActionQueue;
 import dev.yatloaf.modkrowd.cubekrowd.common.cache.TextCache;
 import dev.yatloaf.modkrowd.cubekrowd.message.DirectMessage;
 import dev.yatloaf.modkrowd.cubekrowd.message.cache.CubeKrowdMessageCache;
