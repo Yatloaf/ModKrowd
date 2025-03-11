@@ -42,6 +42,7 @@ public class Config extends FeatureTree {
     }
 
     public void deserialize(File file) throws ReadConfigException {
+        this.initExtenders();
         try (JsonReader jsonReader = new JsonReader(new BufferedReader(new FileReader(file)))) {
 
             JsonObject root = JsonParser.parseReader(jsonReader).getAsJsonObject();

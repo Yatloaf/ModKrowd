@@ -2,6 +2,10 @@
 
 ## 0.1.4: Unreleased
 
+### Changed
+
+- `FeatureExtender` is now a proper entrypoint with the key `modkrowd:feature_extender`.
+
 ## 0.1.3: 2025-03-08
 
 ### Changed
