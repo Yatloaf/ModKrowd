@@ -3,7 +3,6 @@ package dev.yatloaf.modkrowd.config;
 import dev.yatloaf.modkrowd.ModKrowd;
 import dev.yatloaf.modkrowd.config.exception.ConfigException;
 import dev.yatloaf.modkrowd.config.feature.Feature;
-import dev.yatloaf.modkrowd.config.queue.ActionQueue;
 import dev.yatloaf.modkrowd.cubekrowd.common.cache.TextCache;
 import dev.yatloaf.modkrowd.cubekrowd.message.cache.MessageCache;
 import dev.yatloaf.modkrowd.cubekrowd.subserver.Subserver;

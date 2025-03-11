@@ -1,4 +1,4 @@
-package dev.yatloaf.modkrowd.config.queue;
+package dev.yatloaf.modkrowd.config;
 
 import net.minecraft.client.MinecraftClient;
 

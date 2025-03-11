@@ -2,7 +2,7 @@ package dev.yatloaf.modkrowd.config.feature;
 
 import dev.yatloaf.modkrowd.config.DefaultTheme;
 import dev.yatloaf.modkrowd.config.PredicateIndex;
-import dev.yatloaf.modkrowd.config.queue.ActionQueue;
+import dev.yatloaf.modkrowd.config.ActionQueue;
 import dev.yatloaf.modkrowd.cubekrowd.common.CKColor;
 import dev.yatloaf.modkrowd.cubekrowd.common.CKStuff;
 import dev.yatloaf.modkrowd.cubekrowd.common.LatencyLevel;
