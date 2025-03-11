@@ -19,14 +19,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SyncedConfig extends Config {
-    public final List<Feature> enabledFeatures;
+    public final List<Feature> enabledFeatures = new ArrayList<>(FEATURE_ESTIMATION);
 
-    private boolean dirty;
-
-    public SyncedConfig() {
-        this.enabledFeatures = new ArrayList<>(FEATURE_ESTIMATION);
-        this.dirty = true;
-    }
+    private boolean dirty = true;
 
     public void tryDeserialize(File file) {
         try {
