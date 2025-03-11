@@ -91,13 +91,15 @@ public class ModKrowd implements ClientModInitializer {
 				InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_UNKNOWN, "category.modkrowd"));
 		INIT = true;
 
-		ClientLifecycleEvents.CLIENT_STARTED.register(ModKrowd::onClientStarted);
 		ClientPlayConnectionEvents.JOIN.register(ModKrowd::onJoin);
 		ClientPlayConnectionEvents.DISCONNECT.register(ModKrowd::onDisconnect);
 		ClientTickEvents.END_CLIENT_TICK.register(ModKrowd::onEndClientTick);
 		ClientReceiveMessageEvents.ALLOW_GAME.register(ModKrowd::allowMessage);
 		ClientReceiveMessageEvents.MODIFY_GAME.register(ModKrowd::modifyMessage);
 		ClientLifecycleEvents.CLIENT_STOPPING.register(ModKrowd::onClientStopping);
+
+		CONFIG.tryDeserialize(CONFIG_FILE);
+		CONFIG.onInitEnable(MinecraftClient.getInstance());
 	}
 
 	public static void invalidateTabListCache() {
@@ -143,11 +145,6 @@ public class ModKrowd implements ClientModInitializer {
 				mwSubserver.tryConnectNext(MinecraftClient.getInstance().getNetworkHandler(), mwSwitchIndex);
 			}
 		}
-	}
-
-	private static void onClientStarted(MinecraftClient client) {
-		CONFIG.tryDeserialize(CONFIG_FILE);
-		CONFIG.onInitEnable(client);
 	}
 
 	private static void onJoin(ClientPlayNetworkHandler handler, PacketSender sender, MinecraftClient client) {
