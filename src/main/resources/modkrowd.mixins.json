@@ -9,6 +9,7 @@
         "BarrierBlockMixin",
         "ChatHudMixin",
         "ChatScreenMixin",
+        "ClientCommonNetworkHandlerAccessor",
         "ClientPlayNetworkHandlerMixin",
         "ClientWorldPropertiesMixin",
         "Deadmau5FeatureRendererMixin",

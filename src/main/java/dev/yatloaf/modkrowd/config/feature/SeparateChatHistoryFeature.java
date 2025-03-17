@@ -5,8 +5,10 @@ import dev.yatloaf.modkrowd.config.ActionQueue;
 import dev.yatloaf.modkrowd.config.PredicateIndex;
 import dev.yatloaf.modkrowd.cubekrowd.message.Aloha;
 import dev.yatloaf.modkrowd.custom.SelfAlohaMessage;
+import dev.yatloaf.modkrowd.mixin.ClientCommonNetworkHandlerAccessor;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.hud.ChatHud;
+import net.minecraft.client.network.ClientConfigurationNetworkHandler;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.client.network.ServerInfo;
 
@@ -38,8 +40,8 @@ public class SeparateChatHistoryFeature extends Feature {
     }
 
     @Override
-    public void onJoin(ClientPlayNetworkHandler handler, MinecraftClient client, ActionQueue queue) {
-        Location location = Location.of(handler.getServerInfo());
+    public void onConfigurationComplete(ClientConfigurationNetworkHandler handler, MinecraftClient client, ActionQueue queue) {
+        Location location = Location.of(((ClientCommonNetworkHandlerAccessor) handler).getServerInfo());
         if (!location.equals(this.currentLocation)) {
             this.currentLocation = location;
             client.inGameHud.getChatHud().restoreChatState(this.chatStates.getOrDefault(location, EMPTY_CHAT_STATE));

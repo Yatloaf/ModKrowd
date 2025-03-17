@@ -20,12 +20,14 @@ import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.fabricmc.fabric.api.client.message.v1.ClientReceiveMessageEvents;
+import net.fabricmc.fabric.api.client.networking.v1.ClientConfigurationConnectionEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.Version;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.network.ClientConfigurationNetworkHandler;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.client.network.ServerInfo;
 import net.minecraft.client.option.KeyBinding;
@@ -91,6 +93,7 @@ public class ModKrowd implements ClientModInitializer {
 				InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_UNKNOWN, "category.modkrowd"));
 		INIT = true;
 
+		ClientConfigurationConnectionEvents.COMPLETE.register(ModKrowd::onConfigurationComplete);
 		ClientPlayConnectionEvents.JOIN.register(ModKrowd::onJoin);
 		ClientPlayConnectionEvents.DISCONNECT.register(ModKrowd::onDisconnect);
 		ClientTickEvents.END_CLIENT_TICK.register(ModKrowd::onEndClientTick);
@@ -145,6 +148,10 @@ public class ModKrowd implements ClientModInitializer {
 				mwSubserver.tryConnectNext(MinecraftClient.getInstance().getNetworkHandler(), mwSwitchIndex);
 			}
 		}
+	}
+
+	private static void onConfigurationComplete(ClientConfigurationNetworkHandler handler, MinecraftClient client) {
+		CONFIG.onConfigurationComplete(handler, client);
 	}
 
 	private static void onJoin(ClientPlayNetworkHandler handler, PacketSender sender, MinecraftClient client) {

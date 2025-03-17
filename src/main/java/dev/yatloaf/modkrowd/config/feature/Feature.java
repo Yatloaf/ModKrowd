@@ -16,8 +16,10 @@ import dev.yatloaf.modkrowd.custom.Custom;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.message.v1.ClientReceiveMessageEvents;
+import net.fabricmc.fabric.api.client.networking.v1.ClientConfigurationConnectionEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.network.ClientConfigurationNetworkHandler;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
@@ -92,6 +94,19 @@ public class Feature {
      * @param queue  The {@link ActionQueue} that is flushed after iterating through the features.
      */
     public void onDisable(MinecraftClient client, ActionQueue queue) {
+
+    }
+
+    /**
+     * Called before joining a server, while the subserver is {@code NONE}, if the feature is enabled.
+     *
+     * @see ClientConfigurationConnectionEvents#COMPLETE
+     *
+     * @param handler The {@link ClientPlayNetworkHandler} instance.
+     * @param client  The {@link MinecraftClient} instance.
+     * @param queue   The {@link ActionQueue} that is flushed after iterating through the features.
+     */
+    public void onConfigurationComplete(ClientConfigurationNetworkHandler handler, MinecraftClient client, ActionQueue queue) {
 
     }
 
