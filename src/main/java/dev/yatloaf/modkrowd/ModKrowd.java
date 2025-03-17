@@ -143,9 +143,13 @@ public class ModKrowd implements ClientModInitializer {
 
 	private static void tickSwitchingMissileWarsLobby() {
 		if (mwSwitchStatus == MwSwitchStatus.DELAY && mwSwitchTick <= tick) {
-			mwSwitchStatus = MwSwitchStatus.CONNECTING;
-			if (currentSubserver instanceof MissileWarsSubserver mwSubserver) {
-				mwSubserver.tryConnectNext(MinecraftClient.getInstance().getNetworkHandler(), mwSwitchIndex);
+            ClientPlayNetworkHandler handler = MinecraftClient.getInstance().getNetworkHandler();
+			if (handler != null
+					&& currentSubserver instanceof MissileWarsSubserver mwSubserver
+					&& mwSubserver.tryConnectNext(handler, mwSwitchIndex)) {
+				mwSwitchStatus = MwSwitchStatus.CONNECTING;
+			} else {
+				mwSwitchStatus = MwSwitchStatus.IDLE;
 			}
 		}
 	}
