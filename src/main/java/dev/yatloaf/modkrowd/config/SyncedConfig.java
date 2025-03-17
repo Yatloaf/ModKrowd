@@ -10,6 +10,7 @@ import dev.yatloaf.modkrowd.cubekrowd.subserver.Subservers;
 import dev.yatloaf.modkrowd.cubekrowd.tablist.cache.TabListCache;
 import dev.yatloaf.modkrowd.custom.Custom;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.network.ClientConfigurationNetworkHandler;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
 
 import java.io.File;
@@ -113,6 +114,14 @@ public class SyncedConfig extends Config {
         ActionQueue queue = new ActionQueue();
         for (Feature f : this.enabledFeatures) {
             f.onEndTick(client, queue);
+        }
+        queue.flush(client);
+    }
+
+    public synchronized void onConfigurationComplete(ClientConfigurationNetworkHandler handler, MinecraftClient client) {
+        ActionQueue queue = new ActionQueue();
+        for (Feature f : this.enabledFeatures) {
+            f.onConfigurationComplete(handler, client, queue);
         }
         queue.flush(client);
     }
