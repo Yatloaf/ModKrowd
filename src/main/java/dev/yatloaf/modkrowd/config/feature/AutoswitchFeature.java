@@ -10,7 +10,7 @@ import dev.yatloaf.modkrowd.config.PredicateIndex;
 import dev.yatloaf.modkrowd.config.ActionQueue;
 import dev.yatloaf.modkrowd.config.screen.AbstractEntry;
 import dev.yatloaf.modkrowd.config.screen.PredicateEntry;
-import dev.yatloaf.modkrowd.config.screen.UnsignedIntEntry;
+import dev.yatloaf.modkrowd.config.screen.IntEntry;
 import dev.yatloaf.modkrowd.cubekrowd.message.cache.MessageCache;
 import dev.yatloaf.modkrowd.cubekrowd.message.cache.MissileWarsMessageCache;
 import net.minecraft.client.MinecraftClient;
@@ -19,6 +19,7 @@ import net.minecraft.text.Text;
 import net.minecraft.util.JsonHelper;
 
 public class AutoswitchFeature extends Feature {
+    public static final int MIN_DELAY = 0;
     public static final int MAX_DELAY = 280; // 14 seconds
 
     public final Text delayName;
@@ -44,11 +45,12 @@ public class AutoswitchFeature extends Feature {
     public AbstractEntry[] createScreenEntries(MinecraftClient client) {
         return new AbstractEntry[] {
                 new PredicateEntry(client, this),
-                new UnsignedIntEntry(
+                new IntEntry(
                         client,
                         this.delayName,
                         this.delayTooltip,
                         this.delay,
+                        MIN_DELAY,
                         MAX_DELAY,
                         () -> this.delay,
                         value -> this.delay = value
