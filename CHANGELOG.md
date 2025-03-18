@@ -6,6 +6,12 @@
 
 - `FeatureExtender` is now a proper entrypoint with the key `modkrowd:feature_extender`.
 
+### Fixed
+
+- Slim Armor sometimes being broken until reloading resources.
+- Separate Chat History applying too late.
+- Rare crash when trying to switch MissileWars lobbies while not ingame.
+
 ## 0.1.3: 2025-03-08
 
 - Update to 1.21.4.
