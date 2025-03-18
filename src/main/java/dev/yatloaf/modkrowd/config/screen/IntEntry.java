@@ -13,7 +13,8 @@ import java.util.List;
 import java.util.function.IntConsumer;
 import java.util.function.IntSupplier;
 
-public class UnsignedIntEntry extends AbstractEntry {
+public class IntEntry extends AbstractEntry {
+    public final int minValue;
     public final int maxValue;
     public final IntSupplier getter;
     public final IntConsumer setter;
@@ -22,25 +23,26 @@ public class UnsignedIntEntry extends AbstractEntry {
 
     private int value;
 
-    public UnsignedIntEntry(MinecraftClient client, Text label, Tooltip tooltip, int startValue, IntSupplier getter, IntConsumer setter) {
-        this(client, label, tooltip, startValue, Integer.MAX_VALUE, getter, setter);
-    }
-
-    public UnsignedIntEntry(MinecraftClient client, Text label, Tooltip tooltip, int startValue, int maxValue, IntSupplier getter, IntConsumer setter) {
+    public IntEntry(MinecraftClient client, Text label, Tooltip tooltip, int startValue, int minValue, int maxValue, IntSupplier getter, IntConsumer setter) {
         super(client, label);
         this.label.setTooltip(tooltip);
+        this.minValue = minValue;
         this.maxValue = maxValue;
         this.getter = getter;
         this.setter = setter;
         this.textField = new TextFieldWidget(client.textRenderer, 0, 0, 64, 20, Text.empty()); // X and Y are set in render(...)
         this.setValue(startValue);
         this.textField.setTextPredicate(s -> {
-                if (s.isEmpty()) return true;
-                int v = Util.parseIntOr(s, -1);
-                return 0 <= v && v <= this.maxValue;
+            if (s.isEmpty()) return true;
+            try {
+                int v = Integer.parseInt(s);
+                return this.minValue <= v && v <= this.maxValue;
+            } catch (NumberFormatException e) {
+                return false;
+            }
         });
         this.textField.setChangedListener(s -> {
-            this.value = s.isEmpty() ? 0 : Integer.parseUnsignedInt(s);
+            this.value = s.isEmpty() ? 0 : Integer.parseInt(s);
             this.setter.accept(this.value);
         });
     }
