@@ -35,10 +35,11 @@ public final class CKStuff {
 
     public static TextCache censor(TextCache value) {
         StyledString result = value.styledString();
+        StyledString source = result.mapCodePoints(Character::toLowerCase); // Search ignoring case
         for (Int2ObjectMap.Entry<Int2ObjectMap<Object>> entry : BAD_WORD_HASHES.int2ObjectEntrySet()) {
             int length = entry.getIntKey();
             Int2ObjectMap<Object> map = entry.getValue();
-            List<RabinKarp.Result<Object>> finds = RabinKarp.mapHashesAscii(result, map, length);
+            List<RabinKarp.Result<Object>> finds = RabinKarp.mapHashesAscii(source, map, length);
             String replacement = "*".repeat(length);
             for (RabinKarp.Result<Object> f : finds) {
                 result = result.insert(f.index(), replacement);
