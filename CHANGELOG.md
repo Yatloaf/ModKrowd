@@ -2,6 +2,10 @@
 
 ## 0.2.0: Unreleased
 
+### Added
+
+- You’ve Got Mail feature.
+
 ### Changed
 
 - `FeatureExtender` is now a proper entrypoint with the key `modkrowd:feature_extender`.

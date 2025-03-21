@@ -33,6 +33,7 @@ CubeKrowd has strict rules regarding allowed mods, which means some aren’t all
 - Dejoin
 - Separate Chat History
 - Click to Respond
+- You’ve Got Mail
 - Message Preview
 
 ### Creative
