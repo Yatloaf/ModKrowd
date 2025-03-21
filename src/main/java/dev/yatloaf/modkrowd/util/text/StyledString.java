@@ -19,6 +19,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.PrimitiveIterator;
 import java.util.function.Function;
+import java.util.function.IntUnaryOperator;
 
 /**
  * Text but good
@@ -337,6 +338,16 @@ public class StyledString {
         }
 
         return new StyledString(codePoints, styles);
+    }
+
+    public StyledString mapCodePoints(IntUnaryOperator mapper) {
+        int[] codePoints = new int[this.length];
+
+        for (int i = 0; i < codePoints.length; i++) {
+            codePoints[i] = mapper.applyAsInt(this.codePointAt(i));
+        }
+
+        return new StyledString(codePoints, 0, this.styles, this.stylesIndex, this.length);
     }
 
     public StyledString mapStyle(Function<Style, Style> mapper) {
