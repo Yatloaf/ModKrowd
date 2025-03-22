@@ -16,12 +16,27 @@ public final class CKStuff {
     public static final String CUBEKROWD_ADDRESS = "cubekrowd.net"; // server address containing this is treated as CubeKrowd (not case-sensitive)
     public static final String SUBSERVER_COMMAND = "whereami"; // command that returns subserver
 
-    // TODO: Complete the list
+    // All known words
     static {
         BAD_WORD_HASHES.put(4, 8223648, ModKrowd.USELESS);
         BAD_WORD_HASHES.put(4, 1736401, ModKrowd.USELESS);
         BAD_WORD_HASHES.put(4, 14513687, ModKrowd.USELESS);
         BAD_WORD_HASHES.put(4, 8010194, ModKrowd.USELESS);
+        BAD_WORD_HASHES.put(5, 3955782, ModKrowd.USELESS);
+        BAD_WORD_HASHES.put(5, 12545495, ModKrowd.USELESS);
+        BAD_WORD_HASHES.put(5, 4151181, ModKrowd.USELESS);
+        BAD_WORD_HASHES.put(5, 12561961, ModKrowd.USELESS);
+        BAD_WORD_HASHES.put(5, 6088137, ModKrowd.USELESS);
+        BAD_WORD_HASHES.put(6, 3026912, ModKrowd.USELESS);
+        BAD_WORD_HASHES.put(6, 14139499, ModKrowd.USELESS);
+        BAD_WORD_HASHES.put(6, 12714393, ModKrowd.USELESS);
+        BAD_WORD_HASHES.put(6, 14397938, ModKrowd.USELESS);
+        BAD_WORD_HASHES.put(6, 2624441, ModKrowd.USELESS);
+        BAD_WORD_HASHES.put(7, 15791507, ModKrowd.USELESS);
+        BAD_WORD_HASHES.put(7, 16575562, ModKrowd.USELESS);
+        BAD_WORD_HASHES.put(7, 8555973, ModKrowd.USELESS);
+        BAD_WORD_HASHES.put(7, 4358626, ModKrowd.USELESS);
+        BAD_WORD_HASHES.put(8, 10197496, ModKrowd.USELESS);
     }
 
     public static boolean addressIsCubeKrowd(String address) {
