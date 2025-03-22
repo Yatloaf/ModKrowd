@@ -1,9 +1,13 @@
 package dev.yatloaf.modkrowd.util;
 
+import com.google.common.collect.Iterators;
 import dev.yatloaf.modkrowd.util.text.StyledString;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.PrimitiveIterator;
 
@@ -69,6 +73,27 @@ public final class RabinKarp {
     }
 
     public record Result<T>(int index, T t) {}
+
+    public static class Needles<V> implements Iterable<Needle<V>> {
+        private final Int2ObjectMap<Int2ObjectMap<V>> hashes = new Int2ObjectOpenHashMap<>();
+
+        public void put(int length, int hash, V value) {
+            if (this.hashes.containsKey(length)) {
+                this.hashes.get(length).put(hash, value);
+            } else {
+                Int2ObjectMap<V> map = new Int2ObjectOpenHashMap<>();
+                map.put(hash, value);
+                this.hashes.put(length, map);
+            }
+        }
+
+        @Override
+        public @NotNull Iterator<Needle<V>> iterator() {
+            return Iterators.transform(this.hashes.int2ObjectEntrySet().iterator(), entry -> new Needle<>(entry.getIntKey(), entry.getValue()));
+        }
+    }
+
+    public record Needle<V>(int length, Int2ObjectMap<V> map) {}
 
     public static int hashAscii(String value) {
         return hash(value, ASCII_BASE, ASCII_PRIME);
