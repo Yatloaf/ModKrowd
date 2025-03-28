@@ -104,7 +104,10 @@ public class HighContrastThemeFeature extends ThemeFeature {
     protected void onMinigameTabList(MinigameTabList minigameTabList) {
         for (MinigameTabList.EntryCache player : minigameTabList.players()) {
             if (player.result() instanceof MinigameTabName minigameTabName && minigameTabName.afk() == Afk.TRUE) {
-                player.setThemed(TextCache.of(minigameTabName.mapTeamName(teamName -> teamName.mapName(StyledString::fillStrikethrough)).appearance()));
+                player.setThemed(TextCache.of(StyledString.concat(
+                        minigameTabName.afk().star.fillColor(CKColor.LIGHT_PURPLE.textColor),
+                        minigameTabName.teamName().appearance()
+                )));
             }
         }
     }
