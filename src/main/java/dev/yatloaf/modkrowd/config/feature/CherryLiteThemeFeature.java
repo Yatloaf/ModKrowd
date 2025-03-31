@@ -16,7 +16,7 @@ import dev.yatloaf.modkrowd.cubekrowd.message.MainChatMessage;
 import dev.yatloaf.modkrowd.cubekrowd.message.MinigameChatMessage;
 import dev.yatloaf.modkrowd.cubekrowd.message.cache.MessageCache;
 import dev.yatloaf.modkrowd.cubekrowd.tablist.MainTabColumn;
-import dev.yatloaf.modkrowd.cubekrowd.tablist.MainTabPing;
+import dev.yatloaf.modkrowd.cubekrowd.tablist.TabPing;
 import dev.yatloaf.modkrowd.cubekrowd.tablist.MainTabPlayers;
 import dev.yatloaf.modkrowd.cubekrowd.tablist.TabFooter;
 import dev.yatloaf.modkrowd.cubekrowd.tablist.TabFooterSection;
@@ -99,11 +99,21 @@ public class CherryLiteThemeFeature extends ThemeFeature {
 
     protected void onTabEntry(TabEntryCache entry) {
         switch (entry.result()) {
+            case TabPing tabPing -> entry.setThemed(this.tabPing(tabPing));
             case MainTabColumn mainTabColumn -> entry.setThemed(this.mainTabColumn(mainTabColumn));
             case MainTabPlayers mainTabPlayers -> entry.setThemed(this.mainTabPlayers(mainTabPlayers));
-            case MainTabPing mainTabPing -> entry.setThemed(this.mainTabPing(mainTabPing));
             default -> {}
         }
+    }
+
+    protected TextCache tabPing(TabPing ping) {
+        return TextCache.of(StyledString.concat(
+                TabPing.YOUR_PING_.fillColor(CHERRY5),
+                StyledString.fromString(
+                        " " + ping.latency() + "ms",
+                        Style.EMPTY.withColor(DefaultTheme.colorLatencyLevel(LatencyLevel.fromLatency(ping.latency())))
+                )
+        ));
     }
 
     protected TextCache mainTabColumn(MainTabColumn column) {
@@ -115,16 +125,6 @@ public class CherryLiteThemeFeature extends ThemeFeature {
                 MainTabPlayers.PLAYERS_.fillColor(CHERRY5),
                 StyledString.SPACE,
                 StyledString.fromString(Integer.toString(players.playerCount()), Style.EMPTY.withColor(CHERRY6))
-        ));
-    }
-
-    protected TextCache mainTabPing(MainTabPing ping) {
-        return TextCache.of(StyledString.concat(
-                MainTabPing.YOUR_PING_.fillColor(CHERRY5),
-                StyledString.fromString(
-                        " " + ping.latency() + "ms",
-                        Style.EMPTY.withColor(DefaultTheme.colorLatencyLevel(LatencyLevel.fromLatency(ping.latency())))
-                )
         ));
     }
 

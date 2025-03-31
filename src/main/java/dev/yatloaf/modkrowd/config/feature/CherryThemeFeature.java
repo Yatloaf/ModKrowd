@@ -12,7 +12,7 @@ import dev.yatloaf.modkrowd.cubekrowd.common.RankName;
 import dev.yatloaf.modkrowd.cubekrowd.common.cache.TextCache;
 import dev.yatloaf.modkrowd.cubekrowd.tablist.MainTabColumn;
 import dev.yatloaf.modkrowd.cubekrowd.tablist.MainTabName;
-import dev.yatloaf.modkrowd.cubekrowd.tablist.MainTabPing;
+import dev.yatloaf.modkrowd.cubekrowd.tablist.TabPing;
 import dev.yatloaf.modkrowd.cubekrowd.tablist.MinigameTabName;
 import dev.yatloaf.modkrowd.cubekrowd.tablist.cache.TabEntryCache;
 import dev.yatloaf.modkrowd.custom.Custom;
@@ -41,16 +41,16 @@ public class CherryThemeFeature extends CherryLiteThemeFeature {
     }
 
     @Override
-    protected TextCache mainTabColumn(MainTabColumn column) {
-        return TextCache.of(column.appearance().fillColor(column.online() ? CHERRY4 : CHERRY1));
+    protected TextCache tabPing(TabPing ping) {
+        return TextCache.of(StyledString.concat(
+                TabPing.YOUR_PING_.fillColor(CHERRY5),
+                StyledString.fromString(" " + ping.latency() + "ms", Style.EMPTY.withColor(CHERRY6))
+        ));
     }
 
     @Override
-    protected TextCache mainTabPing(MainTabPing ping) {
-        return TextCache.of(StyledString.concat(
-                MainTabPing.YOUR_PING_.fillColor(CHERRY5),
-                StyledString.fromString(" " + ping.latency() + "ms", Style.EMPTY.withColor(CHERRY6))
-        ));
+    protected TextCache mainTabColumn(MainTabColumn column) {
+        return TextCache.of(column.appearance().fillColor(column.online() ? CHERRY4 : CHERRY1));
     }
 
     protected TextCache mainTabName(MainTabName mainTabName) {

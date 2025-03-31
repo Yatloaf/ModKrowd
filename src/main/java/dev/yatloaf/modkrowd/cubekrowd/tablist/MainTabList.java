@@ -127,9 +127,9 @@ public record MainTabList(EntryCache[] entries, EntryCache[] players, EntryCache
 
             // Misaligned info NOT hardcoded to BuildTeam
             if (this.index == 19 || this.index == 18) {
-                MainTabPing mainTabPing = MainTabPing.readFast(StyledStringReader.of(this.original.styledString()));
-                if (mainTabPing.isReal()) {
-                    return mainTabPing;
+                TabPing tabPing = TabPing.readFast(StyledStringReader.of(this.original.styledString()));
+                if (tabPing.isReal()) {
+                    return tabPing;
                 }
             }
             if (this.index == 18 || this.index == 17) {

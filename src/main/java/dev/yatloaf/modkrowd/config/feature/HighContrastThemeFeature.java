@@ -13,7 +13,7 @@ import dev.yatloaf.modkrowd.cubekrowd.message.MainChatMessage;
 import dev.yatloaf.modkrowd.cubekrowd.message.cache.MessageCache;
 import dev.yatloaf.modkrowd.cubekrowd.tablist.MainTabList;
 import dev.yatloaf.modkrowd.cubekrowd.tablist.MainTabName;
-import dev.yatloaf.modkrowd.cubekrowd.tablist.MainTabPing;
+import dev.yatloaf.modkrowd.cubekrowd.tablist.TabPing;
 import dev.yatloaf.modkrowd.cubekrowd.tablist.MinigameTabList;
 import dev.yatloaf.modkrowd.cubekrowd.tablist.MinigameTabName;
 import dev.yatloaf.modkrowd.cubekrowd.tablist.cache.TabListCache;
@@ -89,11 +89,11 @@ public class HighContrastThemeFeature extends ThemeFeature {
                         mainTabName.afk().star.fillColor(CKColor.LIGHT_PURPLE.textColor),
                         modifyRankName(mainTabName.rankName()).appearance()
                 )));
-                case MainTabPing mainTabPing -> entry.setThemed(TextCache.of(StyledString.concat(
-                        MainTabPing.YOUR_PING_,
+                case TabPing tabPing -> entry.setThemed(TextCache.of(StyledString.concat(
+                        TabPing.YOUR_PING_,
                         StyledString.fromString(
-                                " " + mainTabPing.latency() + "ms",
-                                Style.EMPTY.withColor(DefaultTheme.colorLatencyLevel(LatencyLevel.fromLatency(mainTabPing.latency())))
+                                " " + tabPing.latency() + "ms",
+                                Style.EMPTY.withColor(DefaultTheme.colorLatencyLevel(LatencyLevel.fromLatency(tabPing.latency())))
                         )
                 )));
                 default -> {}
