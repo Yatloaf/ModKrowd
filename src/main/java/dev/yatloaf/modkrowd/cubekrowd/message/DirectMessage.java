@@ -1,7 +1,7 @@
 package dev.yatloaf.modkrowd.cubekrowd.message;
 
 import dev.yatloaf.modkrowd.cubekrowd.common.CKColor;
-import dev.yatloaf.modkrowd.cubekrowd.common.CKStuff;
+import dev.yatloaf.modkrowd.cubekrowd.common.CubeKrowd;
 import dev.yatloaf.modkrowd.cubekrowd.common.SelfPlayer;
 import dev.yatloaf.modkrowd.util.text.StyledString;
 import dev.yatloaf.modkrowd.util.text.StyledStringReader;
@@ -19,7 +19,7 @@ public record DirectMessage(Direction direction, String sender, String recipient
         if (senderStyled.isEmpty()) return FAILURE;
         String sender = senderStyled.toUnstyledString();
 
-        source.skipUntilAfter(CKStuff.RIGHT_ARROW);
+        source.skipUntilAfter(CubeKrowd.RIGHT_ARROW);
         source.skipUntilAfter(" ");
 
         StyledString recipientStyled = source.readUntil(" ");
@@ -54,7 +54,7 @@ public record DirectMessage(Direction direction, String sender, String recipient
 
     public StyledString appearance() {
         return StyledString.concat(
-                StyledString.fromString(this.sender + " " + CKStuff.RIGHT_ARROW + " " + this.recipient + " ", CKColor.GRAY.style),
+                StyledString.fromString(this.sender + " " + CubeKrowd.RIGHT_ARROW + " " + this.recipient + " ", CKColor.GRAY.style),
                 this.content
         );
     }

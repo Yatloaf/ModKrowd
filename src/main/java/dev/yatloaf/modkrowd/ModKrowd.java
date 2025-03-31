@@ -7,7 +7,7 @@ import dev.yatloaf.modkrowd.cubekrowd.common.cache.TextCache;
 import dev.yatloaf.modkrowd.cubekrowd.message.KickedMessage;
 import dev.yatloaf.modkrowd.cubekrowd.message.WhereamiMessage;
 import dev.yatloaf.modkrowd.cubekrowd.message.cache.CubeKrowdMessageCache;
-import dev.yatloaf.modkrowd.cubekrowd.common.CKStuff;
+import dev.yatloaf.modkrowd.cubekrowd.common.CubeKrowd;
 import dev.yatloaf.modkrowd.cubekrowd.message.cache.MessageCache;
 import dev.yatloaf.modkrowd.cubekrowd.subserver.MissileWarsSubserver;
 import dev.yatloaf.modkrowd.cubekrowd.subserver.Subserver;
@@ -166,9 +166,9 @@ public class ModKrowd implements ClientModInitializer {
 		mwSwitchIndex = 0;
 
 		ServerInfo info = handler.getServerInfo();
-		if (info != null && CKStuff.addressIsCubeKrowd(info.address)) {
+		if (info != null && CubeKrowd.addressIsCubeKrowd(info.address)) {
 			currentSubserver = Subservers.PENDING;
-			Util.sendCommandPacket(handler, CKStuff.SUBSERVER_COMMAND);
+			Util.sendCommandPacket(handler, CubeKrowd.SUBSERVER_COMMAND);
 		} else {
 			currentSubserver = Subservers.NONE;
 		}

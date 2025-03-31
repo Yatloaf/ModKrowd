@@ -8,13 +8,13 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 
 import java.util.List;
 
-public final class CKStuff {
+public final class CubeKrowd {
     @SuppressWarnings("UnnecessaryUnicodeEscape")
     public static final String RIGHT_ARROW = "\u279B";
-    public static final RabinKarp.Needles<Object> BAD_WORD_HASHES = new RabinKarp.Needles<>();
     public static final String CUBEKROWD_IP = "167.235.185.144";
     public static final String CUBEKROWD_ADDRESS = "cubekrowd.net"; // server address containing this is treated as CubeKrowd (not case-sensitive)
     public static final String SUBSERVER_COMMAND = "whereami"; // command that returns subserver
+    public static final RabinKarp.Needles<Object> BAD_WORD_HASHES = new RabinKarp.Needles<>();
 
     // All known words
     static {
