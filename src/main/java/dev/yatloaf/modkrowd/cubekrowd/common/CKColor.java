@@ -25,7 +25,11 @@ public enum CKColor {
     YELLOW(TextColor.fromFormatting(Formatting.YELLOW)),
     WHITE(TextColor.fromFormatting(Formatting.WHITE)),
     INDIGO(TextColor.fromRgb(0x864DEB)),
-    AZURE(TextColor.fromRgb(0x03A9F4));
+    AZURE(TextColor.fromRgb(0x03A9F4)),
+    SKY(TextColor.fromRgb(0x60C6FF)),
+    CRIMSON(TextColor.fromRgb(0xFF5F79)),
+    FESTIVE_GREEN(TextColor.fromRgb(0x43C800)),
+    FESTIVE_RED(TextColor.fromRgb(0xFF4E50));
 
     public final TextColor textColor;
     public final Style style;

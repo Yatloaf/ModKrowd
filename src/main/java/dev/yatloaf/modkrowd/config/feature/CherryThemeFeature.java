@@ -10,8 +10,11 @@ import dev.yatloaf.modkrowd.cubekrowd.common.MinigameTeamName;
 import dev.yatloaf.modkrowd.cubekrowd.common.Rank;
 import dev.yatloaf.modkrowd.cubekrowd.common.RankName;
 import dev.yatloaf.modkrowd.cubekrowd.common.cache.TextCache;
+import dev.yatloaf.modkrowd.cubekrowd.tablist.GameTabStatus;
+import dev.yatloaf.modkrowd.cubekrowd.tablist.GameTabSubserver;
 import dev.yatloaf.modkrowd.cubekrowd.tablist.MainTabColumn;
 import dev.yatloaf.modkrowd.cubekrowd.tablist.MainTabName;
+import dev.yatloaf.modkrowd.cubekrowd.tablist.TabCentered;
 import dev.yatloaf.modkrowd.cubekrowd.tablist.TabPing;
 import dev.yatloaf.modkrowd.cubekrowd.tablist.MinigameTabName;
 import dev.yatloaf.modkrowd.cubekrowd.tablist.cache.TabEntryCache;
@@ -23,6 +26,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.text.TextColor;
+import org.jetbrains.annotations.Nullable;
 
 public class CherryThemeFeature extends CherryLiteThemeFeature {
     public CherryThemeFeature(String id, PredicateIndex allowedPredicates) {
@@ -38,6 +42,38 @@ public class CherryThemeFeature extends CherryLiteThemeFeature {
             default -> {}
         }
         entry.setLatencyThemed(this.formatLatency(entry.latency));
+    }
+
+    @Override
+    protected @Nullable StyledString tabCentered(TabCentered<?> tabCentered) {
+        StyledString sup = super.tabCentered(tabCentered);
+        if (sup != null) return sup;
+
+        return switch (tabCentered.content()) {
+            case GameTabSubserver gameTabSubserver -> this.gameTabSubserver(gameTabSubserver);
+            case GameTabStatus gameTabStatus -> this.gameTabStatus(gameTabStatus);
+            default -> null;
+        };
+    }
+
+    protected @Nullable StyledString gameTabSubserver(GameTabSubserver gameTabSubserver) {
+        return gameTabSubserver.subserverName().mapStyle(style -> switch (CKColor.fromStyle(style)) {
+            case DARK_PURPLE -> style.withColor(CHERRY1);
+            case BLUE, RED, FESTIVE_RED -> style.withColor(CHERRY2);
+            case DARK_AQUA, CRIMSON -> style.withColor(CHERRY3);
+            case GOLD, FESTIVE_GREEN -> style.withColor(CHERRY4);
+            case GREEN, SKY -> style.withColor(CHERRY5);
+            case AQUA -> style.withColor(CHERRY6);
+            case null, default -> style;
+        });
+    }
+
+    protected @Nullable StyledString gameTabStatus(GameTabStatus gameTabStatus) {
+        return switch (gameTabStatus) {
+            case ONLINE -> gameTabStatus.text.fillColor(CHERRY6);
+            case OFFLINE -> gameTabStatus.text.fillColor(CHERRY3);
+            default -> gameTabStatus.text;
+        };
     }
 
     @Override

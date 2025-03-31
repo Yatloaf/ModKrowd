@@ -15,7 +15,11 @@ import dev.yatloaf.modkrowd.cubekrowd.message.DirectMessage;
 import dev.yatloaf.modkrowd.cubekrowd.message.MainChatMessage;
 import dev.yatloaf.modkrowd.cubekrowd.message.MinigameChatMessage;
 import dev.yatloaf.modkrowd.cubekrowd.message.cache.MessageCache;
+import dev.yatloaf.modkrowd.cubekrowd.tablist.GameTabLabel;
+import dev.yatloaf.modkrowd.cubekrowd.tablist.GameTabMode;
+import dev.yatloaf.modkrowd.cubekrowd.tablist.GameTabPlayers;
 import dev.yatloaf.modkrowd.cubekrowd.tablist.MainTabColumn;
+import dev.yatloaf.modkrowd.cubekrowd.tablist.TabCentered;
 import dev.yatloaf.modkrowd.cubekrowd.tablist.TabPing;
 import dev.yatloaf.modkrowd.cubekrowd.tablist.MainTabPlayers;
 import dev.yatloaf.modkrowd.cubekrowd.tablist.TabFooter;
@@ -29,6 +33,7 @@ import dev.yatloaf.modkrowd.util.text.StyledString;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.Style;
 import net.minecraft.text.TextColor;
+import org.jetbrains.annotations.Nullable;
 
 public class CherryLiteThemeFeature extends ThemeFeature {
     public static final TextColor CHERRY1 = TextColor.fromRgb(0xe986bb);
@@ -99,11 +104,53 @@ public class CherryLiteThemeFeature extends ThemeFeature {
 
     protected void onTabEntry(TabEntryCache entry) {
         switch (entry.result()) {
+            case TabCentered<?> tabCentered -> {
+                StyledString modified = this.tabCentered(tabCentered);
+                if (modified != null) {
+                    entry.setThemed(TextCache.of(StyledString.concat(tabCentered.prefix(), modified, tabCentered.suffix())));
+                }
+            }
             case TabPing tabPing -> entry.setThemed(this.tabPing(tabPing));
             case MainTabColumn mainTabColumn -> entry.setThemed(this.mainTabColumn(mainTabColumn));
             case MainTabPlayers mainTabPlayers -> entry.setThemed(this.mainTabPlayers(mainTabPlayers));
             default -> {}
         }
+    }
+
+    protected @Nullable StyledString tabCentered(TabCentered<?> tabCentered) {
+        return switch (tabCentered.content()) {
+            case GameTabLabel gameTabLabel -> this.gameTabLabel(gameTabLabel);
+            case GameTabMode gameTabMode -> this.gameTabMode(gameTabMode);
+            case GameTabPlayers gameTabPlayers -> this.gameTabPlayers(gameTabPlayers);
+            default -> null;
+        };
+    }
+
+    protected @Nullable StyledString gameTabLabel(GameTabLabel gameTabLabel) {
+        return switch (gameTabLabel) {
+            case WELCOME_TO -> gameTabLabel.text.fillColor(CHERRY3);
+            case ARCKADE -> gameTabLabel.text.mapStyle(style -> {
+                TextColor styleColor = style.getColor();
+                if (CKColor.DARK_PURPLE.textColor.equals(styleColor)) return style.withColor(CHERRY2);
+                if (CKColor.GOLD.textColor.equals(styleColor)) return style.withColor(CHERRY4);
+                return style;
+            });
+            case SERVER, MODE, PLAYERS, STATUS, YOUR_GAME -> gameTabLabel.text.fillColor(CHERRY4);
+            case UNDER, MAINTENANCE -> gameTabLabel.text.fillColor(CHERRY1);
+            default -> null;
+        };
+    }
+
+    protected @Nullable StyledString gameTabMode(GameTabMode gameTabMode) {
+        return StyledString.fromString(gameTabMode.text, Style.EMPTY.withColor(CHERRY5));
+    }
+
+    protected @Nullable StyledString gameTabPlayers(GameTabPlayers gameTabPlayers) {
+        return StyledString.concat(
+                StyledString.fromString(gameTabPlayers.playerCount() + "/", Style.EMPTY.withColor(CHERRY6)),
+                StyledString.fromString(Integer.toString(gameTabPlayers.playerLimit()), Style.EMPTY.withColor(CHERRY3))
+                // Ouch. The inconsistency
+        );
     }
 
     protected TextCache tabPing(TabPing ping) {

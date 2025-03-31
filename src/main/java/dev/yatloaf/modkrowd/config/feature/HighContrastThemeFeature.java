@@ -11,11 +11,10 @@ import dev.yatloaf.modkrowd.cubekrowd.message.AfkMessage;
 import dev.yatloaf.modkrowd.cubekrowd.message.AlohaMessage;
 import dev.yatloaf.modkrowd.cubekrowd.message.MainChatMessage;
 import dev.yatloaf.modkrowd.cubekrowd.message.cache.MessageCache;
-import dev.yatloaf.modkrowd.cubekrowd.tablist.MainTabList;
 import dev.yatloaf.modkrowd.cubekrowd.tablist.MainTabName;
 import dev.yatloaf.modkrowd.cubekrowd.tablist.TabPing;
-import dev.yatloaf.modkrowd.cubekrowd.tablist.MinigameTabList;
 import dev.yatloaf.modkrowd.cubekrowd.tablist.MinigameTabName;
+import dev.yatloaf.modkrowd.cubekrowd.tablist.cache.TabEntryCache;
 import dev.yatloaf.modkrowd.cubekrowd.tablist.cache.TabListCache;
 import dev.yatloaf.modkrowd.config.DefaultTheme;
 import dev.yatloaf.modkrowd.util.text.StyledString;
@@ -69,50 +68,52 @@ public class HighContrastThemeFeature extends ThemeFeature {
 
     protected void onMainChatMessage(MessageCache message, MainChatMessage mainChatMessage) {
         switch (mainChatMessage.sender().rank().letters()) {
-            case RESPECTED, VETERAN -> message.setThemed(TextCache.of(mainChatMessage.mapSender(HighContrastThemeFeature::modifyRankName).appearance()));
+            case RESPECTED, VETERAN -> message.setThemed(TextCache.of(mainChatMessage.mapSender(this::modifyRankName).appearance()));
         }
     }
 
     @Override
     public void onTabList(TabListCache tabList, MinecraftClient client, ActionQueue queue) {
-        switch (tabList.result()) {
-            case MainTabList mainTabList -> this.onMainTabList(mainTabList);
-            case MinigameTabList minigameTabList -> this.onMinigameTabList(minigameTabList);
-            default -> {}
-        }
-    }
-
-    protected void onMainTabList(MainTabList mainTabList) {
-        for (MainTabList.EntryCache entry : mainTabList.entries()) {
+        for (TabEntryCache entry : tabList.result().entries()) {
             switch (entry.result()) {
-                case MainTabName mainTabName -> entry.setThemed(TextCache.of(StyledString.concat(
-                        mainTabName.afk().star.fillColor(CKColor.LIGHT_PURPLE.textColor),
-                        modifyRankName(mainTabName.rankName()).appearance()
-                )));
-                case TabPing tabPing -> entry.setThemed(TextCache.of(StyledString.concat(
-                        TabPing.YOUR_PING_,
-                        StyledString.fromString(
-                                " " + tabPing.latency() + "ms",
-                                Style.EMPTY.withColor(DefaultTheme.colorLatencyLevel(LatencyLevel.fromLatency(tabPing.latency())))
-                        )
-                )));
+                case TabPing tabPing -> entry.setThemed(this.tabPing(tabPing));
+                case MainTabName mainTabName -> entry.setThemed(this.mainTabName(mainTabName));
+                case MinigameTabName minigameTabName
+                        when minigameTabName.afk() == Afk.TRUE -> entry.setThemed(this.minigameTabName(minigameTabName));
                 default -> {}
             }
         }
     }
 
-    protected void onMinigameTabList(MinigameTabList minigameTabList) {
-        for (MinigameTabList.EntryCache player : minigameTabList.players()) {
-            if (player.result() instanceof MinigameTabName minigameTabName && minigameTabName.afk() == Afk.TRUE) {
-                player.setThemed(TextCache.of(StyledString.concat(
-                        minigameTabName.afk().star.fillColor(CKColor.LIGHT_PURPLE.textColor),
-                        minigameTabName.teamName().appearance()
-                )));
-            }
-        }
+    protected TextCache tabPing(TabPing tabPing) {
+        return TextCache.of(StyledString.concat(
+                TabPing.YOUR_PING_,
+                StyledString.fromString(
+                        " " + tabPing.latency() + "ms",
+                        Style.EMPTY.withColor(DefaultTheme.colorLatencyLevel(LatencyLevel.fromLatency(tabPing.latency())))
+                )
+        ));
     }
 
-    protected static RankName modifyRankName(RankName rankName) {
+    protected TextCache mainTabName(MainTabName mainTabName) {
+        return TextCache.of(StyledString.concat(
+                this.afkStar(mainTabName.afk()),
+                this.modifyRankName(mainTabName.rankName()).appearance()
+        ));
+    }
+
+    protected TextCache minigameTabName(MinigameTabName minigameTabName) {
+        return TextCache.of(StyledString.concat(
+                this.afkStar(minigameTabName.afk()),
+                minigameTabName.teamName().appearance()
+        ));
+    }
+
+    protected StyledString afkStar(Afk afk) {
+        return afk.star.fillColor(CKColor.LIGHT_PURPLE.textColor);
+    }
+
+    protected RankName modifyRankName(RankName rankName) {
         return switch (rankName.rank().letters()) {
             case RESPECTED -> rankName.mapName(name -> name.fillColor(CKColor.LIGHT_PURPLE.textColor));
             case VETERAN -> rankName.mapName(name -> name.fillColor(CKColor.YELLOW.textColor));
