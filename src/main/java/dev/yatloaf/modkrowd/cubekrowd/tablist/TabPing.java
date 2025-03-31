@@ -5,12 +5,12 @@ import dev.yatloaf.modkrowd.util.text.StyledString;
 import dev.yatloaf.modkrowd.util.text.StyledStringReader;
 import dev.yatloaf.modkrowd.util.Util;
 
-public record MainTabPing(int latency, boolean isReal) implements TabEntry {
-    public static final MainTabPing FAILURE = new MainTabPing(-1, false);
+public record TabPing(int latency, boolean isReal) implements TabEntry {
+    public static final TabPing FAILURE = new TabPing(-1, false);
 
     public static final StyledString YOUR_PING_ = StyledString.fromString("Your ping:", CKColor.YELLOW.style);
 
-    public static MainTabPing readFast(StyledStringReader source) {
+    public static TabPing readFast(StyledStringReader source) {
         source.skipUntilAfter(YOUR_PING_);
         source.skipUntilAfter(" ");
 
@@ -22,6 +22,6 @@ public record MainTabPing(int latency, boolean isReal) implements TabEntry {
 
         source.skipUntilAfter("ms");
 
-        return new MainTabPing(latency, true);
+        return new TabPing(latency, true);
     }
 }
