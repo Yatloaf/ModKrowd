@@ -1,7 +1,6 @@
 package dev.yatloaf.modkrowd.cubekrowd.tablist;
 
 import dev.yatloaf.modkrowd.ModKrowd;
-import dev.yatloaf.modkrowd.cubekrowd.common.CKColor;
 import dev.yatloaf.modkrowd.cubekrowd.common.SelfPlayer;
 import dev.yatloaf.modkrowd.cubekrowd.common.cache.TextCache;
 import dev.yatloaf.modkrowd.cubekrowd.subserver.MinigameSubserver;
@@ -15,22 +14,21 @@ import net.minecraft.client.network.PlayerListEntry;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
 
 public record MinigameTabList(EntryCache[] entries, EntryCache[] players, EntryCache self, Subserver yourGame, boolean isReal) implements TabList {
     public static final EntryCache[] EMPTY_ENTRIES = new EntryCache[0];
     public static final MinigameTabList FAILURE = new MinigameTabList(EMPTY_ENTRIES, EMPTY_ENTRIES, null, Subservers.NONE, false);
-
-    public static final StyledString YOUR_GAME = StyledString.fromString("Your game", CKColor.GOLD.style.withBold(true));
 
     public static MinigameTabList parseFast(TabListCache source) {
         List<PlayerListEntry> playerListEntries = source.playerListEntries();
         if (playerListEntries.size() < 80) return FAILURE;
 
         StyledString styledString40 = source.getPlayerName(40).styledString();
-        if (!styledString40.strip().equals(ARCKADE)) return FAILURE;
+        if (TabCentered.parse(styledString40, GameTabLabel.ARCKADE::parseSpecific).content() != GameTabLabel.ARCKADE) return FAILURE;
 
         StyledString styledString61 = source.getPlayerName(61).styledString();
-        if (!styledString61.strip().equals(YOUR_GAME)) return FAILURE;
+        if (TabCentered.parse(styledString61, GameTabLabel.YOUR_GAME::parseSpecific).content() != GameTabLabel.YOUR_GAME) return FAILURE;
 
         boolean isLoaded = ModKrowd.currentSubserver.isReal();
         Subserver yourGame = isLoaded ? ModKrowd.currentSubserver : Subservers.UNKNOWN;
@@ -42,7 +40,7 @@ public record MinigameTabList(EntryCache[] entries, EntryCache[] players, EntryC
         for (int index = 0; index < playerListEntries.size(); index++) {
             PlayerListEntry playerListEntry = playerListEntries.get(index);
             TextCache name = source.getPlayerName(index);
-            boolean isPlayer = isLoaded && index >= 62 && !name.string().isBlank() && !name.styledString().contains(___AND);
+            boolean isPlayer = isLoaded && index >= 62 && index <= 79 && !name.string().isBlank() && !name.styledString().contains(___AND);
 
             EntryCache entryCache = new EntryCache(name, index, playerListEntry.getLatency(), yourGame, isPlayer);
             entries[index] = entryCache;
@@ -91,14 +89,49 @@ public record MinigameTabList(EntryCache[] entries, EntryCache[] players, EntryC
         }
 
         protected TabEntry createResult() {
-            if (this.isPlayer && this.subserver instanceof MinigameSubserver minigameSubserver) {
-                MinigameTabName minigameTabName = MinigameTabName.readFast(StyledStringReader.of(this.original.styledString()), minigameSubserver);
-                if (minigameTabName.isReal()) {
-                    return minigameTabName;
+            if (this.isPlayer) {
+                if (this.subserver instanceof MinigameSubserver minigameSubserver) {
+                    return MinigameTabName.readFast(StyledStringReader.of(this.original.styledString()), minigameSubserver);
+                } else {
+                    return TabEntry.FAILURE;
                 }
+            } else if ((this.index + 1) % 20 <= 2) { // Top 2 rows and bottom 1 row
+                if (this.index == 19) {
+                    return TabPing.readFast(StyledStringReader.of(this.original.styledString()));
+                } else {
+                    return TabCentered.parse(this.original.styledString(), labelForIndex(this.index)::parseSpecific);
+                }
+            } else {
+                return TabCentered.parse(this.original.styledString(), contentParserForIndex(this.index));
             }
+        }
 
-            return TabEntry.FAILURE;
+        protected static GameTabLabel labelForIndex(int index) {
+            return switch (index) {
+                case 20 -> GameTabLabel.WELCOME_TO;
+                case 40 -> GameTabLabel.ARCKADE;
+                case 1 -> GameTabLabel.SERVER;
+                case 21 -> GameTabLabel.PLAYERS;
+                case 41 -> GameTabLabel.STATUS;
+                case 61 -> GameTabLabel.YOUR_GAME;
+                default -> GameTabLabel.EMPTY;
+            };
+        }
+
+        protected static Function<StyledString, TabEntry> contentParserForIndex(int index) {
+            if (index < 40) {
+                if (index < 20) {
+                    return GameTabSubserver::parse;
+                } else {
+                    return source -> GameTabLabel.UNDER.matches(source)
+                            ? GameTabLabel.UNDER
+                            : GameTabPlayers.readSoft(StyledStringReader.of(source));
+                }
+            } else {
+                return source -> GameTabLabel.MAINTENANCE.matches(source)
+                        ? GameTabLabel.MAINTENANCE
+                        : GameTabStatus.parse(source);
+            }
         }
 
         @Override
