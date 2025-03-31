@@ -4,7 +4,7 @@ import dev.yatloaf.modkrowd.config.DefaultTheme;
 import dev.yatloaf.modkrowd.config.PredicateIndex;
 import dev.yatloaf.modkrowd.config.ActionQueue;
 import dev.yatloaf.modkrowd.cubekrowd.common.CKColor;
-import dev.yatloaf.modkrowd.cubekrowd.common.CKStuff;
+import dev.yatloaf.modkrowd.cubekrowd.common.CubeKrowd;
 import dev.yatloaf.modkrowd.cubekrowd.common.LatencyLevel;
 import dev.yatloaf.modkrowd.cubekrowd.common.MinigameTeamName;
 import dev.yatloaf.modkrowd.cubekrowd.common.RankName;
@@ -64,7 +64,7 @@ public class CherryLiteThemeFeature extends ThemeFeature {
 
     protected TextCache directMessage(DirectMessage message) {
         return TextCache.of(StyledString.concat(
-                StyledString.fromString(message.sender() + " " + CKStuff.RIGHT_ARROW + " " + message.recipient() + " ").fillColor(CHERRY3),
+                StyledString.fromString(message.sender() + " " + CubeKrowd.RIGHT_ARROW + " " + message.recipient() + " ").fillColor(CHERRY3),
                 message.content().fillColor(CHERRY5)
         ));
     }

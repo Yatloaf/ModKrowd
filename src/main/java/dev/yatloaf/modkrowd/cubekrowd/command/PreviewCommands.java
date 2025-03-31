@@ -7,7 +7,7 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import dev.yatloaf.modkrowd.ModKrowd;
 import dev.yatloaf.modkrowd.cubekrowd.common.CKColor;
-import dev.yatloaf.modkrowd.cubekrowd.common.CKStuff;
+import dev.yatloaf.modkrowd.cubekrowd.common.CubeKrowd;
 import dev.yatloaf.modkrowd.cubekrowd.common.RankBrackets;
 import dev.yatloaf.modkrowd.cubekrowd.common.cache.TextCache;
 import dev.yatloaf.modkrowd.cubekrowd.message.DirectMessage;
@@ -194,7 +194,7 @@ public final class PreviewCommands {
                 return TextCache.EMPTY;
             }
         } else {
-            return args.isEmpty() ? TextCache.EMPTY : CKStuff.censor(ModKrowd.currentSubserver.formatChat(args));
+            return args.isEmpty() ? TextCache.EMPTY : CubeKrowd.censor(ModKrowd.currentSubserver.formatChat(args));
         }
     }
 
