@@ -1,5 +1,6 @@
 package dev.yatloaf.modkrowd.cubekrowd.common;
 
+import com.google.common.net.HostAndPort;
 import dev.yatloaf.modkrowd.ModKrowd;
 import dev.yatloaf.modkrowd.cubekrowd.common.cache.TextCache;
 import dev.yatloaf.modkrowd.util.RabinKarp;
@@ -7,13 +8,13 @@ import dev.yatloaf.modkrowd.util.text.StyledString;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 
 import java.util.List;
+import java.util.regex.Pattern;
 
 public final class CubeKrowd {
     @SuppressWarnings("UnnecessaryUnicodeEscape")
     public static final String RIGHT_ARROW = "\u279B";
-    public static final String CUBEKROWD_IP = "167.235.185.144";
-    public static final String CUBEKROWD_ADDRESS = "cubekrowd.net"; // server address containing this is treated as CubeKrowd (not case-sensitive)
     public static final String SUBSERVER_COMMAND = "whereami"; // command that returns subserver
+    public static final Pattern CUBEKROWD_REGEX = Pattern.compile("167\\.235\\.185\\.144|(?i)(?:play\\.|game\\.)?cubekrowd\\.net");
     public static final RabinKarp.Needles<Object> BAD_WORD_HASHES = new RabinKarp.Needles<>();
 
     // All known words
@@ -40,7 +41,11 @@ public final class CubeKrowd {
     }
 
     public static boolean addressIsCubeKrowd(String address) {
-        return address.contains(CUBEKROWD_IP) || address.toLowerCase().contains(CUBEKROWD_ADDRESS);
+        try {
+            return CUBEKROWD_REGEX.matcher(HostAndPort.fromString(address).getHost()).matches();
+        } catch (IllegalArgumentException e) {
+            return false;
+        }
     }
 
     public static TextCache censor(TextCache value) {
