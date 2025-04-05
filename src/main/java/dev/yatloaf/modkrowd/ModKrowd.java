@@ -9,10 +9,12 @@ import dev.yatloaf.modkrowd.cubekrowd.message.WhereamiMessage;
 import dev.yatloaf.modkrowd.cubekrowd.message.cache.CubeKrowdMessageCache;
 import dev.yatloaf.modkrowd.cubekrowd.common.CubeKrowd;
 import dev.yatloaf.modkrowd.cubekrowd.message.cache.MessageCache;
+import dev.yatloaf.modkrowd.cubekrowd.subserver.CubeKrowdSubserver;
 import dev.yatloaf.modkrowd.cubekrowd.subserver.MissileWarsSubserver;
 import dev.yatloaf.modkrowd.cubekrowd.subserver.Subserver;
 import dev.yatloaf.modkrowd.cubekrowd.subserver.Subservers;
 import dev.yatloaf.modkrowd.cubekrowd.tablist.cache.TabListCache;
+import dev.yatloaf.modkrowd.mixin.ClientCommonNetworkHandlerAccessor;
 import dev.yatloaf.modkrowd.mixin.KeyBindingAccessor;
 import dev.yatloaf.modkrowd.util.Util;
 import net.fabricmc.api.ClientModInitializer;
@@ -155,6 +157,14 @@ public class ModKrowd implements ClientModInitializer {
 	}
 
 	private static void onConfigurationComplete(ClientConfigurationNetworkHandler handler, MinecraftClient client) {
+		ServerInfo info = ((ClientCommonNetworkHandlerAccessor) handler).getServerInfo();
+		if (info != null && CubeKrowd.addressIsCubeKrowd(info.address)) {
+			currentSubserver = Subservers.PENDING;
+		} else {
+			currentSubserver = Subservers.NONE;
+		}
+		CONFIG.updateFeatures();
+
 		CONFIG.onConfigurationComplete(handler, client);
 	}
 
@@ -165,12 +175,8 @@ public class ModKrowd implements ClientModInitializer {
 		mwSwitchTick = 0;
 		mwSwitchIndex = 0;
 
-		ServerInfo info = handler.getServerInfo();
-		if (info != null && CubeKrowd.addressIsCubeKrowd(info.address)) {
-			currentSubserver = Subservers.PENDING;
+		if (currentSubserver instanceof CubeKrowdSubserver) {
 			Util.sendCommandPacket(handler, CubeKrowd.SUBSERVER_COMMAND);
-		} else {
-			currentSubserver = Subservers.NONE;
 		}
 		CONFIG.onJoin(handler, client);
 	}
