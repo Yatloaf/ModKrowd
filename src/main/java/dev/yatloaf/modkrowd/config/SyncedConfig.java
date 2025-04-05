@@ -149,14 +149,12 @@ public class SyncedConfig extends Config {
         queue.flush(client);
     }
 
-    public synchronized boolean allowMessage(MessageCache message, boolean overlay) {
-        MinecraftClient client = MinecraftClient.getInstance();
+    public synchronized void onMessage(MessageCache message, MinecraftClient client) {
         ActionQueue queue = new ActionQueue();
         for (Feature f : this.enabledFeatures) {
-            f.onMessage(message, overlay, client, queue);
+            f.onMessage(message, client, queue);
         }
         queue.flush(client);
-        return !message.blocked();
     }
 
     public synchronized void onTabList(TabListCache tabList) {

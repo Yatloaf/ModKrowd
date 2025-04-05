@@ -83,7 +83,7 @@ public class AutoswitchFeature extends Feature {
     }
 
     @Override
-    public void onMessage(MessageCache message, boolean overlay, MinecraftClient client, ActionQueue queue) {
+    public void onMessage(MessageCache message, MinecraftClient client, ActionQueue queue) {
         if (message instanceof MissileWarsMessageCache mwCache && mwCache.missileWarsGameEndMessageFast().isReal()) {
             ModKrowd.startSwitchingMissileWarsLobby(this.delay);
         }
