@@ -5,16 +5,24 @@
 ### Added
 
 - You’ve Got Mail feature.
+- All known censored words for Message Preview.
+- GameLobby tab list theming.
+- `Connecting to <server>...` message theming.
 
 ### Changed
 
 - `FeatureExtender` is now a proper entrypoint with the key `modkrowd:feature_extender`.
+- Messages now get logged without modifications even if they are modified or blocked.
+- Using the wrong Minecraft version no longer silently fails.
 
 ### Fixed
 
 - Slim Armor sometimes being broken until reloading resources.
 - Separate Chat History applying too late.
 - Rare crash when trying to switch MissileWars lobbies while not ingame.
+- Message Preview censoring being case-sensitive.
+- High Contrast theme inconsistently styling AFK players.
+- Early messages sometimes not being themed.
 
 ## 0.1.3: 2025-03-08
 
