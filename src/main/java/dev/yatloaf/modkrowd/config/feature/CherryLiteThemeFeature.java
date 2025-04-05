@@ -11,6 +11,7 @@ import dev.yatloaf.modkrowd.cubekrowd.common.RankName;
 import dev.yatloaf.modkrowd.cubekrowd.common.cache.TextCache;
 import dev.yatloaf.modkrowd.cubekrowd.message.AfkMessage;
 import dev.yatloaf.modkrowd.cubekrowd.message.AlohaMessage;
+import dev.yatloaf.modkrowd.cubekrowd.message.ConnectingMessage;
 import dev.yatloaf.modkrowd.cubekrowd.message.DirectMessage;
 import dev.yatloaf.modkrowd.cubekrowd.message.MainChatMessage;
 import dev.yatloaf.modkrowd.cubekrowd.message.MinigameChatMessage;
@@ -53,6 +54,7 @@ public class CherryLiteThemeFeature extends ThemeFeature {
             case AlohaMessage alohaMessage -> message.setThemed(this.alohaMessage(alohaMessage));
             case AfkMessage afkMessage -> message.setThemed(this.afkMessage(afkMessage));
             case DirectMessage directMessage -> message.setThemed(this.directMessage(directMessage));
+            case ConnectingMessage connectingMessage -> message.setThemed(this.connectingMessage(connectingMessage));
             case MainChatMessage mainChatMessage -> message.setThemed(this.mainChatMessage(mainChatMessage));
             case MinigameChatMessage minigameChatMessage -> message.setThemed(this.minigameChatMessage(minigameChatMessage));
             default -> {}
@@ -72,6 +74,10 @@ public class CherryLiteThemeFeature extends ThemeFeature {
                 StyledString.fromString(message.sender() + " " + CubeKrowd.RIGHT_ARROW + " " + message.recipient() + " ").fillColor(CHERRY3),
                 message.content().fillColor(CHERRY5)
         ));
+    }
+
+    protected TextCache connectingMessage(ConnectingMessage message) {
+        return TextCache.of(message.appearance().fillColor(CHERRY4));
     }
 
     protected TextCache mainChatMessage(MainChatMessage message) {
