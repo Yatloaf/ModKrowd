@@ -2,6 +2,7 @@ package dev.yatloaf.modkrowd.cubekrowd.message.cache;
 
 import dev.yatloaf.modkrowd.cubekrowd.message.AfkMessage;
 import dev.yatloaf.modkrowd.cubekrowd.message.AlohaMessage;
+import dev.yatloaf.modkrowd.cubekrowd.message.ConnectingMessage;
 import dev.yatloaf.modkrowd.cubekrowd.message.DirectMessage;
 import dev.yatloaf.modkrowd.cubekrowd.message.KickedMessage;
 import dev.yatloaf.modkrowd.cubekrowd.message.Message;
@@ -16,6 +17,7 @@ public class CubeKrowdMessageCache extends MessageCache {
     private AlohaMessage alohaMessage;
     private AfkMessage afkMessage;
     private DirectMessage directMessage;
+    private ConnectingMessage connectingMessage;
     private UnavailableMessage unavailableMessage;
     private KickedMessage kickedMessage;
 
@@ -38,6 +40,11 @@ public class CubeKrowdMessageCache extends MessageCache {
         DirectMessage directMessage = this.directMessageFast();
         if (directMessage.isReal()) {
             return directMessage;
+        }
+
+        ConnectingMessage connectingMessage = this.connectingToSubserverMessageFast();
+        if (connectingMessage.isReal()) {
+            return connectingMessage;
         }
 
         UnavailableMessage unavailableMessage = this.unavailableMessageFast();
@@ -83,6 +90,13 @@ public class CubeKrowdMessageCache extends MessageCache {
             this.directMessage = DirectMessage.readFast(StyledStringReader.of(this.original.styledString()));
         }
         return this.directMessage;
+    }
+
+    public final ConnectingMessage connectingToSubserverMessageFast() {
+        if (this.connectingMessage == null) {
+            this.connectingMessage = ConnectingMessage.readFast(StyledStringReader.of(this.original.styledString()));
+        }
+        return this.connectingMessage;
     }
 
     public final UnavailableMessage unavailableMessageFast() {
