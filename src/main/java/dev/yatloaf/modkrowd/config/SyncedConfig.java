@@ -56,11 +56,6 @@ public class SyncedConfig extends Config {
         this.dirty = true;
     }
 
-    @Deprecated(forRemoval = true, since = "0.1.3")
-    public void updateFeatures(MinecraftClient client, Subserver subserver) {
-        this.updateFeatures(client, subserver, client.player != null ? client.player.getPermissionLevel() : 0);
-    }
-
     public void updateFeatures() {
         MinecraftClient client = MinecraftClient.getInstance();
         this.updateFeatures(client, ModKrowd.currentSubserver, client.player != null ? client.player.getPermissionLevel() : 0);
