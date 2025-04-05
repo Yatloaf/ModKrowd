@@ -3,7 +3,6 @@ package dev.yatloaf.modkrowd;
 import dev.yatloaf.modkrowd.config.Config;
 import dev.yatloaf.modkrowd.config.screen.ConfigScreen;
 import dev.yatloaf.modkrowd.config.SyncedConfig;
-import dev.yatloaf.modkrowd.cubekrowd.common.cache.TextCache;
 import dev.yatloaf.modkrowd.cubekrowd.message.KickedMessage;
 import dev.yatloaf.modkrowd.cubekrowd.message.WhereamiMessage;
 import dev.yatloaf.modkrowd.cubekrowd.message.cache.CubeKrowdMessageCache;
@@ -21,7 +20,6 @@ import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
-import net.fabricmc.fabric.api.client.message.v1.ClientReceiveMessageEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientConfigurationConnectionEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
@@ -34,8 +32,6 @@ import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.client.network.ServerInfo;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;
-import net.minecraft.text.MutableText;
-import net.minecraft.text.Text;
 import org.lwjgl.glfw.GLFW;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -67,7 +63,6 @@ public class ModKrowd implements ClientModInitializer {
 	public static boolean INIT = false; // TODO: Better, somehow
 
 	private static boolean pendingTabListCache = true;
-	private static MessageCache currentMessage = null;
 	private static MwSwitchStatus mwSwitchStatus = MwSwitchStatus.IDLE;
 	private static long mwSwitchTick = 0;
 	private static int mwSwitchIndex = 0;
@@ -99,8 +94,6 @@ public class ModKrowd implements ClientModInitializer {
 		ClientPlayConnectionEvents.JOIN.register(ModKrowd::onJoin);
 		ClientPlayConnectionEvents.DISCONNECT.register(ModKrowd::onDisconnect);
 		ClientTickEvents.END_CLIENT_TICK.register(ModKrowd::onEndClientTick);
-		ClientReceiveMessageEvents.ALLOW_GAME.register(ModKrowd::allowMessage);
-		ClientReceiveMessageEvents.MODIFY_GAME.register(ModKrowd::modifyMessage);
 		ClientLifecycleEvents.CLIENT_STOPPING.register(ModKrowd::onClientStopping);
 
 		CONFIG.tryDeserialize(CONFIG_FILE);
@@ -208,19 +201,22 @@ public class ModKrowd implements ClientModInitializer {
 		}
 	}
 
-	private static boolean allowMessage(Text message, boolean overlay) {
-		currentMessage = MessageCache.of(TextCache.of((MutableText) message), currentSubserver);
+	private static void onClientStopping(MinecraftClient client) {
+		CONFIG.trySerialize(CONFIG_FILE);
+	}
 
-		if (currentMessage instanceof CubeKrowdMessageCache ckCache) {
-			MinecraftClient client = MinecraftClient.getInstance();
+	public static void onMessage(MessageCache message) {
+		MinecraftClient client = MinecraftClient.getInstance();
 
+		if (message instanceof CubeKrowdMessageCache ckCache) {
 			if (currentSubserver == Subservers.PENDING) {
 				WhereamiMessage whereamiMessage = ckCache.whereamiMessageFast();
 				if (whereamiMessage.isReal()) {
 					currentSubserver = whereamiMessage.subserver();
 					CONFIG.updateFeatures();
 					CONFIG.onJoinUpdated(client.getNetworkHandler(), client);
-					return false;
+					message.setBlocked(true);
+					return;
 				}
 			}
 
@@ -237,22 +233,7 @@ public class ModKrowd implements ClientModInitializer {
 			}
 		}
 
-		return CONFIG.allowMessage(currentMessage, overlay);
-	}
-
-	private static Text modifyMessage(Text message, boolean overlay) {
-		if (currentMessage != null && currentMessage.original.text() == message) {
-			MutableText value = currentMessage.themedOrDefault().text();
-			currentMessage = null;
-            return value;
-        } else {
-			// Already modified by some other mod
-			return message;
-		}
-	}
-
-	private static void onClientStopping(MinecraftClient client) {
-		CONFIG.trySerialize(CONFIG_FILE);
+		CONFIG.onMessage(message, client);
 	}
 
 	private enum MwSwitchStatus {

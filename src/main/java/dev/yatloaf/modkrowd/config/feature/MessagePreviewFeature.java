@@ -48,7 +48,7 @@ public class MessagePreviewFeature extends Feature {
     }
 
     @Override
-    public void onMessage(MessageCache message, boolean overlay, MinecraftClient client, ActionQueue queue) {
+    public void onMessage(MessageCache message, MinecraftClient client, ActionQueue queue) {
         if (!(client.currentScreen instanceof ChatScreen)) {
             this.clearPreviewMessage();
         }

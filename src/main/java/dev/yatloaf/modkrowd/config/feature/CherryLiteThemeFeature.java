@@ -49,7 +49,7 @@ public class CherryLiteThemeFeature extends ThemeFeature {
     }
 
     @Override
-    public void onMessage(MessageCache message, boolean overlay, MinecraftClient client, ActionQueue queue) {
+    public void onMessage(MessageCache message, MinecraftClient client, ActionQueue queue) {
         switch (message.result()) {
             case AlohaMessage alohaMessage -> message.setThemed(this.alohaMessage(alohaMessage));
             case AfkMessage afkMessage -> message.setThemed(this.afkMessage(afkMessage));

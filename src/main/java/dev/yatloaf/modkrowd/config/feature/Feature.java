@@ -15,7 +15,6 @@ import dev.yatloaf.modkrowd.cubekrowd.tablist.cache.TabListCache;
 import dev.yatloaf.modkrowd.custom.Custom;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
-import net.fabricmc.fabric.api.client.message.v1.ClientReceiveMessageEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientConfigurationConnectionEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.minecraft.client.MinecraftClient;
@@ -162,15 +161,11 @@ public class Feature {
     /**
      * Called when a game message is received if the feature is enabled.
      *
-     * @see ClientReceiveMessageEvents#ALLOW_GAME
-     * @see ClientReceiveMessageEvents#MODIFY_GAME
-     *
      * @param message The message with convenient methods for parsing and modifying.
-     * @param overlay Whether the message will be displayed in the action bar.
      * @param client  The {@link MinecraftClient} instance.
      * @param queue   The {@link ActionQueue} that is flushed after iterating through the features.
      */
-    public void onMessage(MessageCache message, boolean overlay, MinecraftClient client, ActionQueue queue) {
+    public void onMessage(MessageCache message, MinecraftClient client, ActionQueue queue) {
 
     }
 

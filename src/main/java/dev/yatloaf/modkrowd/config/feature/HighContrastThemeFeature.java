@@ -27,7 +27,7 @@ public class HighContrastThemeFeature extends ThemeFeature {
     }
 
     @Override
-    public void onMessage(MessageCache message, boolean overlay, MinecraftClient client, ActionQueue queue) {
+    public void onMessage(MessageCache message, MinecraftClient client, ActionQueue queue) {
         switch (message.result()) {
             case AlohaMessage alohaMessage -> this.onAlohaMessage(message, alohaMessage);
             case AfkMessage afkMessage -> this.onAfkMessage(message, afkMessage);

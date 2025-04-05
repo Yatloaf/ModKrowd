@@ -15,7 +15,7 @@ public class ClickResponseFeature extends Feature {
     }
 
     @Override
-    public void onMessage(MessageCache message, boolean overlay, MinecraftClient client, ActionQueue queue) {
+    public void onMessage(MessageCache message, MinecraftClient client, ActionQueue queue) {
         if (message instanceof CubeKrowdMessageCache ckMessage) {
             DirectMessage dm = ckMessage.directMessageFast();
             if (dm.isReal()) {
