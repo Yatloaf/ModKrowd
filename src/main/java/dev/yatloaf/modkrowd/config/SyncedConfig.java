@@ -67,9 +67,8 @@ public class SyncedConfig extends Config {
     }
 
     public synchronized void updateFeatures(MinecraftClient client, Subserver subserver, int permissionLevel) {
-        if (subserver == Subservers.PENDING) {
-            return;
-        }
+        boolean disable = subserver != Subservers.PENDING;
+
         List<Feature> eventEnable = new ArrayList<>();
         List<Feature> eventDisable = new ArrayList<>();
         for (Feature f : this.features) {
@@ -80,7 +79,7 @@ public class SyncedConfig extends Config {
                     eventEnable.add(f);
                 }
             } else {
-                if (f.enabled) {
+                if (f.enabled && disable) {
                     f.enabled = false;
                     this.enabledFeatures.remove(f);
                     eventDisable.add(f);

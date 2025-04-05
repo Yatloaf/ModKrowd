@@ -1,6 +1,7 @@
 package dev.yatloaf.modkrowd.cubekrowd.message.cache;
 
 import dev.yatloaf.modkrowd.cubekrowd.message.AfkMessage;
+import dev.yatloaf.modkrowd.cubekrowd.message.AlohaMessage;
 import dev.yatloaf.modkrowd.cubekrowd.message.DirectMessage;
 import dev.yatloaf.modkrowd.cubekrowd.message.KickedMessage;
 import dev.yatloaf.modkrowd.cubekrowd.message.Message;
@@ -8,9 +9,11 @@ import dev.yatloaf.modkrowd.cubekrowd.message.UnavailableMessage;
 import dev.yatloaf.modkrowd.cubekrowd.message.WhereamiMessage;
 import dev.yatloaf.modkrowd.cubekrowd.common.cache.TextCache;
 import dev.yatloaf.modkrowd.util.text.StyledStringReader;
+import net.minecraft.text.TranslatableTextContent;
 
 public class CubeKrowdMessageCache extends MessageCache {
     private WhereamiMessage whereamiMessage;
+    private AlohaMessage alohaMessage;
     private AfkMessage afkMessage;
     private DirectMessage directMessage;
     private UnavailableMessage unavailableMessage;
@@ -55,6 +58,17 @@ public class CubeKrowdMessageCache extends MessageCache {
             this.whereamiMessage = WhereamiMessage.readFast(StyledStringReader.of(this.original.styledString()));
         }
         return this.whereamiMessage;
+    }
+
+    public final AlohaMessage alohaMessageFast() {
+        if (this.alohaMessage == null) {
+            if (this.original.text().getContent() instanceof TranslatableTextContent content) {
+                this.alohaMessage = AlohaMessage.parseFast(content);
+            } else {
+                this.alohaMessage = AlohaMessage.FAILED;
+            }
+        }
+        return this.alohaMessage;
     }
 
     public final AfkMessage afkMessageFast() {

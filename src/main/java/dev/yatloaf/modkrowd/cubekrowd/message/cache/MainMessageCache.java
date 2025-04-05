@@ -5,10 +5,8 @@ import dev.yatloaf.modkrowd.cubekrowd.message.MainChatMessage;
 import dev.yatloaf.modkrowd.cubekrowd.message.Message;
 import dev.yatloaf.modkrowd.cubekrowd.common.cache.TextCache;
 import dev.yatloaf.modkrowd.util.text.StyledStringReader;
-import net.minecraft.text.TranslatableTextContent;
 
 public class MainMessageCache extends CubeKrowdMessageCache {
-    private AlohaMessage alohaMessage;
     private MainChatMessage mainChatMessage;
 
     public MainMessageCache(TextCache original) {
@@ -28,17 +26,6 @@ public class MainMessageCache extends CubeKrowdMessageCache {
         }
 
         return super.createResult();
-    }
-
-    public final AlohaMessage alohaMessageFast() {
-        if (this.alohaMessage == null) {
-            if (this.original.text().getContent() instanceof TranslatableTextContent content) {
-                this.alohaMessage = AlohaMessage.parseFast(content);
-            } else {
-                this.alohaMessage = AlohaMessage.FAILED;
-            }
-        }
-        return this.alohaMessage;
     }
 
     public final MainChatMessage mainChatMessageFast() {
