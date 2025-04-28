@@ -2,6 +2,10 @@
 
 ## 0.2.1: Unreleased
 
+### Fixed
+
+- Slapfish not being recognized.
+
 ## 0.2.0: 2025-04-05
 
 ### Added

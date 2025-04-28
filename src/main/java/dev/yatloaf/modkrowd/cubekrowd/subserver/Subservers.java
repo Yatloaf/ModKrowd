@@ -52,8 +52,8 @@ public final class Subservers {
     public static final SnowySkirmishSubserver SNOWYSKIRMISH2 = subserver(new SnowySkirmishSubserver("snowyskirmish2", "SnowySkirmish 2", "SnowySkirmish 2"));
     public static final IceRunnerSubserver ICERUNNER = subserver(new IceRunnerSubserver("icerunner", "IceRunner", "IceRunner"));
     public static final FishslapSubserver FISHSLAP = subserver(new FishslapSubserver("fishslap", "Fishslap", "Fishslap"));
+    public static final FishslapSubserver SLAPFISH = subserver(new FishslapSubserver("pvp", "PVP", "PVP")); // Might change if PVP ever comes back for real
     public static final UHCSubserver UHC = subserver(new UHCSubserver("uhc", "UHC"));
-    public static final FakeSubserver PVP = subserver(new FakeSubserver("pvp", "PVP", "PVP")); // :sunglasses:
 
     static {
         MISSILEWARS1.nextSubservers = new Subserver[]{MISSILEWARS2, MISSILEWARS3, MISSILEWARS4, MISSILEWARS5};
