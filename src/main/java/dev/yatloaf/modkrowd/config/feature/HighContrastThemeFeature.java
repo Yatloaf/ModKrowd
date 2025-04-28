@@ -9,6 +9,7 @@ import dev.yatloaf.modkrowd.cubekrowd.common.RankName;
 import dev.yatloaf.modkrowd.cubekrowd.common.cache.TextCache;
 import dev.yatloaf.modkrowd.cubekrowd.message.AfkMessage;
 import dev.yatloaf.modkrowd.cubekrowd.message.AlohaMessage;
+import dev.yatloaf.modkrowd.cubekrowd.message.FishslapChatMessage;
 import dev.yatloaf.modkrowd.cubekrowd.message.MainChatMessage;
 import dev.yatloaf.modkrowd.cubekrowd.message.cache.MessageCache;
 import dev.yatloaf.modkrowd.cubekrowd.tablist.MainTabName;
@@ -34,6 +35,7 @@ public class HighContrastThemeFeature extends ThemeFeature {
             case AlohaMessage alohaMessage -> this.onAlohaMessage(message, alohaMessage);
             case AfkMessage afkMessage -> this.onAfkMessage(message, afkMessage);
             case MainChatMessage mainChatMessage -> this.onMainChatMessage(message, mainChatMessage);
+            case FishslapChatMessage fishslapChatMessage -> this.onFishslapChatMessage(message, fishslapChatMessage);
             default -> {}
         }
     }
@@ -71,6 +73,12 @@ public class HighContrastThemeFeature extends ThemeFeature {
     protected void onMainChatMessage(MessageCache message, MainChatMessage mainChatMessage) {
         switch (mainChatMessage.sender().rank().letters()) {
             case RESPECTED, VETERAN -> message.setThemed(TextCache.of(mainChatMessage.mapSender(this::modifyRankName).appearance()));
+        }
+    }
+
+    protected void onFishslapChatMessage(MessageCache message, FishslapChatMessage fishslapChatMessage) {
+        switch (fishslapChatMessage.sender().rank().letters()) {
+            case RESPECTED, VETERAN -> message.setThemed(TextCache.of(fishslapChatMessage.mapSender(this::modifyRankName).appearance()));
         }
     }
 

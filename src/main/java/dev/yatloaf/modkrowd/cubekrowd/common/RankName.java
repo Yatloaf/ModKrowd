@@ -11,7 +11,7 @@ public record RankName(Rank rank, StyledString name, boolean isReal) {
     public static RankName readSoft(StyledStringReader source) {
         Rank rank = Rank.readSoft(source);
         source.skipUntilAfter(" ");
-        StyledString name = source.readUntil(" ").isolate();
+        StyledString name = source.readUntilAny(">", " ").isolate();
 
         boolean isReal = rank.isReal() && !name.isEmpty();
         return new RankName(rank, name, isReal);
@@ -22,7 +22,7 @@ public record RankName(Rank rank, StyledString name, boolean isReal) {
         if (!rank.isReal()) return FAILURE;
 
         source.skipUntilAfter(" ");
-        StyledString name = source.readUntil(" ").isolate();
+        StyledString name = source.readUntilAny(">", " ").isolate();
         if (name.isEmpty()) return FAILURE;
 
         return new RankName(rank, name, true);

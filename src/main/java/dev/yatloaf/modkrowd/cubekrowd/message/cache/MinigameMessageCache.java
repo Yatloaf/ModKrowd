@@ -6,7 +6,7 @@ import dev.yatloaf.modkrowd.cubekrowd.message.MinigameChatMessage;
 import dev.yatloaf.modkrowd.cubekrowd.subserver.MinigameSubserver;
 import dev.yatloaf.modkrowd.util.text.StyledStringReader;
 
-public class MinigameMessageCache extends CubeKrowdMessageCache { // NOT a superclass of IceRunnerMessageCache
+public class MinigameMessageCache extends CubeKrowdMessageCache { // NOT a superclass of FishslapMessageCache
     public final MinigameSubserver subserver;
 
     private MinigameChatMessage minigameChatMessage;
