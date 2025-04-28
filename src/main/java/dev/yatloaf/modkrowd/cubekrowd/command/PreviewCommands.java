@@ -181,7 +181,7 @@ public final class PreviewCommands {
      * Get the message preview for the current chat text
      *
      * @param args current chat text, stripped of multi-spaces
-     * @return the message preview, or {@code EmptyCache.EMPTY} if there is none
+     * @return the message preview, or {@link TextCache#EMPTY} if there is none
      */
     public static @NotNull TextCache preview(@NotNull String args) {
         if (args.startsWith("/")) {
@@ -194,7 +194,11 @@ public final class PreviewCommands {
                 return TextCache.EMPTY;
             }
         } else {
-            return args.isEmpty() ? TextCache.EMPTY : CubeKrowd.censor(ModKrowd.currentSubserver.formatChat(args));
+            if (args.isEmpty()) return TextCache.EMPTY;
+
+            TextCache chat = ModKrowd.currentSubserver.formatChat(args);
+            if (chat == TextCache.EMPTY) return TextCache.EMPTY;
+            return CubeKrowd.censor(chat);
         }
     }
 
