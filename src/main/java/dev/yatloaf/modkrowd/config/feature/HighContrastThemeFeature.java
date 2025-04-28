@@ -12,9 +12,11 @@ import dev.yatloaf.modkrowd.cubekrowd.message.AlohaMessage;
 import dev.yatloaf.modkrowd.cubekrowd.message.MainChatMessage;
 import dev.yatloaf.modkrowd.cubekrowd.message.cache.MessageCache;
 import dev.yatloaf.modkrowd.cubekrowd.tablist.MainTabName;
+import dev.yatloaf.modkrowd.cubekrowd.tablist.TabHeader;
 import dev.yatloaf.modkrowd.cubekrowd.tablist.TabPing;
 import dev.yatloaf.modkrowd.cubekrowd.tablist.MinigameTabName;
 import dev.yatloaf.modkrowd.cubekrowd.tablist.cache.TabEntryCache;
+import dev.yatloaf.modkrowd.cubekrowd.tablist.cache.TabHeaderCache;
 import dev.yatloaf.modkrowd.cubekrowd.tablist.cache.TabListCache;
 import dev.yatloaf.modkrowd.config.DefaultTheme;
 import dev.yatloaf.modkrowd.util.text.StyledString;
@@ -83,6 +85,10 @@ public class HighContrastThemeFeature extends ThemeFeature {
                 default -> {}
             }
         }
+        TabHeaderCache tabHeader = tabList.tabHeaderCache();
+        switch (tabHeader.tabHeaderSoft().rankName().rank().letters()) {
+            case RESPECTED, VETERAN -> tabHeader.setThemed(this.tabHeader(tabHeader.tabHeaderSoft()));
+        }
     }
 
     protected TextCache tabPing(TabPing tabPing) {
@@ -106,6 +112,18 @@ public class HighContrastThemeFeature extends ThemeFeature {
         return TextCache.of(StyledString.concat(
                 this.afkStar(minigameTabName.afk()),
                 minigameTabName.teamName().appearance()
+        ));
+    }
+
+    protected TextCache tabHeader(TabHeader tabHeader) {
+        return TextCache.of(StyledString.concat(
+                TabHeader.PREFIX1,
+                TabHeader.INFIX1,
+                this.modifyRankName(tabHeader.rankName()).appearance(),
+                TabHeader.SUFFIX1,
+                StyledString.NEWLINE,
+                TabHeader.PREFIX2,
+                tabHeader.time().appearance()
         ));
     }
 
