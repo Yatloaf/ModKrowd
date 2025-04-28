@@ -13,6 +13,7 @@ import dev.yatloaf.modkrowd.cubekrowd.message.AfkMessage;
 import dev.yatloaf.modkrowd.cubekrowd.message.AlohaMessage;
 import dev.yatloaf.modkrowd.cubekrowd.message.ConnectingMessage;
 import dev.yatloaf.modkrowd.cubekrowd.message.DirectMessage;
+import dev.yatloaf.modkrowd.cubekrowd.message.FishslapChatMessage;
 import dev.yatloaf.modkrowd.cubekrowd.message.MainChatMessage;
 import dev.yatloaf.modkrowd.cubekrowd.message.MinigameChatMessage;
 import dev.yatloaf.modkrowd.cubekrowd.message.cache.MessageCache;
@@ -57,6 +58,7 @@ public class CherryLiteThemeFeature extends ThemeFeature {
             case ConnectingMessage connectingMessage -> message.setThemed(this.connectingMessage(connectingMessage));
             case MainChatMessage mainChatMessage -> message.setThemed(this.mainChatMessage(mainChatMessage));
             case MinigameChatMessage minigameChatMessage -> message.setThemed(this.minigameChatMessage(minigameChatMessage));
+            case FishslapChatMessage fishslapChatMessage -> message.setThemed(this.fishslapChatMessage(fishslapChatMessage));
             default -> {}
         }
     }
@@ -92,6 +94,15 @@ public class CherryLiteThemeFeature extends ThemeFeature {
         return TextCache.of(StyledString.concat(
                 StyledString.fromString("<").fillColor(CHERRY6),
                 this.minigameTeamName(message.teamName()),
+                StyledString.fromString("> ").fillColor(CHERRY6),
+                message.content().mapStyle(this::whiteToCherry)
+        ));
+    }
+
+    protected TextCache fishslapChatMessage(FishslapChatMessage message) {
+        return TextCache.of(StyledString.concat(
+                StyledString.fromString("<").fillColor(CHERRY6),
+                this.rankName(message.sender()),
                 StyledString.fromString("> ").fillColor(CHERRY6),
                 message.content().mapStyle(this::whiteToCherry)
         ));

@@ -5,6 +5,7 @@
 ### Fixed
 
 - Slapfish not being recognized.
+- Fishslap and Slapfish chat messages not being themed correctly.
 - High Contrast Theme not modifying rank color in tab header.
 
 ## 0.2.0: 2025-04-05

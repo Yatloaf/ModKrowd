@@ -5,6 +5,7 @@ import dev.yatloaf.modkrowd.cubekrowd.common.cache.ThemedCache;
 import dev.yatloaf.modkrowd.cubekrowd.common.cache.TextCache;
 import dev.yatloaf.modkrowd.cubekrowd.subserver.CubeKrowdSubserver;
 import dev.yatloaf.modkrowd.cubekrowd.subserver.FakeSubserver;
+import dev.yatloaf.modkrowd.cubekrowd.subserver.FishslapSubserver;
 import dev.yatloaf.modkrowd.cubekrowd.subserver.MainSubserver;
 import dev.yatloaf.modkrowd.cubekrowd.subserver.MinigameSubserver;
 import dev.yatloaf.modkrowd.cubekrowd.subserver.MissileWarsSubserver;
@@ -23,6 +24,7 @@ public abstract class MessageCache extends ThemedCache {
             case FakeSubserver ignored -> new FakeMessageCache(message); // Slight hack to play more nicely with PENDING
             case MainSubserver ignored -> new MainMessageCache(message);
             case MissileWarsSubserver missileWarsSubserver -> new MissileWarsMessageCache(message, missileWarsSubserver);
+            case FishslapSubserver ignored -> new FishslapMessageCache(message);
             case MinigameSubserver minigameSubserver -> new MinigameMessageCache(message, minigameSubserver);
             case CubeKrowdSubserver ignored -> new CubeKrowdMessageCache(message);
             default -> new NoneMessageCache(message);
