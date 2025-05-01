@@ -23,8 +23,12 @@ import dev.yatloaf.modkrowd.config.DefaultTheme;
 import dev.yatloaf.modkrowd.util.text.StyledString;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.Style;
+import net.minecraft.text.TextColor;
 
 public class HighContrastThemeFeature extends ThemeFeature {
+    public static final TextColor PINK = TextColor.fromRgb(0xFF9FCF);
+    public static final TextColor LAVENDER = TextColor.fromRgb(0xBF7FFF);
+
     public HighContrastThemeFeature(String id, PredicateIndex allowedPredicates) {
         super(id, allowedPredicates);
     }
@@ -136,13 +140,13 @@ public class HighContrastThemeFeature extends ThemeFeature {
     }
 
     protected StyledString afkStar(Afk afk) {
-        return afk.star.fillColor(CKColor.LIGHT_PURPLE.textColor);
+        return afk.star.fillColor(PINK);
     }
 
     protected RankName modifyRankName(RankName rankName) {
         return switch (rankName.rank().letters()) {
-            case RESPECTED -> rankName.mapName(name -> name.fillColor(CKColor.LIGHT_PURPLE.textColor));
-            case VETERAN -> rankName.mapName(name -> name.fillColor(CKColor.YELLOW.textColor));
+            case RESPECTED -> rankName.mapName(name -> name.fillColor(PINK));
+            case VETERAN -> rankName.mapName(name -> name.fillColor(LAVENDER));
             default -> rankName;
         };
     }
