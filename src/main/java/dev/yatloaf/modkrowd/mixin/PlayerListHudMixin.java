@@ -11,6 +11,7 @@ import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.hud.PlayerListHud;
 import net.minecraft.client.network.PlayerListEntry;
+import net.minecraft.client.option.GameOptions;
 import net.minecraft.scoreboard.Scoreboard;
 import net.minecraft.scoreboard.ScoreboardObjective;
 import net.minecraft.text.MutableText;
@@ -152,6 +153,32 @@ public abstract class PlayerListHudMixin implements PlayerListHudDuck {
 		} else {
 			this.renderLatencyIcon(context, width, x, y, entry);
 		}
+	}
+
+	// ----------------------------
+	// ---------- OTHERS ----------
+	// ----------------------------
+
+	@Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/option/GameOptions;getTextBackgroundColor(I)I"))
+	private int getTextBackgroundColorRedirect(GameOptions instance, int fallbackColor) {
+		return ModKrowd.currentTabListCache.entryColorOr(fallbackColor);
+	}
+
+	// DRY fans hate this trick
+
+	@ModifyArg(method = "render", index = 4, at = @At(value = "INVOKE", ordinal = 0, target = "Lnet/minecraft/client/gui/DrawContext;fill(IIIII)V"))
+	private int fillArg0(int color) {
+		return ModKrowd.currentTabListCache.hudColorOr(color);
+	}
+
+	@ModifyArg(method = "render", index = 4, at = @At(value = "INVOKE", ordinal = 1, target = "Lnet/minecraft/client/gui/DrawContext;fill(IIIII)V"))
+	private int fillArg1(int color) {
+		return ModKrowd.currentTabListCache.hudColorOr(color);
+	}
+
+	@ModifyArg(method = "render", index = 4, at = @At(value = "INVOKE", ordinal = 3, target = "Lnet/minecraft/client/gui/DrawContext;fill(IIIII)V"))
+	private int fillArg3(int color) {
+		return ModKrowd.currentTabListCache.hudColorOr(color);
 	}
 
 	@Unique

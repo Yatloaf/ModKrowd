@@ -2,6 +2,10 @@
 
 ## 0.2.1: Unreleased
 
+### Added
+
+- Themes can now tint the tab list background.
+
 ### Changed
 
 - High Contrast Theme now uses custom colors:
