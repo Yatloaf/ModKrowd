@@ -12,6 +12,7 @@ import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.PlayerSkinDrawer;
 import net.minecraft.client.gui.hud.PlayerListHud;
 import net.minecraft.client.network.PlayerListEntry;
+import net.minecraft.client.option.GameOptions;
 import net.minecraft.scoreboard.Scoreboard;
 import net.minecraft.scoreboard.ScoreboardObjective;
 import net.minecraft.text.MutableText;
@@ -27,6 +28,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
@@ -158,6 +160,32 @@ public abstract class PlayerListHudMixin implements PlayerListHudDuck {
 		} else {
 			this.renderLatencyIcon(context, width, x, y, entry);
 		}
+	}
+
+	// ----------------------------
+	// ---------- OTHERS ----------
+	// ----------------------------
+
+	@Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/option/GameOptions;getTextBackgroundColor(I)I"))
+	private int getTextBackgroundColorRedirect(GameOptions instance, int fallbackColor) {
+		return ModKrowd.currentTabListCache.entryColorOr(fallbackColor);
+	}
+
+	// DRY fans hate this trick
+
+	@ModifyArg(method = "render", index = 4, at = @At(value = "INVOKE", ordinal = 0, target = "Lnet/minecraft/client/gui/DrawContext;fill(IIIII)V"))
+	private int fillArg0(int color) {
+		return ModKrowd.currentTabListCache.hudColorOr(color);
+	}
+
+	@ModifyArg(method = "render", index = 4, at = @At(value = "INVOKE", ordinal = 1, target = "Lnet/minecraft/client/gui/DrawContext;fill(IIIII)V"))
+	private int fillArg1(int color) {
+		return ModKrowd.currentTabListCache.hudColorOr(color);
+	}
+
+	@ModifyArg(method = "render", index = 4, at = @At(value = "INVOKE", ordinal = 3, target = "Lnet/minecraft/client/gui/DrawContext;fill(IIIII)V"))
+	private int fillArg3(int color) {
+		return ModKrowd.currentTabListCache.hudColorOr(color);
 	}
 
 	@Unique

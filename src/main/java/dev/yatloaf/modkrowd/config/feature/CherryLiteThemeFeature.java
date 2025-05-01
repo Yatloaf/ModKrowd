@@ -45,6 +45,9 @@ public class CherryLiteThemeFeature extends ThemeFeature {
     public static final TextColor CHERRY5 = TextColor.fromRgb(0xfccbe7);
     public static final TextColor CHERRY6 = TextColor.fromRgb(0xf5daef);
 
+    public static final int STEM_T = 0x80271620;
+    public static final int CHERRY6_T = 0x20000000 | CHERRY6.getRgb();
+
     public CherryLiteThemeFeature(String id, PredicateIndex allowedPredicates) {
         super(id, allowedPredicates);
     }
@@ -117,6 +120,8 @@ public class CherryLiteThemeFeature extends ThemeFeature {
         TabFooterCache tabFooter = tabList.tabFooterCache();
         tabHeader.setThemed(this.tabHeader(tabHeader.tabHeaderSoft()));
         tabFooter.setThemed(this.tabFooter(tabFooter.tabFooterSoft()));
+        tabList.setHudColor(STEM_T);
+        tabList.setEntryColor(CHERRY6_T);
     }
 
     protected void onTabEntry(TabEntryCache entry) {

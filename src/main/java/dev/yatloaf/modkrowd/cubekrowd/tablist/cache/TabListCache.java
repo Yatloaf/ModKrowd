@@ -34,6 +34,10 @@ public class TabListCache {
     private List<PlayerListEntry> playerListEntries;
     private List<TextCache> playerNames;
 
+    // No nullable Integer to avoid indirection and allocation
+    private long hudColor = 1L << 32;
+    private long entryColor = 1L << 32;
+
     private TabListCache(MinecraftClient client) {
         this.hud = client.inGameHud.getPlayerListHud();
         this.hudDuck = (PlayerListHudDuck) this.hud;
@@ -104,5 +108,25 @@ public class TabListCache {
             this.playerNames.set(index, CACHE.get((MutableText) this.hud.getPlayerName(this.playerListEntries().get(index))));
         }
         return this.playerNames.get(index);
+    }
+
+    public final void setHudColor(int color) {
+        this.hudColor = Integer.toUnsignedLong(color);
+    }
+
+    public final int hudColorOr(int fallback) {
+        return (this.hudColor & 1L << 32) == 0
+                ? (int) this.hudColor
+                : fallback;
+    }
+
+    public final void setEntryColor(int color) {
+        this.entryColor = Integer.toUnsignedLong(color);
+    }
+
+    public final int entryColorOr(int fallback) {
+        return (this.entryColor & 1L << 32) == 0
+                ? (int) this.entryColor
+                : fallback;
     }
 }
