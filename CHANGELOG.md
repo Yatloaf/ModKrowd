@@ -11,6 +11,7 @@
 - High Contrast Theme now uses custom colors:
   - Pink for Respected and AFK (previously light purple).
   - Lavender for Veteran (previously yellow).
+- High Contrast Theme now styles join/leave and AFK messages more distinctly.
 
 ### Fixed
 

@@ -8,6 +8,7 @@ import dev.yatloaf.modkrowd.cubekrowd.common.LatencyLevel;
 import dev.yatloaf.modkrowd.cubekrowd.common.RankName;
 import dev.yatloaf.modkrowd.cubekrowd.common.cache.TextCache;
 import dev.yatloaf.modkrowd.cubekrowd.message.AfkMessage;
+import dev.yatloaf.modkrowd.cubekrowd.message.Aloha;
 import dev.yatloaf.modkrowd.cubekrowd.message.AlohaMessage;
 import dev.yatloaf.modkrowd.cubekrowd.message.FishslapChatMessage;
 import dev.yatloaf.modkrowd.cubekrowd.message.MainChatMessage;
@@ -23,6 +24,7 @@ import dev.yatloaf.modkrowd.config.DefaultTheme;
 import dev.yatloaf.modkrowd.util.text.StyledString;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.Style;
+import net.minecraft.text.Text;
 import net.minecraft.text.TextColor;
 
 public class HighContrastThemeFeature extends ThemeFeature {
@@ -48,30 +50,38 @@ public class HighContrastThemeFeature extends ThemeFeature {
 
     protected void onAlohaMessage(MessageCache message, AlohaMessage alohaMessage) {
         switch (alohaMessage.aloha()) {
-            case JOIN -> message.setThemed(TextCache.of(StyledString.concat(
-                    StyledString.fromString("+ ", CKColor.DARK_GREEN.style),
-                    alohaMessage.name().fillColor(CKColor.WHITE.textColor),
-                    StyledString.fromString(" joined", CKColor.GRAY.style)
-            )));
-            case LEAVE -> message.setThemed(TextCache.of(StyledString.concat(
-                    StyledString.fromString("- ", CKColor.DARK_RED.style),
-                    alohaMessage.name().fillColor(CKColor.WHITE.textColor),
-                    StyledString.fromString(" left", CKColor.GRAY.style)
-            )));
+            case JOIN -> message.setThemed(TextCache.of(
+                    Text.literal("+ ").setStyle(CKColor.GREEN.style).append(Text.translatable(
+                            Aloha.JOIN.key,
+                            alohaMessage.name().fillColor(CKColor.YELLOW.textColor).toText()
+                    ).setStyle(CKColor.GRAY.style))
+            ));
+            case LEAVE -> message.setThemed(TextCache.of(
+                    Text.literal("- ").setStyle(CKColor.RED.style).append(Text.translatable(
+                            Aloha.LEAVE.key,
+                            alohaMessage.name().fillColor(CKColor.YELLOW.textColor).toText()
+                    ).setStyle(CKColor.GRAY.style))
+            ));
         }
     }
 
     protected void onAfkMessage(MessageCache message, AfkMessage afkMessage) {
         switch (afkMessage.afk()) {
             case FALSE -> message.setThemed(TextCache.of(StyledString.concat(
-                    StyledString.fromString("+ ", CKColor.GREEN.style),
-                    afkMessage.name().fillColor(CKColor.WHITE.textColor),
-                    StyledString.fromString(" is no longer AFK", CKColor.GRAY.style)
+                    StyledString.concat(
+                            StyledString.fromString("→ "),
+                            afkMessage.name(),
+                            StyledString.SPACE
+                    ).fillColor(PINK),
+                    Afk.FALSE.messageSuffix.fillColor(CKColor.GRAY.textColor)
             )));
             case TRUE -> message.setThemed(TextCache.of(StyledString.concat(
-                    StyledString.fromString("- ", CKColor.RED.style),
-                    afkMessage.name().fillColor(CKColor.WHITE.textColor),
-                    StyledString.fromString(" is now AFK", CKColor.GRAY.style)
+                    StyledString.concat(
+                            StyledString.fromString("← "),
+                            afkMessage.name(),
+                            StyledString.SPACE
+                    ).fillColor(PINK),
+                    Afk.TRUE.messageSuffix.fillColor(CKColor.GRAY.textColor)
             )));
         }
     }
