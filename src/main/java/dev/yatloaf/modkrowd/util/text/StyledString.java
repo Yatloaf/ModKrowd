@@ -243,7 +243,6 @@ public class StyledString {
                     ).setStyle(sectionStyle)
             );
         }
-        new ArrayList<>().toArray(Object[]::new);
         return text;
     }
 
