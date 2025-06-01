@@ -76,5 +76,7 @@
     "modkrowd.config.predicate.missilewars": "MissileWars",
     "modkrowd.config.predicate.missilewars.tooltip": "MissileWars 0 - MissileWars 9",
     "modkrowd.config.predicate.always": "ON",
-    "modkrowd.config.predicate.always.tooltip": ""
+    "modkrowd.config.predicate.always.tooltip": "",
+    "modkrowd.message.self_joined": "Joined %s",
+    "modkrowd.message.self_left": "Left %s"
 }

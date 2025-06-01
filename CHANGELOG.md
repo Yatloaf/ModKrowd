@@ -2,6 +2,10 @@
 
 ## 0.2.2: Unreleased
 
+### Changed
+
+- Separate Chat History messages are now translated
+
 ## 0.2.1: 2025-05-01
 
 ### Added

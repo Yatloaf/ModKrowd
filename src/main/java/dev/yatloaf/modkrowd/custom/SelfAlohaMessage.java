@@ -14,6 +14,9 @@ public record SelfAlohaMessage(Aloha aloha, ServerInfo info) implements Custom {
 
     @Override
     public TextCache appearance() {
-        return TextCache.of(Text.literal((this.aloha == Aloha.JOIN ? "Joined " : "Left ") + this.nameOrAddress()).formatted(Formatting.AQUA));
+        return TextCache.of(Text.translatable(
+                this.aloha == Aloha.JOIN ? "modkrowd.message.self_joined" : "modkrowd.message.self_left",
+                this.nameOrAddress()
+        ).formatted(Formatting.AQUA));
     }
 }
