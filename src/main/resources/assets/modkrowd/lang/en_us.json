@@ -59,6 +59,8 @@
     "modkrowd.config.feature.auto_missilewars_lobby_switch.tooltip": "Automatically switch to the next MissileWars lobby after a game",
     "modkrowd.config.feature.auto_missilewars_lobby_switch.delay": "-- Delay (ticks)",
     "modkrowd.config.feature.auto_missilewars_lobby_switch.delay.tooltip": "Maximum value: 280 (14 seconds)",
+    "modkrowd.config.feature.tie_detector": "Tie Detector",
+    "modkrowd.config.feature.tie_detector.tooltip": "Measure ties in MissileWars",
     "modkrowd.config.feature.respectate": "Respectate",
     "modkrowd.config.feature.respectate.tooltip": "Keep spectating players after they die",
     "modkrowd.config.feature.theme_high_contrast": "High Contrast",
@@ -77,6 +79,10 @@
     "modkrowd.config.predicate.missilewars.tooltip": "MissileWars 0 - MissileWars 9",
     "modkrowd.config.predicate.always": "ON",
     "modkrowd.config.predicate.always.tooltip": "",
+    "modkrowd.message.missilewars_tie.sequential": "Tie! Team %2$s won %3$s.%4$ss (%5$s ticks) after team %1$s",
+    "modkrowd.message.missilewars_tie.simultaneous": "Tie! Both teams won in the same tick!",
+    "modkrowd.message.missilewars_tie.red": "Red",
+    "modkrowd.message.missilewars_tie.green": "Green",
     "modkrowd.message.self_joined": "Joined %s",
     "modkrowd.message.self_left": "Left %s"
 }

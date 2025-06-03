@@ -59,6 +59,8 @@
     "modkrowd.config.feature.auto_missilewars_lobby_switch.tooltip": "Wechselt nach einem Spiel automatisch zur nächsten MissileWars-Lobby",
     "modkrowd.config.feature.auto_missilewars_lobby_switch.delay": "-- Verzögerung (Ticks)",
     "modkrowd.config.feature.auto_missilewars_lobby_switch.delay.tooltip": "Maximalwert: 280 (14 Sekunden)",
+    "modkrowd.config.feature.tie_detector": "Unentschieden",
+    "modkrowd.config.feature.tie_detector.tooltip": "Misst Unentschieden in MissileWars",
     "modkrowd.config.feature.respectate": "Weiterzuschauen",
     "modkrowd.config.feature.respectate.tooltip": "Schaut Spielern weiter zu, wenn sie sterben",
     "modkrowd.config.feature.theme_high_contrast": "Hoher Kontrast",
@@ -77,6 +79,10 @@
     "modkrowd.config.predicate.missilewars.tooltip": "MissileWars 0 - MissileWars 9",
     "modkrowd.config.predicate.always": "AN",
     "modkrowd.config.predicate.always.tooltip": "",
+    "modkrowd.message.missilewars_tie.sequential": "Unentschieden! Team %2$s hat %3$s,%4$ss (%5$s Ticks) nach Team %1$s gewonnen",
+    "modkrowd.message.missilewars_tie.simultaneous": "Unentschieden! Beide Teams haben im selben Tick gewonnen!",
+    "modkrowd.message.missilewars_tie.red": "Rot",
+    "modkrowd.message.missilewars_tie.green": "Grün",
     "modkrowd.message.self_joined": "%s betreten",
     "modkrowd.message.self_left": "%s verlassen"
 }

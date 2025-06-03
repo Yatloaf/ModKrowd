@@ -124,6 +124,9 @@ public class FeatureTree {
     public final AutoswitchFeature AUTOSWITCH = this.MISSILEWARS.feature(new AutoswitchFeature(
             "auto_missilewars_lobby_switch", PredicateIndex.BINARY
     ));
+    public final Feature TIE_DETECTOR = this.MISSILEWARS.feature(new Feature(
+            "tie_detector", PredicateIndex.BINARY_MW
+    ));
     public final Feature RESPECTATE = this.MISSILEWARS.feature(new Feature(
             "respectate", PredicateIndex.TERNARY_MW
     ));

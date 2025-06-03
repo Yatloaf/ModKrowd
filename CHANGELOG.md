@@ -2,6 +2,10 @@
 
 ## 0.2.2: Unreleased
 
+### Added
+
+- Tie Detector feature
+
 ### Changed
 
 - Separate Chat History messages are now translated

@@ -19,10 +19,12 @@ import dev.yatloaf.modkrowd.cubekrowd.tablist.TabPing;
 import dev.yatloaf.modkrowd.cubekrowd.tablist.MinigameTabName;
 import dev.yatloaf.modkrowd.cubekrowd.tablist.cache.TabEntryCache;
 import dev.yatloaf.modkrowd.custom.Custom;
+import dev.yatloaf.modkrowd.custom.MissileWarsTieMessage;
 import dev.yatloaf.modkrowd.custom.SelfAlohaMessage;
 import dev.yatloaf.modkrowd.util.Util;
 import dev.yatloaf.modkrowd.util.text.StyledString;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.text.MutableText;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.text.TextColor;
@@ -184,11 +186,48 @@ public class CherryThemeFeature extends CherryLiteThemeFeature {
     public TextCache themeCustom(Custom custom, MinecraftClient client, ActionQueue queue) {
         return switch (custom) {
             case SelfAlohaMessage selfAlohaMessage -> this.selfAlohaMessage(selfAlohaMessage);
+            case MissileWarsTieMessage missileWarsTieMessage -> this.missileWarsTieMessage(missileWarsTieMessage);
             default -> TextCache.EMPTY;
         };
     }
 
     public TextCache selfAlohaMessage(SelfAlohaMessage selfAlohaMessage) {
         return TextCache.of(selfAlohaMessage.appearance().text().setStyle(Style.EMPTY.withColor(CHERRY5)));
+    }
+
+    // DRY!!
+
+    private static final MutableText MW_TIE_RED =
+            MissileWarsTieMessage.RED.copy().setStyle(Style.EMPTY.withColor(CHERRY3));
+    private static final MutableText MW_TIE_GREEN =
+            MissileWarsTieMessage.GREEN.copy().setStyle(Style.EMPTY.withColor(CHERRY6));
+    private static final TextCache MW_TIE_SIMULTANEOUS = TextCache.of(
+            MissileWarsTieMessage.SIMULTANEOUS.text().copy().setStyle(Style.EMPTY.withColor(CHERRY4).withItalic(true))
+    );
+
+    public TextCache missileWarsTieMessage(MissileWarsTieMessage missileWarsTieMessage) {
+        long redWinTick = missileWarsTieMessage.redWinTick();
+        long greenWinTick = missileWarsTieMessage.greenWinTick();
+
+        if (redWinTick == greenWinTick) {
+            return MW_TIE_SIMULTANEOUS;
+        } else {
+            long deltaTicks;
+            MutableText first;
+            MutableText last;
+
+            if (redWinTick < greenWinTick) {
+                deltaTicks = greenWinTick - redWinTick;
+                first = MW_TIE_RED;
+                last = MW_TIE_GREEN;
+            } else {
+                deltaTicks = redWinTick - greenWinTick;
+                first = MW_TIE_GREEN;
+                last = MW_TIE_RED;
+            }
+
+            return TextCache.of(MissileWarsTieMessage.sequential(first, last, deltaTicks)
+                    .setStyle(Style.EMPTY.withColor(CHERRY2).withItalic(true)));
+        }
     }
 }
