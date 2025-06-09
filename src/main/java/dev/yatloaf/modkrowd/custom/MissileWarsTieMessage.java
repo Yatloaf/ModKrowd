@@ -13,7 +13,7 @@ public record MissileWarsTieMessage(long redWinTick, long greenWinTick) implemen
             Text.translatable("modkrowd.message.missilewars_tie.green").formatted(Formatting.GREEN);
     public static final TextCache SIMULTANEOUS = TextCache.of(Text.translatable(
             "modkrowd.message.missilewars_tie.simultaneous"
-    ).setStyle(CKColor.GOLD.style.withItalic(true)));
+    ).setStyle(CKColor.GOLD.style));
 
     public static MutableText sequential(MutableText first, MutableText last, long deltaTicks) {
         return Text.translatable(
@@ -45,7 +45,7 @@ public record MissileWarsTieMessage(long redWinTick, long greenWinTick) implemen
                 last = RED;
             }
 
-            return TextCache.of(sequential(first, last, deltaTicks).setStyle(CKColor.DARK_AQUA.style.withItalic(true)));
+            return TextCache.of(sequential(first, last, deltaTicks).setStyle(CKColor.DARK_AQUA.style));
         }
     }
 }
