@@ -4,6 +4,7 @@ import dev.yatloaf.modkrowd.ModKrowd;
 import dev.yatloaf.modkrowd.config.ActionQueue;
 import dev.yatloaf.modkrowd.config.PredicateIndex;
 import dev.yatloaf.modkrowd.cubekrowd.message.Aloha;
+import dev.yatloaf.modkrowd.custom.Custom;
 import dev.yatloaf.modkrowd.custom.SelfAlohaMessage;
 import dev.yatloaf.modkrowd.mixin.ClientCommonNetworkHandlerAccessor;
 import net.minecraft.client.MinecraftClient;
@@ -46,7 +47,11 @@ public class SeparateChatHistoryFeature extends Feature {
             this.currentLocation = location;
             client.inGameHud.getChatHud().restoreChatState(this.chatStates.getOrDefault(location, EMPTY_CHAT_STATE));
             if (location instanceof Server server) {
-                client.inGameHud.getChatHud().addMessage(ModKrowd.CONFIG.themeCustom(new SelfAlohaMessage(Aloha.JOIN, server.info)).text());
+                client.inGameHud.getChatHud().addMessage(
+                        ModKrowd.CONFIG.themeCustom(new SelfAlohaMessage(Aloha.JOIN, server.info)).text(),
+                        null,
+                        Custom.MESSAGE_INDICATOR
+                );
             }
         }
     }
@@ -55,7 +60,11 @@ public class SeparateChatHistoryFeature extends Feature {
     public void onDisconnect(ClientPlayNetworkHandler handler, MinecraftClient client, ActionQueue queue) {
         Location location = Location.of(handler.getServerInfo());
         if (location instanceof Server server) {
-            client.inGameHud.getChatHud().addMessage(ModKrowd.CONFIG.themeCustom(new SelfAlohaMessage(Aloha.LEAVE, server.info)).text());
+            client.inGameHud.getChatHud().addMessage(
+                    ModKrowd.CONFIG.themeCustom(new SelfAlohaMessage(Aloha.LEAVE, server.info)).text(),
+                    null,
+                    Custom.MESSAGE_INDICATOR
+            );
         }
         this.chatStates.put(location, client.inGameHud.getChatHud().toChatState());
         this.currentLocation = null;

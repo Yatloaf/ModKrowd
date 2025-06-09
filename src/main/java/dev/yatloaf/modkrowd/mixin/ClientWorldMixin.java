@@ -1,6 +1,7 @@
 package dev.yatloaf.modkrowd.mixin;
 
 import dev.yatloaf.modkrowd.ModKrowd;
+import dev.yatloaf.modkrowd.custom.Custom;
 import dev.yatloaf.modkrowd.custom.MissileWarsTieMessage;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -67,7 +68,9 @@ public abstract class ClientWorldMixin extends World {
     @Unique
     private void sendTieMessage() {
         this.client.inGameHud.getChatHud().addMessage(
-                ModKrowd.CONFIG.themeCustom(new MissileWarsTieMessage(this.redWinTick, this.greenWinTick)).text()
+                ModKrowd.CONFIG.themeCustom(new MissileWarsTieMessage(this.redWinTick, this.greenWinTick)).text(),
+                null,
+                Custom.MESSAGE_INDICATOR
         );
     }
 }

@@ -3,6 +3,7 @@ package dev.yatloaf.modkrowd.config.feature;
 import dev.yatloaf.modkrowd.ModKrowd;
 import dev.yatloaf.modkrowd.config.ActionQueue;
 import dev.yatloaf.modkrowd.config.PredicateIndex;
+import dev.yatloaf.modkrowd.cubekrowd.common.CKColor;
 import dev.yatloaf.modkrowd.cubekrowd.message.DirectMessage;
 import dev.yatloaf.modkrowd.cubekrowd.message.cache.CubeKrowdMessageCache;
 import dev.yatloaf.modkrowd.cubekrowd.message.cache.MessageCache;
@@ -16,17 +17,18 @@ import net.minecraft.client.util.ChatMessages;
 import net.minecraft.text.OrderedText;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class MessagePreviewFeature extends Feature {
 
-    private static final Text PREVIEW_TEXT = Text.literal("Preview message");
-    private static final int PREVIEW_COLOR = Objects.requireNonNull(Formatting.LIGHT_PURPLE.getColorValue());
-    public static final MessageIndicator PREVIEW_INDICATOR = new MessageIndicator(PREVIEW_COLOR, null, PREVIEW_TEXT, "ModKrowd:Preview");
+    public static final MessageIndicator PREVIEW_INDICATOR = new MessageIndicator(
+            CKColor.LIGHT_PURPLE.textColor.getRgb(),
+            null,
+            Text.literal("Preview message"),
+            "ModKrowd:Preview"
+    );
     private static final OrderedText PREVIEW_PREFIX = OrderedText.styled(' ', Style.EMPTY);
 
     public String replyTarget = null;

@@ -5,6 +5,7 @@
 ### Added
 
 - Tie Detector feature.
+- Indicators for custom messages added by the mod.
 
 ### Changed
 
