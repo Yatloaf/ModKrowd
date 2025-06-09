@@ -62,6 +62,12 @@ CubeKrowd has strict rules regarding allowed mods, which means some aren’t all
 
 - BetterPingDisplay (obsolete when using this mod)
 
-<hr/>
+## Special Thanks
 
-Special thanks to CatAndComparator, Hydrintegral, TheAI, Kaybeo, Hardfg5000, encodeous, [RubenNL](https://github.com/RubenNL), DIMM4 and CubeKrowd staff.
+- **CatAndComparator**, for coming up with a brilliant feature name
+- **[Hydrintegral](https://namemc.com/profile/Hydrintegral.1)**, **TheAI**, **[Kaybeo](https://www.youtube.com/channel/UCPCxS_Y9gWhPdVJ4_FUrw4Q)**, **Hardfg5000**, **[encodeous](https://github.com/encodeous)** and **[DIMM4](http://www.dimm4.video/)**, for finding issues and suggesting improvements
+- **iRobo**, for making the original CubeKrowd patch for BetterPingDisplay
+- **[RubenNL](https://github.com/RubenNL)**, for developing the original [MWSwitcher](https://gitlab.rubend.nl/minecraft/mods/mwswitcher) and [Tie Detector](https://gitlab.rubend.nl/minecraft/mods/tiedetector)
+- **[CubeKrowd staff](https://cubekrowd.net/staff/)**, for allowing and encouraging this mod
+
+~Yat :3
