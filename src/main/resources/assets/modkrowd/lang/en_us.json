@@ -27,7 +27,7 @@
     "modkrowd.config.feature.hide_every_label.tooltip": "Hide every nametag",
     "modkrowd.config.feature.hide_players": "Hide Players",
     "modkrowd.config.feature.hide_players.tooltip": "Hide every player",
-    "modkrowd.config.feature.no_chat_clear_on_rejoin": "Dejoin",
+    "modkrowd.config.feature.no_chat_clear_on_rejoin": "Persistent Chat History",
     "modkrowd.config.feature.no_chat_clear_on_rejoin.tooltip": "Keep chat through rejoins",
     "modkrowd.config.feature.separate_chat_history": "Separate Chat History",
     "modkrowd.config.feature.separate_chat_history.tooltip": "Keep track of separate chat histories per server",

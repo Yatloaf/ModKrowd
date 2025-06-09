@@ -4,16 +4,19 @@
 
 ### Added
 
-- Tie Detector feature
+- Tie Detector feature.
 
 ### Changed
 
-- Separate Chat History messages are now translated
+- Separate Chat History messages are now translated.
+- Renamed Dejoin to Persistent Chat Messages.
+  - The old name was analogous to Deconfigure, a feature that was removed before release.
+  - The new name is analogous to Separate Chat History.
 
 ### Fixed
 
-- Disabling a theme not invalidating the tab list cache
-- Unused translation keys
+- Disabling a theme not invalidating the tab list cache.
+- Unused translation keys.
 
 ## 0.2.1: 2025-05-01
 
