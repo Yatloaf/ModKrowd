@@ -14,4 +14,9 @@ public class ThemeFeature extends Feature {
     public void onEnable(MinecraftClient client, ActionQueue queue) {
         ModKrowd.invalidateTabListCache();
     }
+
+    @Override
+    public void onDisable(MinecraftClient client, ActionQueue queue) {
+        ModKrowd.invalidateTabListCache();
+    }
 }

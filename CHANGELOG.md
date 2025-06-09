@@ -10,6 +10,10 @@
 
 - Separate Chat History messages are now translated
 
+### Fixed
+
+- Disabling a theme not invalidating the tab list cache
+
 ## 0.2.1: 2025-05-01
 
 ### Added
