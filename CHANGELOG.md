@@ -13,6 +13,7 @@
 ### Fixed
 
 - Disabling a theme not invalidating the tab list cache
+- Unused translation keys
 
 ## 0.2.1: 2025-05-01
 

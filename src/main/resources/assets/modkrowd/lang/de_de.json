@@ -27,8 +27,6 @@
     "modkrowd.config.feature.hide_every_label.tooltip": "Zeigt keinen Spielernamen an",
     "modkrowd.config.feature.hide_players": "Verstecke Spieler",
     "modkrowd.config.feature.hide_players.tooltip": "Versteckt alle Spieler",
-    "modkrowd.config.feature.no_reconfiguration_screen": "Kurzzeitgedächtnis",
-    "modkrowd.config.feature.no_reconfiguration_screen.tooltip": "Entfernt den Rekonfigurieren-Bildschirm",
     "modkrowd.config.feature.no_chat_clear_on_rejoin": "Langzeitgedächtnis",
     "modkrowd.config.feature.no_chat_clear_on_rejoin.tooltip": "Behält den Chat beim Neuverbinden",
     "modkrowd.config.feature.separate_chat_history": "Separate Chatverläufe",
