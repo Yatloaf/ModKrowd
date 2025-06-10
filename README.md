@@ -1,5 +1,7 @@
 # ModKrowd
 
+**The 1.21 branch has been discontinued due to CubeKrowd no longer supporting that version.**
+
 To use this mod, download it from [Modrinth](https://modrinth.com/mod/modkrowd).
 
 ## What?
