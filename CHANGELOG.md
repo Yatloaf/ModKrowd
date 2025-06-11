@@ -2,6 +2,8 @@
 
 ## 0.2.2: Unreleased
 
+- Update to 1.21.5.
+
 ### Added
 
 - Tie Detector feature.

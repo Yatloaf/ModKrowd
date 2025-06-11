@@ -36,8 +36,8 @@ public abstract class ClientWorldMixin extends World {
     @Unique private long greenWinTick = -1;
 
     @Override
-    public void onBlockChanged(BlockPos pos, BlockState oldBlock, BlockState newBlock) {
-        super.onBlockChanged(pos, oldBlock, newBlock);
+    public void onBlockStateChanged(BlockPos pos, BlockState oldBlock, BlockState newBlock) {
+        super.onBlockStateChanged(pos, oldBlock, newBlock);
 
         if (ModKrowd.CONFIG.TIE_DETECTOR.enabled && oldBlock.isOf(Blocks.NETHER_PORTAL)) {
 

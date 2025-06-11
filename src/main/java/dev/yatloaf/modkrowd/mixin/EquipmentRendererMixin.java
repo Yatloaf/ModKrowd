@@ -38,8 +38,8 @@ public class EquipmentRendererMixin {
 
         ArmorTrim armorTrim = args.get(0);
         ArmorTrimPattern pattern = armorTrim.pattern().value();
-        ArmorTrimPattern slimPattern = new ArmorTrimPattern(pattern.assetId().withSuffixedPath("_slim"), pattern.templateItem(), pattern.description(), pattern.decal());
-        ArmorTrim slimArmorTrim = new ArmorTrim(armorTrim.material(), RegistryEntry.of(slimPattern), armorTrim.showInTooltip());
+        ArmorTrimPattern slimPattern = new ArmorTrimPattern(pattern.assetId().withSuffixedPath("_slim"), pattern.description(), pattern.decal());
+        ArmorTrim slimArmorTrim = new ArmorTrim(armorTrim.material(), RegistryEntry.of(slimPattern));
         args.set(0, slimArmorTrim);
     }
 }

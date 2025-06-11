@@ -20,7 +20,7 @@ public class ClickResponseFeature extends Feature {
             DirectMessage dm = ckMessage.directMessageFast();
             if (dm.isReal()) {
                 message.setThemed(TextCache.of(ckMessage.original.text().copy().styled(style -> style.withClickEvent(
-                        new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/msg " + dm.other() + " ")
+                        new ClickEvent.SuggestCommand("/msg " + dm.other() + " ")
                 ))));
             }
         }

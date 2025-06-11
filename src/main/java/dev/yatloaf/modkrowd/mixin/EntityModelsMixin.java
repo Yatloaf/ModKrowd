@@ -51,17 +51,17 @@ public class EntityModelsMixin {
     // See ArmorEntityModel.getModelData()
     @Unique
     private static ModelData getModelData(Dilation dilation) {
-        ModelData modelData = ArmorEntityModel.getModelData(dilation, 0.0F);
+        ModelData modelData = ArmorEntityModel.getModelData(dilation);
         ModelPartData modelPartData = modelData.getRoot();
         modelPartData.addChild(
                 EntityModelPartNames.RIGHT_ARM,
                 ModelPartBuilder.create().uv(40, 16).cuboid(-2.0F, -2.0F, -2.0F, 3.0F, 12.0F, 4.0F, dilation),
-                ModelTransform.pivot(-5.0F, 2.0F, 0.0F)
+                ModelTransform.origin(-5.0F, 2.0F, 0.0F)
         );
         modelPartData.addChild(
                 EntityModelPartNames.LEFT_ARM,
                 ModelPartBuilder.create().uv(40, 16).mirrored().cuboid(-1.0F, -2.0F, -2.0F, 3.0F, 12.0F, 4.0F, dilation),
-                ModelTransform.pivot(5.0F, 2.0F, 0.0F)
+                ModelTransform.origin(5.0F, 2.0F, 0.0F)
         );
         return modelData;
     }
