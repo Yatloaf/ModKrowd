@@ -16,6 +16,7 @@ import dev.yatloaf.modkrowd.cubekrowd.message.DirectMessage;
 import dev.yatloaf.modkrowd.cubekrowd.message.FishslapChatMessage;
 import dev.yatloaf.modkrowd.cubekrowd.message.MainChatMessage;
 import dev.yatloaf.modkrowd.cubekrowd.message.MinigameChatMessage;
+import dev.yatloaf.modkrowd.cubekrowd.message.MissileWarsDeathMessage;
 import dev.yatloaf.modkrowd.cubekrowd.message.cache.MessageCache;
 import dev.yatloaf.modkrowd.cubekrowd.tablist.GameTabLabel;
 import dev.yatloaf.modkrowd.cubekrowd.tablist.GameTabMode;
@@ -61,6 +62,7 @@ public class CherryLiteThemeFeature extends ThemeFeature {
             case ConnectingMessage connectingMessage -> message.setThemed(this.connectingMessage(connectingMessage));
             case MainChatMessage mainChatMessage -> message.setThemed(this.mainChatMessage(mainChatMessage));
             case MinigameChatMessage minigameChatMessage -> message.setThemed(this.minigameChatMessage(minigameChatMessage));
+            case MissileWarsDeathMessage missileWarsDeathMessage -> message.setThemed(this.missileWarsDeathMessage(missileWarsDeathMessage));
             case FishslapChatMessage fishslapChatMessage -> message.setThemed(this.fishslapChatMessage(fishslapChatMessage));
             default -> {}
         }
@@ -100,6 +102,10 @@ public class CherryLiteThemeFeature extends ThemeFeature {
                 StyledString.fromString("> ").fillColor(CHERRY6),
                 message.content().mapStyle(this::whiteToCherry)
         ));
+    }
+
+    protected TextCache missileWarsDeathMessage(MissileWarsDeathMessage message) {
+        return TextCache.of(message.appearance().fillStyle(Style.EMPTY.withColor(CHERRY1)));
     }
 
     protected TextCache fishslapChatMessage(FishslapChatMessage message) {

@@ -6,6 +6,7 @@
 
 - Tie Detector feature.
 - Indicators for custom messages added by the mod.
+- MissileWars death message theming.
 
 ### Changed
 
