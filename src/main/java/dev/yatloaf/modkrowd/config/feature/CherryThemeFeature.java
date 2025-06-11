@@ -10,6 +10,7 @@ import dev.yatloaf.modkrowd.cubekrowd.common.MinigameTeamName;
 import dev.yatloaf.modkrowd.cubekrowd.common.Rank;
 import dev.yatloaf.modkrowd.cubekrowd.common.RankName;
 import dev.yatloaf.modkrowd.cubekrowd.common.cache.TextCache;
+import dev.yatloaf.modkrowd.cubekrowd.message.MissileWarsDeathMessage;
 import dev.yatloaf.modkrowd.cubekrowd.tablist.GameTabStatus;
 import dev.yatloaf.modkrowd.cubekrowd.tablist.GameTabSubserver;
 import dev.yatloaf.modkrowd.cubekrowd.tablist.MainTabColumn;
@@ -33,6 +34,23 @@ import org.jetbrains.annotations.Nullable;
 public class CherryThemeFeature extends CherryLiteThemeFeature {
     public CherryThemeFeature(String id, PredicateIndex allowedPredicates) {
         super(id, allowedPredicates);
+    }
+
+    @Override
+    protected TextCache missileWarsDeathMessage(MissileWarsDeathMessage message) {
+        MissileWarsDeathMessage modifiedMessage = message
+                .mapVictim(this::modifyMissileWarsTeamName)
+                .mapKillerIfPresent(this::modifyMissileWarsTeamName);
+        return super.missileWarsDeathMessage(modifiedMessage);
+    }
+
+    // Someone clean up this spaghetti
+    protected Text modifyMissileWarsTeamName(Text original) {
+        return switch (CKColor.fromStyle(original.getStyle())) {
+            case RED -> original.copy().fillStyle(Style.EMPTY.withColor(CHERRY3));
+            case GREEN -> original.copy().fillStyle(Style.EMPTY.withColor(CHERRY6));
+            case null, default -> original;
+        };
     }
 
     @Override

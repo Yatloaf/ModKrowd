@@ -12,6 +12,7 @@ import dev.yatloaf.modkrowd.cubekrowd.message.Aloha;
 import dev.yatloaf.modkrowd.cubekrowd.message.AlohaMessage;
 import dev.yatloaf.modkrowd.cubekrowd.message.FishslapChatMessage;
 import dev.yatloaf.modkrowd.cubekrowd.message.MainChatMessage;
+import dev.yatloaf.modkrowd.cubekrowd.message.MissileWarsDeathMessage;
 import dev.yatloaf.modkrowd.cubekrowd.message.cache.MessageCache;
 import dev.yatloaf.modkrowd.cubekrowd.tablist.MainTabName;
 import dev.yatloaf.modkrowd.cubekrowd.tablist.TabHeader;
@@ -43,6 +44,7 @@ public class HighContrastThemeFeature extends ThemeFeature {
             case AlohaMessage alohaMessage -> this.onAlohaMessage(message, alohaMessage);
             case AfkMessage afkMessage -> this.onAfkMessage(message, afkMessage);
             case MainChatMessage mainChatMessage -> this.onMainChatMessage(message, mainChatMessage);
+            case MissileWarsDeathMessage missileWarsDeathMessage -> this.onMissileWarsDeathMessage(message, missileWarsDeathMessage);
             case FishslapChatMessage fishslapChatMessage -> this.onFishslapChatMessage(message, fishslapChatMessage);
             default -> {}
         }
@@ -90,6 +92,11 @@ public class HighContrastThemeFeature extends ThemeFeature {
         switch (mainChatMessage.sender().rank().letters()) {
             case RESPECTED, VETERAN -> message.setThemed(TextCache.of(mainChatMessage.mapSender(this::modifyRankName).appearance()));
         }
+    }
+
+    protected void onMissileWarsDeathMessage(MessageCache message, MissileWarsDeathMessage missileWarsDeathMessage) {
+        // The args should all already have a non-null color
+        message.setThemed(TextCache.of(missileWarsDeathMessage.appearance().fillStyle(CKColor.GRAY.style)));
     }
 
     protected void onFishslapChatMessage(MessageCache message, FishslapChatMessage fishslapChatMessage) {
