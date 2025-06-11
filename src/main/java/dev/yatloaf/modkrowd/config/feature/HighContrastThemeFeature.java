@@ -31,6 +31,7 @@ import net.minecraft.text.TextColor;
 public class HighContrastThemeFeature extends ThemeFeature {
     public static final TextColor PINK = TextColor.fromRgb(0xFF9FCF);
     public static final TextColor LAVENDER = TextColor.fromRgb(0xBF7FFF);
+    public static final TextColor CORNFLOWER = TextColor.fromRgb(0x5F7FFF);
 
     public static final int BLACK75 = 0xC0000000;
 
@@ -90,7 +91,7 @@ public class HighContrastThemeFeature extends ThemeFeature {
 
     protected void onMainChatMessage(MessageCache message, MainChatMessage mainChatMessage) {
         switch (mainChatMessage.sender().rank().letters()) {
-            case RESPECTED, VETERAN -> message.setThemed(TextCache.of(mainChatMessage.mapSender(this::modifyRankName).appearance()));
+            case RESPECTED, VETERAN, DEVELOPER -> message.setThemed(TextCache.of(mainChatMessage.mapSender(this::modifyRankName).appearance()));
         }
     }
 
@@ -101,7 +102,7 @@ public class HighContrastThemeFeature extends ThemeFeature {
 
     protected void onFishslapChatMessage(MessageCache message, FishslapChatMessage fishslapChatMessage) {
         switch (fishslapChatMessage.sender().rank().letters()) {
-            case RESPECTED, VETERAN -> message.setThemed(TextCache.of(fishslapChatMessage.mapSender(this::modifyRankName).appearance()));
+            case RESPECTED, VETERAN, DEVELOPER -> message.setThemed(TextCache.of(fishslapChatMessage.mapSender(this::modifyRankName).appearance()));
         }
     }
 
@@ -167,6 +168,7 @@ public class HighContrastThemeFeature extends ThemeFeature {
         return switch (rankName.rank().letters()) {
             case RESPECTED -> rankName.mapName(name -> name.fillColor(PINK));
             case VETERAN -> rankName.mapName(name -> name.fillColor(LAVENDER));
+            case DEVELOPER -> rankName.mapName(name -> name.fillColor(CORNFLOWER));
             default -> rankName;
         };
     }
