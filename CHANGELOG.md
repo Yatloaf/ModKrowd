@@ -16,6 +16,7 @@
 - Renamed Dejoin to Persistent Chat Messages.
   - The old name was analogous to Deconfigure, a feature that was removed before release.
   - The new name is analogous to Separate Chat History.
+- High Contrast Theme now replaces the Developer rank color with Cornflower.
 
 ### Fixed
 
