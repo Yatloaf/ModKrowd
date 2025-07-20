@@ -2,6 +2,15 @@
 
 ## 0.2.3: Unreleased
 
+### Added
+
+- Hide Yourself feature.
+
+### Changed
+
+- Renamed Hide Players to Hide Others.
+  - The new name both increases accuracy and disambiguates from Hide Others.
+
 ## 0.2.2: 2025-06-11
 
 - Update to 1.21.5.

@@ -25,7 +25,8 @@ CubeKrowd has strict rules regarding allowed mods, which means some aren’t all
 - Own Nametag
 - All Nametags
 - No Nametags
-- Hide Players
+- Hide Others
+- Hide Yourself
 
 ### Chat
 

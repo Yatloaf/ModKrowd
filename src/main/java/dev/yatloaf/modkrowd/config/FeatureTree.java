@@ -67,6 +67,9 @@ public class FeatureTree {
     public final Feature HIDE_PLAYERS = this.APPEARANCE.feature(new Feature(
             "hide_players", PredicateIndex.TERNARY_CK
     ));
+    public final Feature HIDE_SELF = this.APPEARANCE.feature(new Feature(
+            "hide_self", PredicateIndex.TERNARY_CK
+    ));
 
     // ----------------
     //  CHAT
