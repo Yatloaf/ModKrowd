@@ -26,6 +26,7 @@ import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.Version;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.screen.ChatScreen;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.network.ClientConfigurationNetworkHandler;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
@@ -137,8 +138,13 @@ public class ModKrowd implements ClientModInitializer {
 	}
 
 	private static void tickSwitchingMissileWarsLobby() {
-		if (mwSwitchStatus == MwSwitchStatus.DELAY && mwSwitchTick <= tick) {
-            ClientPlayNetworkHandler handler = MinecraftClient.getInstance().getNetworkHandler();
+		MinecraftClient client = MinecraftClient.getInstance();
+
+		// Wait until no ChatScreen is open
+		if (mwSwitchStatus == MwSwitchStatus.DELAY && mwSwitchTick <= tick
+				&& !(client.currentScreen instanceof ChatScreen)) {
+
+            ClientPlayNetworkHandler handler = client.getNetworkHandler();
 			if (handler != null
 					&& currentSubserver instanceof MissileWarsSubserver mwSubserver
 					&& mwSubserver.tryConnectNext(handler, mwSwitchIndex)) {

@@ -10,6 +10,7 @@
 
 - Renamed Hide Players to Hide Others.
   - The new name both increases accuracy and disambiguates from Hide Others.
+- Autoswitch now waits for the chat screen to be closed.
 
 ## 0.2.2: 2025-06-11
 
