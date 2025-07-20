@@ -4,6 +4,7 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.mojang.brigadier.tree.CommandNode;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import dev.yatloaf.modkrowd.ModKrowd;
 import dev.yatloaf.modkrowd.cubekrowd.common.CKColor;
@@ -211,7 +212,18 @@ public final class PreviewCommands {
     public static void command(LiteralArgumentBuilder<Object> previewer, String... aliases) {
         LiteralCommandNode<Object> node = DISPATCHER.register(previewer);
         for (String alias : aliases) {
-            DISPATCHER.register(literal(alias).redirect(node));
+            // See <https://github.com/Mojang/brigadier/issues/46>
+            // This is worked around by manually copying the destination node, as in
+            // <https://github.com/PaperMC/Velocity/blob/8abc9c80a69158ebae0121fda78b55c865c0abad/proxy/src/main/java/com/velocitypowered/proxy/util/BrigadierUtils.java#L38>
+
+            LiteralArgumentBuilder<Object> builder = literal(alias)
+                    .requires(node.getRequirement())
+                    .forward(node.getRedirect(), node.getRedirectModifier(), node.isFork())
+                    .executes(node.getCommand());
+            for (CommandNode<Object> child : node.getChildren()) {
+                builder.then(child);
+            }
+            DISPATCHER.register(builder);
         }
     }
 

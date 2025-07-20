@@ -12,6 +12,11 @@
   - The new name both increases accuracy and disambiguates from Hide Others.
 - Autoswitch now waits for the chat screen to be closed.
 
+### Fixed
+
+- Message Preview not being displayed for some commands.
+  - This was due to a bug in Brigadier.
+
 ## 0.2.2: 2025-06-11
 
 - Update to 1.21.5.
