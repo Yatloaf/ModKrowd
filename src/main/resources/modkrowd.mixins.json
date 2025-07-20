@@ -5,6 +5,8 @@
     "client": [
         "ArmorFeatureRendererMixin",
         "BarrierBlockMixin",
+        "ChatHudLineMixin",
+        "ChatHudLineMixin$ChatHudLineVisibleMixin",
         "ChatHudMixin",
         "ChatScreenMixin",
         "ClientCommonNetworkHandlerAccessor",

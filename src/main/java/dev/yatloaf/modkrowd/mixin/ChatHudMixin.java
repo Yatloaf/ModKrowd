@@ -1,8 +1,10 @@
 package dev.yatloaf.modkrowd.mixin;
 
+import com.llamalad7.mixinextras.sugar.Local;
 import dev.yatloaf.modkrowd.ModKrowd;
 import dev.yatloaf.modkrowd.cubekrowd.common.cache.TextCache;
 import dev.yatloaf.modkrowd.cubekrowd.message.cache.MessageCache;
+import dev.yatloaf.modkrowd.mixinduck.ChatHudLineDuck;
 import dev.yatloaf.modkrowd.util.ChainedListView;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
@@ -13,12 +15,14 @@ import net.minecraft.network.message.MessageSignatureData;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.MathHelper;
+import org.jetbrains.annotations.NotNull;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
@@ -59,6 +63,12 @@ public abstract class ChatHudMixin {
         return this.extendedMessages;
     }
 
+    @ModifyArg(method = "render", index = 4, at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/DrawContext;fill(IIIII)V", ordinal = 0))
+    private int fillArg(int color, @Local @NotNull ChatHudLine.Visible visible) {
+        ChatHudLineDuck visibleDuck = (ChatHudLineDuck)(Object) visible;
+        return color | visibleDuck.modKrowd$getBackgroundTint();
+    }
+
     @Inject(method = "clear", cancellable = true, at = @At("HEAD"))
     private void clearInject(CallbackInfo ci) {
         if (ModKrowd.CONFIG.DEJOIN.enabled || ModKrowd.CONFIG.SEPARATE_CHAT_HISTORY.enabled) {
@@ -78,10 +88,20 @@ public abstract class ChatHudMixin {
 
         if (!messageCache.blocked()) {
             ChatHudLine displayedLine = new ChatHudLine(this.client.inGameHud.getTicks(), messageCache.themedOrDefault().text(), signatureData, indicator);
+            ((ChatHudLineDuck)(Object) displayedLine).modKrowd$setBackgroundTint(messageCache.backgroundTint());
             this.addVisibleMessage(displayedLine);
             this.addMessage(displayedLine);
         }
 
         ci.cancel();
+    }
+
+    @ModifyArg(method = "addVisibleMessage", at = @At(value = "INVOKE", target = "Ljava/util/List;add(ILjava/lang/Object;)V"))
+    private Object addArg(Object t, @Local(argsOnly = true) @NotNull ChatHudLine message) {
+        ChatHudLineDuck messageDuck = (ChatHudLineDuck)(Object) message;
+        // We would cast to ChatHudLine.Visible to undo type erasure, but this has to be a double cast anyway
+        ChatHudLineDuck visibleDuck = (ChatHudLineDuck) t;
+        visibleDuck.modKrowd$setBackgroundTint(messageDuck.modKrowd$getBackgroundTint());
+        return visibleDuck;
     }
 }

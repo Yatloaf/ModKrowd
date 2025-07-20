@@ -13,6 +13,7 @@ import dev.yatloaf.modkrowd.cubekrowd.subserver.Subserver;
 
 public abstract class MessageCache extends ThemedCache {
     private boolean blocked = false;
+    private int backgroundTint = 0;
     private Message result;
 
     public MessageCache(TextCache original) {
@@ -37,6 +38,14 @@ public abstract class MessageCache extends ThemedCache {
 
     public void setBlocked(boolean value) {
         this.blocked = value;
+    }
+
+    public int backgroundTint() {
+        return this.backgroundTint;
+    }
+
+    public void setBackgroundTint(int color) {
+        this.backgroundTint = color & 0x00FFFFFF;
     }
 
     public final Message result() {

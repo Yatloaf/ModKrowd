@@ -5,6 +5,7 @@
 ### Added
 
 - Hide Yourself feature.
+- Themes can now tint the chat message background.
 
 ### Changed
 
