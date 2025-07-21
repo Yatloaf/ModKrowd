@@ -42,6 +42,7 @@ public abstract class ChatHudMixin {
     @Shadow protected abstract void logChatMessage(ChatHudLine message);
     @Shadow protected abstract void addVisibleMessage(ChatHudLine message);
     @Shadow protected abstract void addMessage(ChatHudLine message);
+    @Shadow public abstract void scroll(int scroll);
 
     // Redirected visibleMessages
     @Unique private List<ChatHudLine.Visible> extendedMessages = this.visibleMessages;
@@ -56,10 +57,12 @@ public abstract class ChatHudMixin {
         } else {
             this.extendedMessages = this.visibleMessages;
         }
+        // Scroll back if the user scrolled further than possible
+        this.scroll(0);
     }
 
     @Redirect(method = "render", at = @At(value = "FIELD", target = "Lnet/minecraft/client/gui/hud/ChatHud;visibleMessages:Ljava/util/List;"))
-    private List<ChatHudLine.Visible> visibleMessagesRedirect(ChatHud instance) {
+    private List<ChatHudLine.Visible> render_visibleMessagesRedirect(ChatHud instance) {
         return this.extendedMessages;
     }
 
@@ -103,5 +106,25 @@ public abstract class ChatHudMixin {
         ChatHudLineDuck visibleDuck = (ChatHudLineDuck) t;
         visibleDuck.modKrowd$setBackgroundTint(messageDuck.modKrowd$getBackgroundTint());
         return visibleDuck;
+    }
+
+    @Redirect(method = "getTextStyleAt", at = @At(value = "FIELD", target = "Lnet/minecraft/client/gui/hud/ChatHud;visibleMessages:Ljava/util/List;"))
+    private List<ChatHudLine.Visible> getTextStyleAt_visibleMessagesRedirect(ChatHud instance) {
+        return this.extendedMessages;
+    }
+
+    @Redirect(method = "getIndicatorAt", at = @At(value = "FIELD", target = "Lnet/minecraft/client/gui/hud/ChatHud;visibleMessages:Ljava/util/List;"))
+    private List<ChatHudLine.Visible> getIndicatorAt_visibleMessagesRedirect(ChatHud instance) {
+        return this.extendedMessages;
+    }
+
+    @Redirect(method = "getMessageIndex", at = @At(value = "FIELD", target = "Lnet/minecraft/client/gui/hud/ChatHud;visibleMessages:Ljava/util/List;"))
+    private List<ChatHudLine.Visible> getMessageIndex_visibleMessagesRedirect(ChatHud instance) {
+        return this.extendedMessages;
+    }
+
+    @Redirect(method = "getMessageLineIndex", at = @At(value = "FIELD", target = "Lnet/minecraft/client/gui/hud/ChatHud;visibleMessages:Ljava/util/List;"))
+    private List<ChatHudLine.Visible> getMessageLineIndex_visibleMessagesRedirect(ChatHud instance) {
+        return this.extendedMessages;
     }
 }

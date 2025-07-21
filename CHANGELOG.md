@@ -19,6 +19,7 @@
 
 - Message Preview not being displayed for some commands.
   - This was due to a bug in Brigadier.
+- Various interactions being misaligned while a preview message was active.
 
 ## 0.2.2: 2025-06-11
 
