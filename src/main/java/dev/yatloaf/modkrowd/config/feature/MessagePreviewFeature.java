@@ -8,6 +8,7 @@ import dev.yatloaf.modkrowd.cubekrowd.message.DirectMessage;
 import dev.yatloaf.modkrowd.cubekrowd.message.cache.CubeKrowdMessageCache;
 import dev.yatloaf.modkrowd.cubekrowd.message.cache.MessageCache;
 import dev.yatloaf.modkrowd.cubekrowd.common.cache.TextCache;
+import dev.yatloaf.modkrowd.mixinduck.ChatHudLineDuck;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.hud.ChatHudLine;
@@ -15,21 +16,19 @@ import net.minecraft.client.gui.hud.MessageIndicator;
 import net.minecraft.client.gui.screen.ChatScreen;
 import net.minecraft.client.util.ChatMessages;
 import net.minecraft.text.OrderedText;
-import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class MessagePreviewFeature extends Feature {
-
     public static final MessageIndicator PREVIEW_INDICATOR = new MessageIndicator(
             CKColor.LIGHT_PURPLE.textColor.getRgb(),
             null,
             Text.literal("Preview message"),
             "ModKrowd:Preview"
     );
-    private static final OrderedText PREVIEW_PREFIX = OrderedText.styled(' ', Style.EMPTY);
+    public static final int PREVIEW_BACKGROUND_TINT = 0x5F005F;
 
     public String replyTarget = null;
 
@@ -84,11 +83,14 @@ public class MessagePreviewFeature extends Feature {
 
         List<ChatHudLine.Visible> visibleLines = new ArrayList<>(orderedTextLines.size());
         for (int l = orderedTextLines.size() - 1; l >= 0; l--) {
-            OrderedText currentLine = OrderedText.concat(PREVIEW_PREFIX, orderedTextLines.get(l));
+            OrderedText currentLine = orderedTextLines.get(l);
             boolean endOfEntry = l == orderedTextLines.size() - 1;
-            visibleLines.add(new ChatHudLine.Visible(
+
+            ChatHudLine.Visible visible = new ChatHudLine.Visible(
                     Integer.MIN_VALUE, currentLine, PREVIEW_INDICATOR, endOfEntry
-            ));
+            );
+            ((ChatHudLineDuck)(Object) visible).modKrowd$setBackgroundTint(PREVIEW_BACKGROUND_TINT);
+            visibleLines.add(visible);
         }
 
         this.linedMessage = this.previewMessage;

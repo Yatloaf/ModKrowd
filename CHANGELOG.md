@@ -6,12 +6,14 @@
 
 - Hide Yourself feature.
 - Themes can now tint the chat message background.
+  - It is tinted magenta for preview messages to match the message indicator.
 
 ### Changed
 
 - Renamed Hide Players to Hide Others.
   - The new name both increases accuracy and disambiguates from Hide Others.
 - Autoswitch now waits for the chat screen to be closed.
+- Preview messages no longer add a leading space.
 
 ### Fixed
 
