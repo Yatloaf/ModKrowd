@@ -7,6 +7,7 @@
 - Hide Yourself feature.
 - Themes can now tint the chat message background.
   - It is tinted magenta for preview messages to match the message indicator.
+- Message Preview now supports chat formatting codes.
 
 ### Changed
 
