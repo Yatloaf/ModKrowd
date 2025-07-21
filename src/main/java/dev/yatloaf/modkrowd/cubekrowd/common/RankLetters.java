@@ -4,7 +4,9 @@ import dev.yatloaf.modkrowd.util.Util;
 import dev.yatloaf.modkrowd.util.text.StyledString;
 import dev.yatloaf.modkrowd.util.text.StyledStringReader;
 import net.minecraft.text.Style;
+import net.minecraft.util.Formatting;
 
+import java.util.EnumSet;
 import java.util.Map;
 
 public enum RankLetters {
@@ -23,6 +25,17 @@ public enum RankLetters {
     ADMIN(CKColor.RED, StyledString.fromString("A", Style.EMPTY.withBold(true))),
     UNKNOWN(CKColor.WHITE, StyledString.fromString("?"));
 
+    public static final EnumSet<Formatting> PF_NONE = EnumSet.noneOf(Formatting.class);
+    public static final EnumSet<Formatting> PF_LIMITED = EnumSet.of(
+            Formatting.STRIKETHROUGH,
+            Formatting.UNDERLINE,
+            Formatting.ITALIC
+    );
+    public static final EnumSet<Formatting> PF_ALMOST_ALL = EnumSet.allOf(Formatting.class);
+    static {
+        PF_ALMOST_ALL.remove(Formatting.OBFUSCATED);
+    }
+
     public final CKColor color;
     public final StyledString letter;
 
@@ -35,6 +48,15 @@ public enum RankLetters {
 
     public static RankLetters read(StyledStringReader source) {
         return source.mapNextOrDefault(FROM_LETTER, UNKNOWN);
+    }
+
+    public EnumSet<Formatting> permittedFormattings() {
+        // Can't really know for stacked ranks
+        return switch (this) {
+            case ADMIN, MODERATOR, HELPER, DEVELOPER -> PF_ALMOST_ALL;
+            case ZIPKROWD, YOUTUBE, SPECIAL_GUEST, BUILDER, VETERAN, RESPECTED -> PF_LIMITED;
+            default -> PF_NONE;
+        };
     }
 
     public boolean isReal() {

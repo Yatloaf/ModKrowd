@@ -13,6 +13,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -94,6 +95,44 @@ public class StyledString {
         Arrays.fill(styles, filledStyle);
 
         return new StyledString(codePoints, styles);
+    }
+
+    public static StyledString fromFormattedString(@NotNull String source, int formatChar,
+                                                   @NotNull EnumSet<Formatting> formattings) {
+        return fromFormattedString(source, formatChar, formattings, FALSE_STYLE);
+    }
+
+    public static StyledString fromFormattedString(@NotNull String source, int formatChar,
+                                                   @NotNull EnumSet<Formatting> formattings, @NotNull Style startStyle) {
+        Style currentStyle = startStyle.withParent(FALSE_STYLE);
+
+        IntList codepoints = new IntArrayList(source.length());
+        List<Style> styles = new ArrayList<>(source.length());
+
+        PrimitiveIterator.OfInt sourceIterator = source.codePoints().iterator();
+        while (sourceIterator.hasNext()) {
+            int ch = sourceIterator.nextInt();
+
+            if (ch == formatChar && sourceIterator.hasNext()) {
+                int code = sourceIterator.nextInt();
+
+                if (code <= 'z' && Formatting.byCode((char) code) instanceof Formatting f && formattings.contains(f)) {
+                    currentStyle = currentStyle.withFormatting(f);
+                    continue;
+                }
+
+                // Invalid code
+                codepoints.add(ch);
+                styles.add(currentStyle);
+                codepoints.add(code);
+                styles.add(currentStyle);
+            } else {
+                codepoints.add(ch);
+                styles.add(currentStyle);
+            }
+        }
+
+        return new StyledString(codepoints.toIntArray(), styles.toArray(EMPTY_STYLES));
     }
 
     public static StyledString fromText(@NotNull Text source) {
