@@ -2,6 +2,8 @@
 
 ## 0.2.3: Unreleased
 
+- Update to 1.21.8.
+
 ### Added
 
 - Hide Yourself feature.

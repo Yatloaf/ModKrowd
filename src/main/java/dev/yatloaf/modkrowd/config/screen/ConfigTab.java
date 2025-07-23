@@ -27,6 +27,12 @@ public class ConfigTab implements Tab {
     }
 
     @Override
+    public Text getNarratedHint() {
+        // Accessibility? This is the default implementation in GridScreenTab
+        return Text.empty();
+    }
+
+    @Override
     public void forEachChild(Consumer<ClickableWidget> consumer) {
         this.listWidget.forEachChild(consumer);
     }

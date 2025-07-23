@@ -18,6 +18,7 @@ import net.minecraft.text.MutableText;
 import net.minecraft.text.OrderedText;
 import net.minecraft.text.StringVisitable;
 import net.minecraft.text.Text;
+import net.minecraft.util.Colors;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
@@ -145,10 +146,8 @@ public abstract class PlayerListHudMixin implements PlayerListHudDuck {
 		if (ModKrowd.CONFIG.PING_DISPLAY.enabled) {
 			if (this.currentEntry.isPlayer()) {
 				MutableText text = this.currentEntry.latencyThemedOrDefault().text();
-				context.getMatrices().push();
-				context.getMatrices().translate(0.0f, 0.0f, 100.0f);
-				context.drawTextWithShadow(this.client.textRenderer, text, x + width - this.client.textRenderer.getWidth(text), y, 0);
-				context.getMatrices().pop();
+				// color gets overridden by the text style anyway, but we need the opacity
+				context.drawTextWithShadow(this.client.textRenderer, text, x + width - this.client.textRenderer.getWidth(text), y, Colors.WHITE);
 			}
 		} else {
 			this.renderLatencyIcon(context, width, x, y, entry);

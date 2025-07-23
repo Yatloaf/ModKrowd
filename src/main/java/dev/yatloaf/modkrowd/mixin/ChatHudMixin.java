@@ -66,8 +66,14 @@ public abstract class ChatHudMixin {
         return this.extendedMessages;
     }
 
-    @ModifyArg(method = "render", index = 4, at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/DrawContext;fill(IIIII)V", ordinal = 0))
-    private int fillArg(int color, @Local @NotNull ChatHudLine.Visible visible) {
+    @Redirect(method = "method_71990", at = @At(value = "FIELD", target = "Lnet/minecraft/client/gui/hud/ChatHud;visibleMessages:Ljava/util/List;"))
+    private List<ChatHudLine.Visible> renderLoop_visibleMessagesRedirect(ChatHud instance) {
+        return this.extendedMessages;
+    }
+
+    // Lambda method! visible is argsOnly due to being passed from outside
+    @ModifyArg(method = "method_71992", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/math/ColorHelper;withAlpha(FI)I", ordinal = 0))
+    private int withAlphaArg(int color, @Local(argsOnly = true) @NotNull ChatHudLine.Visible visible) {
         ChatHudLineDuck visibleDuck = (ChatHudLineDuck)(Object) visible;
         return color | visibleDuck.modKrowd$getBackgroundTint();
     }
