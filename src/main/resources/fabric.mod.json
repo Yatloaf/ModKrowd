@@ -8,6 +8,9 @@
 		"Yatloaf"
 	],
 	"contact": {
+		"homepage": "https://modrinth.com/mod/modkrowd",
+		"issues": "https://github.com/Yatloaf/ModKrowd/issues",
+		"sources": "https://github.com/Yatloaf/ModKrowd"
 	},
 	"license": "LGPL-3.0-only",
 	"icon": "assets/modkrowd/icon.png",
