@@ -1,6 +1,8 @@
 # ModKrowd changelog
 
-## 0.2.3: Unreleased
+## 0.2.4: Unreleased
+
+## 0.2.3: 2025-07-24
 
 - Update to 1.21.8.
 
