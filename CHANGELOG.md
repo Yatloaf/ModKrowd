@@ -2,6 +2,10 @@
 
 ## 0.2.4: Unreleased
 
+### Fixed
+
+- Message Preview not accepting `&r` for ranks with limited chat formatting permissions.
+
 ## 0.2.3: 2025-07-24
 
 ### Added
