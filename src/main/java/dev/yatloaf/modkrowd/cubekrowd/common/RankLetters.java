@@ -29,7 +29,8 @@ public enum RankLetters {
     public static final EnumSet<Formatting> PF_LIMITED = EnumSet.of(
             Formatting.STRIKETHROUGH,
             Formatting.UNDERLINE,
-            Formatting.ITALIC
+            Formatting.ITALIC,
+            Formatting.RESET
     );
     public static final EnumSet<Formatting> PF_ALMOST_ALL = EnumSet.allOf(Formatting.class);
     static {
