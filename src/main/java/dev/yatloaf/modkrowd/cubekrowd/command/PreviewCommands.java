@@ -22,6 +22,8 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.EnumSet;
+
 import static com.mojang.brigadier.builder.LiteralArgumentBuilder.literal;
 import static com.mojang.brigadier.builder.RequiredArgumentBuilder.argument;
 
@@ -37,12 +39,18 @@ public final class PreviewCommands {
                                         .executes(context -> {
                                             String target = StringArgumentType.getString(context, "target");
                                             String message = StringArgumentType.getString(context, "message");
+
+                                            EnumSet<Formatting> permittedFormattings = SelfPlayer.rankNameSoft().rank().letters().permittedFormattings();
+                                            // &r also resets the gold color
+                                            StyledString formatted = StyledString.fromFormattedString(message, '&',
+                                                    permittedFormattings, CKColor.GOLD.style);
+
                                             if (SelfPlayer.username().equals(target)) {
                                                 throw result(new DirectMessage(
                                                         Direction.LOOP,
                                                         DirectMessage.ME,
                                                         DirectMessage.ME,
-                                                        StyledString.fromString(message, CKColor.GOLD.style),
+                                                        formatted,
                                                         true
                                                 ).appearance());
                                             } else {
@@ -50,7 +58,7 @@ public final class PreviewCommands {
                                                         Direction.OUTGOING,
                                                         DirectMessage.ME,
                                                         target,
-                                                        StyledString.fromString(message, CKColor.GOLD.style),
+                                                        formatted,
                                                         true
                                                 ).appearance());
                                             }
@@ -66,12 +74,18 @@ public final class PreviewCommands {
                                     }
                                     String target = ModKrowd.CONFIG.MESSAGE_PREVIEW.replyTarget;
                                     String message = StringArgumentType.getString(context, "message");
+
+                                    EnumSet<Formatting> permittedFormattings = SelfPlayer.rankNameSoft().rank().letters().permittedFormattings();
+                                    // &r also resets the gold color
+                                    StyledString formatted = StyledString.fromFormattedString(message, '&',
+                                            permittedFormattings, CKColor.GOLD.style);
+
                                     if (SelfPlayer.username().equals(target)) {
                                         throw result(new DirectMessage(
                                                 Direction.LOOP,
                                                 DirectMessage.ME,
                                                 DirectMessage.ME,
-                                                StyledString.fromString(message, CKColor.GOLD.style),
+                                                formatted,
                                                 true
                                         ).appearance());
                                     } else {
@@ -79,7 +93,7 @@ public final class PreviewCommands {
                                                 Direction.OUTGOING,
                                                 DirectMessage.ME,
                                                 target,
-                                                StyledString.fromString(message, CKColor.GOLD.style),
+                                                formatted,
                                                 true
                                         ).appearance());
                                     }
