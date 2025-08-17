@@ -1,9 +1,16 @@
 package dev.yatloaf.modkrowd.cubekrowd.subserver;
 
 import dev.yatloaf.modkrowd.ModKrowd;
+import dev.yatloaf.modkrowd.cubekrowd.common.MinigameTeamName;
+import dev.yatloaf.modkrowd.cubekrowd.common.RankName;
+import dev.yatloaf.modkrowd.cubekrowd.common.SelfPlayer;
 import dev.yatloaf.modkrowd.cubekrowd.common.cache.TextCache;
 import dev.yatloaf.modkrowd.util.Util;
+import dev.yatloaf.modkrowd.util.text.StyledString;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
+import net.minecraft.util.Formatting;
+
+import java.util.EnumSet;
 
 public abstract class Subserver {
     // Shoutout to the CubeKrowd developers for giving each server at least 6 names:
@@ -37,5 +44,47 @@ public abstract class Subserver {
 
     public TextCache formatChat(String message) {
         return TextCache.EMPTY;
+    }
+
+    public static TextCache formatChatMain(String message) {
+        RankName rankName = SelfPlayer.rankNameSoft();
+        StyledString prefix = SelfPlayer.rankNameSoft().appearance();
+
+        if (StyledString.EMPTY.equals(prefix)) {
+            return TextCache.EMPTY;
+        } else {
+            EnumSet<Formatting> permittedFormattings = rankName.rank().letters().permittedFormattings();
+            StyledString formatted = StyledString.fromFormattedString(message, '&', permittedFormattings);
+
+            return TextCache.of(StyledString.concat(prefix, StyledString.SPACE, formatted));
+        }
+    }
+
+    public static TextCache formatChatMinigame(String message) {
+        MinigameTeamName teamName = SelfPlayer.teamNameSoft();
+
+        if (teamName != MinigameTeamName.FAILURE) {
+            return TextCache.of(StyledString.concat(
+                    StyledString.fromString("<"),
+                    teamName.appearance(),
+                    StyledString.fromString("> " + message)
+            ));
+        } else {
+            return TextCache.EMPTY;
+        }
+    }
+
+    public static TextCache formatChatMixed(String message) {
+        StyledString prefix = SelfPlayer.rankNameSoft().appearance();
+
+        if (StyledString.EMPTY.equals(prefix)) {
+            return TextCache.EMPTY;
+        } else {
+            return TextCache.of(StyledString.concat(
+                    StyledString.fromString("<"),
+                    prefix,
+                    StyledString.fromString("> " + message)
+            ));
+        }
     }
 }
