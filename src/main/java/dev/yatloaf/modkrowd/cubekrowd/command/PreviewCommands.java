@@ -40,10 +40,8 @@ public final class PreviewCommands {
                                             String target = StringArgumentType.getString(context, "target");
                                             String message = StringArgumentType.getString(context, "message");
 
-                                            EnumSet<Formatting> permittedFormattings = SelfPlayer.rankNameSoft().rank().letters().permittedFormattings();
                                             // &r also resets the gold color
-                                            StyledString formatted = StyledString.fromFormattedString(message, '&',
-                                                    permittedFormattings, CKColor.GOLD.style);
+                                            StyledString formatted = SelfPlayer.tryFormat(message, CKColor.GOLD.style);
 
                                             if (SelfPlayer.username().equals(target)) {
                                                 throw result(new DirectMessage(
@@ -75,10 +73,8 @@ public final class PreviewCommands {
                                     String target = ModKrowd.CONFIG.MESSAGE_PREVIEW.replyTarget;
                                     String message = StringArgumentType.getString(context, "message");
 
-                                    EnumSet<Formatting> permittedFormattings = SelfPlayer.rankNameSoft().rank().letters().permittedFormattings();
                                     // &r also resets the gold color
-                                    StyledString formatted = StyledString.fromFormattedString(message, '&',
-                                            permittedFormattings, CKColor.GOLD.style);
+                                    StyledString formatted = SelfPlayer.tryFormat(message, CKColor.GOLD.style);
 
                                     if (SelfPlayer.username().equals(target)) {
                                         throw result(new DirectMessage(

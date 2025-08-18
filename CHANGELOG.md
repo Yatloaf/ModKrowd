@@ -6,6 +6,7 @@
 
 - Message Preview not accepting `&r` for ranks with limited chat formatting permissions.
 - Message Preview not parsing chat formatting in direct messages.
+- Message Preview not parsing chat formatting on minigame subservers.
 - Message Preview not including angled brackets in BuildTeam.
 
 ## 0.2.3: 2025-07-24
