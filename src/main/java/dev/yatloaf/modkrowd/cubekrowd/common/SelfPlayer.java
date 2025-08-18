@@ -4,8 +4,13 @@ import dev.yatloaf.modkrowd.ModKrowd;
 import dev.yatloaf.modkrowd.cubekrowd.subserver.CubeKrowdSubserver;
 import dev.yatloaf.modkrowd.cubekrowd.subserver.MinigameSubserver;
 import dev.yatloaf.modkrowd.cubekrowd.tablist.cache.TabEntryCache;
+import dev.yatloaf.modkrowd.util.text.StyledString;
 import dev.yatloaf.modkrowd.util.text.StyledStringReader;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.text.Style;
+import net.minecraft.util.Formatting;
+
+import java.util.EnumSet;
 
 public class SelfPlayer {
     public static RankName rankName = RankName.FAILURE;
@@ -36,5 +41,15 @@ public class SelfPlayer {
 
     public static String username() {
         return MinecraftClient.getInstance().getSession().getUsername();
+    }
+
+    public static StyledString tryFormat(String message) {
+        EnumSet<Formatting> permittedFormattings = SelfPlayer.rankNameSoft().rank().letters().permittedFormattings();
+        return StyledString.fromFormattedString(message, '&', permittedFormattings);
+    }
+
+    public static StyledString tryFormat(String message, Style startStyle) {
+        EnumSet<Formatting> permittedFormattings = SelfPlayer.rankNameSoft().rank().letters().permittedFormattings();
+        return StyledString.fromFormattedString(message, '&', permittedFormattings, startStyle);
     }
 }
