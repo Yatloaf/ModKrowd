@@ -2,6 +2,10 @@
 
 ## 0.2.4: Unreleased
 
+### Changed
+
+- Autoswitch is now forced after 14 seconds even if the chat screen is open to avoid dumping the player into Gamelobby
+
 ### Fixed
 
 - Message Preview not accepting `&r` for ranks with limited chat formatting permissions.
