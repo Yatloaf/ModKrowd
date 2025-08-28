@@ -66,6 +66,7 @@ public class ModKrowd implements ClientModInitializer {
 	private static boolean pendingTabListCache = true;
 	private static MwSwitchStatus mwSwitchStatus = MwSwitchStatus.IDLE;
 	private static long mwSwitchTick = 0;
+	private static long mwSwitchForceTick = 0;
 	private static int mwSwitchIndex = 0;
 
 	@Override
@@ -132,6 +133,7 @@ public class ModKrowd implements ClientModInitializer {
 	public static void startSwitchingMissileWarsLobby(int delay) {
 		if (mwSwitchStatus != MwSwitchStatus.CONNECTING) {
 			mwSwitchTick = tick + delay;
+			mwSwitchForceTick = tick + 280; // 14 seconds
 			mwSwitchStatus = MwSwitchStatus.DELAY;
 			tickSwitchingMissileWarsLobby();
 		}
@@ -140,9 +142,10 @@ public class ModKrowd implements ClientModInitializer {
 	private static void tickSwitchingMissileWarsLobby() {
 		MinecraftClient client = MinecraftClient.getInstance();
 
-		// Wait until no ChatScreen is open
-		if (mwSwitchStatus == MwSwitchStatus.DELAY && mwSwitchTick <= tick
-				&& !(client.currentScreen instanceof ChatScreen)) {
+		// Wait until no ChatScreen is open or the force tick has been reached
+		if (mwSwitchStatus == MwSwitchStatus.DELAY && (
+				mwSwitchForceTick <= tick || mwSwitchTick <= tick && !(client.currentScreen instanceof ChatScreen)
+		)) {
 
             ClientPlayNetworkHandler handler = client.getNetworkHandler();
 			if (handler != null
@@ -172,6 +175,7 @@ public class ModKrowd implements ClientModInitializer {
 
 		mwSwitchStatus = MwSwitchStatus.IDLE;
 		mwSwitchTick = 0;
+		mwSwitchForceTick = 0;
 		mwSwitchIndex = 0;
 
 		if (currentSubserver instanceof CubeKrowdSubserver) {
@@ -233,6 +237,7 @@ public class ModKrowd implements ClientModInitializer {
 					if (!mwSubserver.tryConnectNext(client.getNetworkHandler(), mwSwitchIndex)) {
 						mwSwitchStatus = MwSwitchStatus.IDLE;
 						mwSwitchTick = 0;
+						mwSwitchForceTick = 0;
 						mwSwitchIndex = 0;
 					}
 				}
