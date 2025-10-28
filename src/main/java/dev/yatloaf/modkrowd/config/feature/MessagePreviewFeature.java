@@ -3,6 +3,7 @@ package dev.yatloaf.modkrowd.config.feature;
 import dev.yatloaf.modkrowd.ModKrowd;
 import dev.yatloaf.modkrowd.config.ActionQueue;
 import dev.yatloaf.modkrowd.config.PredicateIndex;
+import dev.yatloaf.modkrowd.cubekrowd.command.PreviewCommands;
 import dev.yatloaf.modkrowd.cubekrowd.common.CKColor;
 import dev.yatloaf.modkrowd.cubekrowd.message.DirectMessage;
 import dev.yatloaf.modkrowd.cubekrowd.message.cache.CubeKrowdMessageCache;
@@ -107,6 +108,7 @@ public class MessagePreviewFeature extends Feature {
     public void clearPreviewMessage() {
         this.previewMessage = TextCache.EMPTY;
         this.removePreview = Long.MAX_VALUE;
+        PreviewCommands.advanceRandom();
     }
 
     public void queueClearPreviewMessage() {
