@@ -33,8 +33,6 @@
     "modkrowd.config.feature.no_chat_clear_on_rejoin.tooltip": "Behält den Chat beim Neuverbinden",
     "modkrowd.config.feature.separate_chat_history": "Separate Chatverläufe",
     "modkrowd.config.feature.separate_chat_history.tooltip": "Führt separate Chatverläufe für verschiedene Server",
-    "modkrowd.config.feature.click_to_respond": "Klicke zum Antworten",
-    "modkrowd.config.feature.click_to_respond.tooltip": "Lässt Direktnachrichten zum Antworten anklicken",
     "modkrowd.config.feature.direct_message_sound": "Nachricht für Dich",
     "modkrowd.config.feature.direct_message_sound.tooltip": "Spielt ein Geräusch, wenn eine Direktnachricht empfangen wird",
     "modkrowd.config.feature.direct_message_sound.sound": "-- Geräusch (Ressource)",

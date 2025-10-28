@@ -32,7 +32,6 @@ CubeKrowd has strict rules regarding allowed mods, which means some aren’t all
 
 - Persistent Chat History
 - Separate Chat History
-- Click to Respond
 - You’ve Got Mail
 - Message Preview
 
