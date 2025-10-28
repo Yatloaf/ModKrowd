@@ -22,16 +22,21 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.EnumSet;
+import java.util.Random;
 
 import static com.mojang.brigadier.builder.LiteralArgumentBuilder.literal;
 import static com.mojang.brigadier.builder.RequiredArgumentBuilder.argument;
 
 @SuppressWarnings("UnnecessaryUnicodeEscape")
 public final class PreviewCommands {
+    private static final Random RANDOM = new Random();
+    private static String currentMeow;
+
     private static final CommandDispatcher<Object> DISPATCHER = new CommandDispatcher<>();
 
     static {
+        advanceRandom();
+
         command(
                 literal("message")
                         .then(argument("target", StringArgumentType.word())
@@ -144,7 +149,12 @@ public final class PreviewCommands {
         chattymoteV("%s loses", "%s loses %s", "lose", "lost");
         chattymote1("%s loves %s", "love");
         chattymote0("%s doesn't like it", "meh");
-        // chattymote0("%s tried to meow but coughed up a hairball!", "meow");
+        command(
+                literal("meow").executes(context -> {
+                    checkChattymote();
+                    throw result(Text.literal(SelfPlayer.username() + currentMeow).formatted(Formatting.LIGHT_PURPLE));
+                })
+        );
         chattymote0("%s thought they could be op", "opme");
         chattymote0("%s is having a party \\o/", "party", "partayy");
         chattymoteV("%s pats", "%s pats %s", "pat"); // UNDOCUMENTED
@@ -211,6 +221,18 @@ public final class PreviewCommands {
             if (chat == TextCache.EMPTY) return TextCache.EMPTY;
             return CubeKrowd.censor(chat);
         }
+    }
+
+    /**
+     * Advance the random number generator to get a new result for the next set of previews
+     */
+    public static void advanceRandom() {
+        int meowIndex = RANDOM.nextInt(10);
+        currentMeow = switch (meowIndex) {
+            case 0 -> " meows";
+            case 1 -> " tried to meow, but coughs up a furball";
+            default -> " makes cat sounds";
+        };
     }
 
     /**
