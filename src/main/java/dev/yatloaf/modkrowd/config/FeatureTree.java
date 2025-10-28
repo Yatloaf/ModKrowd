@@ -5,7 +5,6 @@ import dev.yatloaf.modkrowd.config.feature.AutoswitchFeature;
 import dev.yatloaf.modkrowd.config.feature.BlockCutoutFeature;
 import dev.yatloaf.modkrowd.config.feature.CherryLiteThemeFeature;
 import dev.yatloaf.modkrowd.config.feature.CherryThemeFeature;
-import dev.yatloaf.modkrowd.config.feature.ClickResponseFeature;
 import dev.yatloaf.modkrowd.config.feature.DirectMessageSoundFeature;
 import dev.yatloaf.modkrowd.config.feature.Feature;
 import dev.yatloaf.modkrowd.config.feature.HighContrastThemeFeature;
@@ -80,9 +79,6 @@ public class FeatureTree {
     ));
     public final SeparateChatHistoryFeature SEPARATE_CHAT_HISTORY = this.CHAT.feature(new SeparateChatHistoryFeature(
             "separate_chat_history", PredicateIndex.BINARY
-    ));
-    public final ClickResponseFeature CLICK_RESPOND = this.CHAT.feature(new ClickResponseFeature(
-            "click_to_respond", PredicateIndex.BINARY_CK
     ));
     public final DirectMessageSoundFeature DIRECT_MESSAGE_SOUND = this.CHAT.feature(new DirectMessageSoundFeature(
             "direct_message_sound", PredicateIndex.BINARY_CK

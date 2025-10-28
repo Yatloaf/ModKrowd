@@ -4,11 +4,15 @@
 
 ### Added
 
-- `/meow` chattymote for Message Preview
+- `/meow` chattymote for Message Preview.
 
 ### Changed
 
-- Autoswitch is now forced after 14 seconds even if the chat screen is open to avoid dumping the player into Gamelobby
+- Autoswitch is now forced after 14 seconds even if the chat screen is open to avoid dumping the player into Gamelobby.
+
+### Removed
+
+- Click to Respond, made obsolete by CubeKrowd doing it automatically.
 
 ### Fixed
 

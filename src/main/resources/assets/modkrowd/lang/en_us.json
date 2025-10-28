@@ -33,8 +33,6 @@
     "modkrowd.config.feature.no_chat_clear_on_rejoin.tooltip": "Keep chat through rejoins",
     "modkrowd.config.feature.separate_chat_history": "Separate Chat History",
     "modkrowd.config.feature.separate_chat_history.tooltip": "Keep track of separate chat histories per server",
-    "modkrowd.config.feature.click_to_respond": "Click to Respond",
-    "modkrowd.config.feature.click_to_respond.tooltip": "Allow clicking direct messages to respond",
     "modkrowd.config.feature.direct_message_sound": "You’ve Got Mail",
     "modkrowd.config.feature.direct_message_sound.tooltip": "Play a sound when receiving a direct message",
     "modkrowd.config.feature.direct_message_sound.sound": "-- Sound (resource)",
