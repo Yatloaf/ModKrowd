@@ -227,12 +227,16 @@ public final class PreviewCommands {
      * Advance the random number generator to get a new result for the next set of previews
      */
     public static void advanceRandom() {
-        int meowIndex = RANDOM.nextInt(10);
-        currentMeow = switch (meowIndex) {
-            case 0 -> " meows";
-            case 1 -> " tried to meow, but coughs up a furball";
-            default -> " makes cat sounds";
-        };
+        // As confirmed by zorua162: 1% meow, 9% furball, 90% cat sounds
+
+        int meowIndex = RANDOM.nextInt(100);
+        if (meowIndex == 0) {
+            currentMeow = " meows";
+        } else if (meowIndex < 10) {
+            currentMeow = " tried to meow, but coughs up a furball";
+        } else {
+            currentMeow = " makes cat sounds";
+        }
     }
 
     /**
