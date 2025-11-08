@@ -61,6 +61,8 @@
     "modkrowd.config.feature.tie_detector.tooltip": "Measure ties in MissileWars",
     "modkrowd.config.feature.respectate": "Respectate",
     "modkrowd.config.feature.respectate.tooltip": "Keep spectating players after they die",
+    "modkrowd.config.feature.theme_shaded_tab_list_background": "Shaded Tab",
+    "modkrowd.config.feature.theme_shaded_tab_list_background.tooltip": "Darken the tab list background",
     "modkrowd.config.feature.theme_high_contrast": "High Contrast",
     "modkrowd.config.feature.theme_high_contrast.tooltip": "Adjust text formatting for accessibility",
     "modkrowd.config.feature.theme_cherry_lite": "Cherry Lite",

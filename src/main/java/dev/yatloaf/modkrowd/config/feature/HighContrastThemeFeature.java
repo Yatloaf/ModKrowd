@@ -33,8 +33,6 @@ public class HighContrastThemeFeature extends ThemeFeature {
     public static final TextColor LAVENDER = TextColor.fromRgb(0xBF7FFF);
     public static final TextColor CORNFLOWER = TextColor.fromRgb(0x5F7FFF);
 
-    public static final int BLACK75 = 0xC0000000;
-
     public HighContrastThemeFeature(String id, PredicateIndex allowedPredicates) {
         super(id, allowedPredicates);
     }
@@ -121,7 +119,6 @@ public class HighContrastThemeFeature extends ThemeFeature {
         switch (tabHeader.tabHeaderSoft().rankName().rank().letters()) {
             case RESPECTED, VETERAN -> tabHeader.setThemed(this.tabHeader(tabHeader.tabHeaderSoft()));
         }
-        tabList.setHudColor(BLACK75);
     }
 
     protected TextCache tabPing(TabPing tabPing) {
