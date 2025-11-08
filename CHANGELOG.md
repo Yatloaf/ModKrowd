@@ -22,6 +22,7 @@
 - Message Preview not parsing chat formatting on minigame subservers.
 - Message Preview not including angled brackets in BuildTeam.
 - BuildTeam tab list not being recognized.
+- Empty chat messages not being themed.
 
 ## 0.2.3: 2025-07-24
 
