@@ -13,9 +13,9 @@ public record MainChatMessage(RankName sender, StyledString content, boolean isR
         RankName sender = RankName.readFast(source);
         if (!sender.isReal()) return FAILURE;
 
-        source.skipUntilAfter(" ");
+        if (!source.skipIfNext(" ")) return FAILURE;
+
         StyledString content = source.readAll().isolate();
-        if (content.isEmpty()) return FAILURE;
 
         return new MainChatMessage(sender, content, true);
     }
