@@ -5,6 +5,7 @@
 ### Added
 
 - `/meow` chattymote for Message Preview.
+- Shaded Tab theme, taking over part of High Contrast theme.
 
 ### Changed
 
