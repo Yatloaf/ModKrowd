@@ -18,7 +18,7 @@ public final class Subservers {
     public static final SurvivalSubserver SURVIVAL2 = subserver(new SurvivalSubserver("survival2", "Survival 2", "Survival2", "Survival 2"));
     public static final FakeSubserver SURVIVAL_AMBIGUOUS = subserver(new FakeSubserver(null, null, "Survival"));
     public static final BuildCompSubserver BUILDCOMP = subserver(new BuildCompSubserver("buildcomp", "BuildComp", "BuildComp"));
-    public static final BuildTeamSubserver BUILDTEAM = subserver(new BuildTeamSubserver("buildteam", "BuildTeam", "BuildTeam"));
+    public static final BuildTeamSubserver BUILDTEAM = subserver(new BuildTeamSubserver("buildteam", "BuildTeam", "BuildTeam", "Buildteam"));
     public static final GameLobbySubserver GAMELOBBY = subserver(new GameLobbySubserver("gamelobby1", "GameLobby"));
     public static final MissileWarsSubserver MISSILEWARS0 = subserver(new MissileWarsSubserver("missilewars0", "MissileWars 0", "MissileWars+ 0"));
     public static final MissileWarsSubserver MISSILEWARS1 = subserver(new MissileWarsSubserver("missilewars1", "MissileWars 1", "MissileWars 1"));
