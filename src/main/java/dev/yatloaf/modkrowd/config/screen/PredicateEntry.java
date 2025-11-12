@@ -48,9 +48,9 @@ public class PredicateEntry extends AbstractEntry {
     }
 
     @Override
-    public void render(DrawContext context, int index, int y, int x, int entryWidth, int entryHeight, int mouseX, int mouseY, boolean hovered, float tickDelta) {
-        super.render(context, index, y, x, entryWidth, entryHeight, mouseX, mouseY, hovered, tickDelta);
-        this.button.setPosition(x + entryWidth - 64, y);
-        this.button.render(context, mouseX, mouseY, tickDelta);
+    public void render(DrawContext context, int mouseX, int mouseY, boolean hovered, float deltaTicks) {
+        super.render(context, mouseX, mouseY, hovered, deltaTicks);
+        this.button.setPosition(this.getContentX() + this.getContentWidth() - 64, this.getContentY());
+        this.button.render(context, mouseX, mouseY, deltaTicks);
     }
 }

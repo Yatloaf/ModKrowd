@@ -39,7 +39,8 @@ public class ConfigTab implements Tab {
 
     @Override
     public void refreshGrid(ScreenRect tabArea) {
-        this.listWidget.setDimensionsAndPosition(tabArea.width(), tabArea.height(), 0, tabArea.getTop());
+        // Unlike setDimensionsAndPosition, position also calls recalculateAllChildrenPositions
+        this.listWidget.position(tabArea.width(), tabArea.height(), 0, tabArea.getTop());
     }
 
     public void refreshState() {

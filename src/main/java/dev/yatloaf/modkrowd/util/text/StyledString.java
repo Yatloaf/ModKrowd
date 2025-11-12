@@ -2,9 +2,9 @@ package dev.yatloaf.modkrowd.util.text;
 
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntList;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Style;
+import net.minecraft.text.StyleSpriteSource;
 import net.minecraft.text.Text;
 import net.minecraft.text.TextColor;
 import net.minecraft.util.Formatting;
@@ -37,7 +37,7 @@ public class StyledString {
             .withStrikethrough(false)
             .withUnderline(false)
             .withItalic(false)
-            .withFont(MinecraftClient.DEFAULT_FONT_ID);
+            .withFont(StyleSpriteSource.DEFAULT);
 
     public static final StyledString EMPTY = new StyledString(EMPTY_CODEPOINTS, EMPTY_STYLES);
     public static final StyledString SPACE = fromString(" ");

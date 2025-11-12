@@ -66,8 +66,8 @@ public abstract class ChatHudMixin {
         return this.extendedMessages;
     }
 
-    @Redirect(method = "method_71990", at = @At(value = "FIELD", target = "Lnet/minecraft/client/gui/hud/ChatHud;visibleMessages:Ljava/util/List;"))
-    private List<ChatHudLine.Visible> renderLoop_visibleMessagesRedirect(ChatHud instance) {
+    @Redirect(method = "forEachVisibleLine", at = @At(value = "FIELD", target = "Lnet/minecraft/client/gui/hud/ChatHud;visibleMessages:Ljava/util/List;"))
+    private List<ChatHudLine.Visible> forEachVisibleLine_visibleMessagesRedirect(ChatHud instance) {
         return this.extendedMessages;
     }
 

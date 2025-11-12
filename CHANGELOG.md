@@ -2,6 +2,8 @@
 
 ## 0.2.4: Unreleased
 
+- Update to 1.21.10.
+
 ### Added
 
 - `/meow` chattymote for Message Preview.

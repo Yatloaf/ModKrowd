@@ -23,7 +23,7 @@ public record VanillaTabList(EntryCache[] entries, EntryCache[] players, EntryCa
         }
 
         // Fake tab list players either have an empty name or one containing "~"
-        String firstProfileName = playerListEntries.getFirst().getProfile().getName();
+        String firstProfileName = playerListEntries.getFirst().getProfile().name();
         if (firstProfileName.isBlank() || firstProfileName.contains("~")) {
             return FAILURE;
         }

@@ -5,7 +5,6 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.entity.LivingEntityRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -14,18 +13,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(LivingEntityRenderer.class)
 public class LivingEntityRendererMixin<T extends LivingEntity> {
-	// DINNERBONE_GRUMM
 	// SHOW_OWN_LABEL
 	// ALWAYS_SHOW_LABELS
 	// ALWAYS_HIDE_LABELS
-
-	// Turn everything upside down for absolutely no reason
-	@Inject(at = @At("HEAD"), method = "shouldFlipUpsideDown", cancellable = true)
-	private static void shouldFlipUpsideDownInject(LivingEntity entity, CallbackInfoReturnable<Boolean> cir) {
-		if (ModKrowd.CONFIG.DINNERBONE_GRUMM.enabled && entity instanceof PlayerEntity) {
-			cir.setReturnValue(true);
-		}
-	}
 
 	// Hud appears always disabled
 	// This overrides the other mixins below

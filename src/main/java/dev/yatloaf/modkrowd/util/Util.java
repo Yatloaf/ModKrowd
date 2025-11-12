@@ -5,6 +5,8 @@ import it.unimi.dsi.fastutil.chars.Char2CharOpenHashMap;
 import net.fabricmc.loader.api.SemanticVersion;
 import net.fabricmc.loader.api.VersionParsingException;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
+import net.minecraft.client.render.entity.model.EntityModelLayer;
+import net.minecraft.client.render.entity.model.EquipmentModelData;
 import net.minecraft.network.packet.c2s.play.CommandExecutionC2SPacket;
 
 import java.util.Arrays;
@@ -30,6 +32,9 @@ public final class Util {
         NUMERAL_TO_SUPERSCRIPT.put('9', '⁹');
         NUMERAL_TO_SUPERSCRIPT.put('-', '\u207B');
     }
+
+    // TODO: Find better solution to Yarn mess-up workaround
+    public static EquipmentModelData<EntityModelLayer> PLAYER_SLIM_EQUIPMENT;
 
     public static String superscript(int n) {
         char[] chars = String.valueOf(n).toCharArray();

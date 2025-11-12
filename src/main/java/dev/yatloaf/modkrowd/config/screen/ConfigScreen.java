@@ -11,8 +11,8 @@ import net.minecraft.client.gui.tab.Tab;
 import net.minecraft.client.gui.tab.TabManager;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.TabNavigationWidget;
+import net.minecraft.client.input.KeyInput;
 import net.minecraft.text.Text;
-import org.lwjgl.glfw.GLFW;
 
 /**
  * May your deity of choice help you
@@ -110,12 +110,14 @@ public class ConfigScreen extends Screen {
     }
 
     @Override
-    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+    public boolean keyPressed(KeyInput input) {
         // Save even when pressing Esc
-        if (keyCode == GLFW.GLFW_KEY_ESCAPE) {
+        if (input.isEscape()) {
             this.saveAndClose();
+            return true;
+        } else {
+            return super.keyPressed(input);
         }
-        return super.keyPressed(keyCode, scanCode, modifiers);
     }
 
     @Override

@@ -33,6 +33,7 @@ import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.client.network.ServerInfo;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;
+import net.minecraft.util.Identifier;
 import org.lwjgl.glfw.GLFW;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -84,12 +85,13 @@ public class ModKrowd implements ClientModInitializer {
 		};
 		LOGGER.info(hello[ThreadLocalRandom.current().nextInt(hello.length)]);
 
+		KeyBinding.Category category = KeyBinding.Category.create(Identifier.of("modkrowd", "modkrowd"));
 		OPTIONS_KEY = KeyBindingHelper.registerKeyBinding(new KeyBinding("key.modkrowd.options",
-				InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_UNKNOWN, "category.modkrowd"));
+				InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_UNKNOWN, category));
 		TOGGLE_MESSAGE_PREVIEW_KEY = KeyBindingHelper.registerKeyBinding(new KeyBinding("key.modkrowd.toggle_message_preview",
-				InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_UNKNOWN, "category.modkrowd"));
+				InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_UNKNOWN, category));
 		NEXT_SUBSERVER_KEY = KeyBindingHelper.registerKeyBinding(new KeyBinding("key.modkrowd.next_subserver",
-				InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_UNKNOWN, "category.modkrowd"));
+				InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_UNKNOWN, category));
 		INIT = true;
 
 		ClientConfigurationConnectionEvents.COMPLETE.register(ModKrowd::onConfigurationComplete);

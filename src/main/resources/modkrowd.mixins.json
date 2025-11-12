@@ -3,6 +3,7 @@
     "package": "dev.yatloaf.modkrowd.mixin",
     "compatibilityLevel": "JAVA_17",
     "client": [
+        "AbstractEndPortalBlockEntityRendererMixin",
         "ArmorFeatureRendererMixin",
         "BarrierBlockMixin",
         "ChatHudLineMixin",
@@ -16,11 +17,10 @@
         "ClientWorldPropertiesMixin",
         "Deadmau5FeatureRendererMixin",
         "EndGatewayBlockMixin",
-        "EndPortalBlockEntityRendererMixin",
         "EndPortalBlockMixin",
         "EntityMixin",
+        "EntityModelLayersMixin",
         "EntityModelsMixin",
-        "EntityRendererMixin",
         "EquipmentRendererMixin",
         "GameRendererMixin",
         "HeldItemRendererMixin",
@@ -29,6 +29,7 @@
         "LivingEntityRendererMixin",
         "OtherClientPlayerEntityMixin",
         "PistonExtensionBlockMixin",
+        "PlayerEntityRendererMixin",
         "PlayerListHudMixin",
         "StructureVoidBlockMixin",
         "TabNavigationWidgetMixin"

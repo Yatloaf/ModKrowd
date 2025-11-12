@@ -21,8 +21,9 @@ public class GameRendererMixin {
     @Inject(method = "tick", at = @At("HEAD"))
     public void tickInject(CallbackInfo ci) {
         if (ModKrowd.CONFIG.RESPECTATE.enabled) {
-            if (this.client.world != null && this.client.cameraEntity != null && this.client.cameraEntity.isRemoved()) {
-                Entity respawned = this.client.world.getEntityById(this.client.cameraEntity.getId());
+            Entity cameraEntity = this.client.getCameraEntity();
+            if (this.client.world != null && cameraEntity != null && cameraEntity.isRemoved()) {
+                Entity respawned = this.client.world.getEntityById(cameraEntity.getId());
                 if (respawned != null) {
                     this.client.setCameraEntity(respawned);
                 }

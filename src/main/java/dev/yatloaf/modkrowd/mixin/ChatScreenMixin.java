@@ -6,6 +6,7 @@ import dev.yatloaf.modkrowd.cubekrowd.command.PreviewCommands;
 import net.minecraft.client.gui.screen.ChatScreen;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.TextFieldWidget;
+import net.minecraft.client.input.KeyInput;
 import net.minecraft.text.Text;
 import org.apache.commons.lang3.StringUtils;
 import org.spongepowered.asm.mixin.Mixin;
@@ -34,8 +35,8 @@ public class ChatScreenMixin extends Screen {
 
     // Handle quick toggle key
     @Inject(method = "keyPressed", at = @At("HEAD"))
-    private void keyPressedInject(int keyCode, int scanCode, int modifiers, CallbackInfoReturnable<Boolean> cir) {
-        if (ModKrowd.INIT && ModKrowd.TOGGLE_MESSAGE_PREVIEW_KEY.matchesKey(keyCode, scanCode)) {
+    private void keyPressedInject(KeyInput input, CallbackInfoReturnable<Boolean> cir) {
+        if (ModKrowd.INIT && ModKrowd.TOGGLE_MESSAGE_PREVIEW_KEY.matchesKey(input)) {
             Feature f = ModKrowd.CONFIG.MESSAGE_PREVIEW;
             // Next predicate
             f.predicate = f.allowedPredicates.index.get((f.allowedPredicates.index.indexOf(f.predicate) + 1) % f.allowedPredicates.index.size());
