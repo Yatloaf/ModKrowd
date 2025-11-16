@@ -33,6 +33,7 @@ public abstract class ArmorFeatureRendererMixin<S extends BipedEntityRenderState
     private static final Set<Identifier> SLIMMABLE = new HashSet<>();
     static {
         SLIMMABLE.add(EquipmentAssetKeys.LEATHER.getValue());
+        SLIMMABLE.add(EquipmentAssetKeys.COPPER.getValue());
         SLIMMABLE.add(EquipmentAssetKeys.CHAINMAIL.getValue());
         SLIMMABLE.add(EquipmentAssetKeys.IRON.getValue());
         SLIMMABLE.add(EquipmentAssetKeys.GOLD.getValue());
