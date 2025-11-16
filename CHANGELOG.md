@@ -2,6 +2,10 @@
 
 ## 0.2.5: Unreleased
 
+### Fixed
+
+- Keybind category missing translation.
+
 ## 0.2.4: 2025-11-12
 
 - Update to 1.21.10.
