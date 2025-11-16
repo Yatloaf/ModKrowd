@@ -1,6 +1,8 @@
 # ModKrowd changelog
 
-## 0.2.4: Unreleased
+**The 1.21.5 branch has been discontinued due to CubeKrowd no longer supporting that version.**
+
+## 0.2.4: 2025-11-12
 
 ### Added
 
