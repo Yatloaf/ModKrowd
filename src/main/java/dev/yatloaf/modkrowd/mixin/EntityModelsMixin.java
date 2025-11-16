@@ -37,8 +37,14 @@ public class EntityModelsMixin {
     @Redirect(method = "getModels", at = @At(value = "INVOKE", remap = false, target = "Lnet/minecraft/client/render/entity/model/EquipmentModelData;addTo(Lnet/minecraft/client/render/entity/model/EquipmentModelData;Lcom/google/common/collect/ImmutableMap$Builder;)V"))
     private static <T> void addToRedirect(EquipmentModelData<T> instance, EquipmentModelData<TexturedModelData> texturedModelData, ImmutableMap.Builder<T, TexturedModelData> builder) {
         if (ModKrowd.CONFIG.SLIM_ARMOR.enabled && instance == Util.PLAYER_SLIM_EQUIPMENT) {
-            EquipmentModelData<TexturedModelData> data3 = texturedModelData.map(data -> data.transform(EntityModelsMixin::transformSlim));
-            instance.addTo(data3, builder);
+            // .map() would modify every part, we only want to modify the chest
+            EquipmentModelData<TexturedModelData> slimData = new EquipmentModelData<>(
+                    texturedModelData.head(),
+                    texturedModelData.chest().transform(EntityModelsMixin::transformSlim),
+                    texturedModelData.legs(),
+                    texturedModelData.feet()
+            );
+            instance.addTo(slimData, builder);
         } else {
             instance.addTo(texturedModelData, builder);
         }
@@ -56,22 +62,25 @@ public class EntityModelsMixin {
         ModelPartData sourceRoot = source.getRoot();
 
         for (Map.Entry<String, ModelPartData> entry : sourceRoot.getChildren()) {
-            resultRoot.addChild(entry.getKey(), entry.getValue());
+            String key = entry.getKey();
+            ModelPartData value = entry.getValue();
+            resultRoot.addChild(key, value);
+
+            // Double addChild call because it deals with the mess of transferring children to the new object
+            // Only do this if the parts actually exist
+            switch (key) {
+                case EntityModelPartNames.RIGHT_ARM -> resultRoot.addChild(
+                        EntityModelPartNames.RIGHT_ARM,
+                        ModelPartBuilder.create().uv(40, 16).cuboid(-2.0F, -2.0F, -2.0F, 3.0F, 12.0F, 4.0F, ARMOR_DILATION),
+                        ModelTransform.origin(-5.0F, 2.0F, 0.0F)
+                );
+                case EntityModelPartNames.LEFT_ARM -> resultRoot.addChild(
+                        EntityModelPartNames.LEFT_ARM,
+                        ModelPartBuilder.create().uv(40, 16).mirrored().cuboid(-1.0F, -2.0F, -2.0F, 3.0F, 12.0F, 4.0F, ARMOR_DILATION),
+                        ModelTransform.origin(5.0F, 2.0F, 0.0F)
+                );
+            }
         }
-
-        // A double addChild call is better than a condition inside the loop: It does overwrite the value we just copied
-        // in, but also deals with the mess of transferring children to the new object
-
-        resultRoot.addChild(
-                EntityModelPartNames.RIGHT_ARM,
-                ModelPartBuilder.create().uv(40, 16).cuboid(-2.0F, -2.0F, -2.0F, 3.0F, 12.0F, 4.0F, ARMOR_DILATION),
-                ModelTransform.origin(-5.0F, 2.0F, 0.0F)
-        );
-        resultRoot.addChild(
-                EntityModelPartNames.LEFT_ARM,
-                ModelPartBuilder.create().uv(40, 16).mirrored().cuboid(-1.0F, -2.0F, -2.0F, 3.0F, 12.0F, 4.0F, ARMOR_DILATION),
-                ModelTransform.origin(5.0F, 2.0F, 0.0F)
-        );
 
         return result;
     }

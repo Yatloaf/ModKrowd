@@ -5,6 +5,7 @@
 ### Fixed
 
 - Keybind category missing translation.
+- Slim Armor adding model parts when it shouldn’t.
 
 ## 0.2.4: 2025-11-12
 
