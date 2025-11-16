@@ -2,10 +2,15 @@
 
 ## 0.2.5: Unreleased
 
+### Changed
+
+- Optimized embedded assets.
+
 ### Fixed
 
 - Keybind category missing translation.
 - Slim Armor adding model parts when it shouldn’t.
+- Slim Armor making some armor invisible.
 
 ## 0.2.4: 2025-11-12
 
