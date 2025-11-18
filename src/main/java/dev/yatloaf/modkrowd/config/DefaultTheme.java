@@ -3,12 +3,12 @@ package dev.yatloaf.modkrowd.config;
 import dev.yatloaf.modkrowd.cubekrowd.common.LatencyLevel;
 import dev.yatloaf.modkrowd.cubekrowd.common.cache.TextCache;
 import dev.yatloaf.modkrowd.util.Util;
-import net.minecraft.text.Text;
+import net.minecraft.network.chat.Component;
 
 public class DefaultTheme {
     public static TextCache formatLatency(int latency) {
         int color = colorLatencyLevel(LatencyLevel.fromLatency(latency));
-        return TextCache.of(Text.literal(Util.superscript(latency)).withColor(color));
+        return TextCache.of(Component.literal(Util.superscript(latency)).withColor(color));
     }
 
     public static int colorLatencyLevel(LatencyLevel level) {

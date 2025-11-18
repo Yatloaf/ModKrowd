@@ -1,29 +1,29 @@
 package dev.yatloaf.modkrowd.cubekrowd.common;
 
 import dev.yatloaf.modkrowd.util.Util;
-import net.minecraft.text.Style;
-import net.minecraft.text.TextColor;
-import net.minecraft.util.Formatting;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Style;
+import net.minecraft.network.chat.TextColor;
 
 import java.util.Map;
 
 public enum CKColor {
-    BLACK(TextColor.fromFormatting(Formatting.BLACK)),
-    DARK_BLUE(TextColor.fromFormatting(Formatting.DARK_BLUE)),
-    DARK_GREEN(TextColor.fromFormatting(Formatting.DARK_GREEN)),
-    DARK_AQUA(TextColor.fromFormatting(Formatting.DARK_AQUA)),
-    DARK_RED(TextColor.fromFormatting(Formatting.DARK_RED)),
-    DARK_PURPLE(TextColor.fromFormatting(Formatting.DARK_PURPLE)),
-    GOLD(TextColor.fromFormatting(Formatting.GOLD)),
-    GRAY(TextColor.fromFormatting(Formatting.GRAY)),
-    DARK_GRAY(TextColor.fromFormatting(Formatting.DARK_GRAY)),
-    BLUE(TextColor.fromFormatting(Formatting.BLUE)),
-    GREEN(TextColor.fromFormatting(Formatting.GREEN)),
-    AQUA(TextColor.fromFormatting(Formatting.AQUA)),
-    RED(TextColor.fromFormatting(Formatting.RED)),
-    LIGHT_PURPLE(TextColor.fromFormatting(Formatting.LIGHT_PURPLE)),
-    YELLOW(TextColor.fromFormatting(Formatting.YELLOW)),
-    WHITE(TextColor.fromFormatting(Formatting.WHITE)),
+    BLACK(TextColor.fromLegacyFormat(ChatFormatting.BLACK)),
+    DARK_BLUE(TextColor.fromLegacyFormat(ChatFormatting.DARK_BLUE)),
+    DARK_GREEN(TextColor.fromLegacyFormat(ChatFormatting.DARK_GREEN)),
+    DARK_AQUA(TextColor.fromLegacyFormat(ChatFormatting.DARK_AQUA)),
+    DARK_RED(TextColor.fromLegacyFormat(ChatFormatting.DARK_RED)),
+    DARK_PURPLE(TextColor.fromLegacyFormat(ChatFormatting.DARK_PURPLE)),
+    GOLD(TextColor.fromLegacyFormat(ChatFormatting.GOLD)),
+    GRAY(TextColor.fromLegacyFormat(ChatFormatting.GRAY)),
+    DARK_GRAY(TextColor.fromLegacyFormat(ChatFormatting.DARK_GRAY)),
+    BLUE(TextColor.fromLegacyFormat(ChatFormatting.BLUE)),
+    GREEN(TextColor.fromLegacyFormat(ChatFormatting.GREEN)),
+    AQUA(TextColor.fromLegacyFormat(ChatFormatting.AQUA)),
+    RED(TextColor.fromLegacyFormat(ChatFormatting.RED)),
+    LIGHT_PURPLE(TextColor.fromLegacyFormat(ChatFormatting.LIGHT_PURPLE)),
+    YELLOW(TextColor.fromLegacyFormat(ChatFormatting.YELLOW)),
+    WHITE(TextColor.fromLegacyFormat(ChatFormatting.WHITE)),
     INDIGO(TextColor.fromRgb(0x864DEB)),
     AZURE(TextColor.fromRgb(0x03A9F4)),
     SKY(TextColor.fromRgb(0x60C6FF)),

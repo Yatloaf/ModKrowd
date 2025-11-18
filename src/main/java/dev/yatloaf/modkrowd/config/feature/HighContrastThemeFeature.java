@@ -1,7 +1,8 @@
 package dev.yatloaf.modkrowd.config.feature;
 
-import dev.yatloaf.modkrowd.config.PredicateIndex;
 import dev.yatloaf.modkrowd.config.ActionQueue;
+import dev.yatloaf.modkrowd.config.DefaultTheme;
+import dev.yatloaf.modkrowd.config.PredicateIndex;
 import dev.yatloaf.modkrowd.cubekrowd.common.Afk;
 import dev.yatloaf.modkrowd.cubekrowd.common.CKColor;
 import dev.yatloaf.modkrowd.cubekrowd.common.LatencyLevel;
@@ -15,18 +16,17 @@ import dev.yatloaf.modkrowd.cubekrowd.message.MainChatMessage;
 import dev.yatloaf.modkrowd.cubekrowd.message.MissileWarsDeathMessage;
 import dev.yatloaf.modkrowd.cubekrowd.message.cache.MessageCache;
 import dev.yatloaf.modkrowd.cubekrowd.tablist.MainTabName;
+import dev.yatloaf.modkrowd.cubekrowd.tablist.MinigameTabName;
 import dev.yatloaf.modkrowd.cubekrowd.tablist.TabHeader;
 import dev.yatloaf.modkrowd.cubekrowd.tablist.TabPing;
-import dev.yatloaf.modkrowd.cubekrowd.tablist.MinigameTabName;
 import dev.yatloaf.modkrowd.cubekrowd.tablist.cache.TabEntryCache;
 import dev.yatloaf.modkrowd.cubekrowd.tablist.cache.TabHeaderCache;
 import dev.yatloaf.modkrowd.cubekrowd.tablist.cache.TabListCache;
-import dev.yatloaf.modkrowd.config.DefaultTheme;
 import dev.yatloaf.modkrowd.util.text.StyledString;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.text.Style;
-import net.minecraft.text.Text;
-import net.minecraft.text.TextColor;
+import net.minecraft.client.Minecraft;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.Style;
+import net.minecraft.network.chat.TextColor;
 
 public class HighContrastThemeFeature extends ThemeFeature {
     public static final TextColor PINK = TextColor.fromRgb(0xFF9FCF);
@@ -38,7 +38,7 @@ public class HighContrastThemeFeature extends ThemeFeature {
     }
 
     @Override
-    public void onMessage(MessageCache message, MinecraftClient client, ActionQueue queue) {
+    public void onMessage(MessageCache message, Minecraft minecraft, ActionQueue queue) {
         switch (message.result()) {
             case AlohaMessage alohaMessage -> this.onAlohaMessage(message, alohaMessage);
             case AfkMessage afkMessage -> this.onAfkMessage(message, afkMessage);
@@ -52,13 +52,13 @@ public class HighContrastThemeFeature extends ThemeFeature {
     protected void onAlohaMessage(MessageCache message, AlohaMessage alohaMessage) {
         switch (alohaMessage.aloha()) {
             case JOIN -> message.setThemed(TextCache.of(
-                    Text.literal("+ ").setStyle(CKColor.GREEN.style).append(Text.translatable(
+                    Component.literal("+ ").setStyle(CKColor.GREEN.style).append(Component.translatable(
                             Aloha.JOIN.key,
                             alohaMessage.name().fillColor(CKColor.YELLOW.textColor).toText()
                     ).setStyle(CKColor.GRAY.style))
             ));
             case LEAVE -> message.setThemed(TextCache.of(
-                    Text.literal("- ").setStyle(CKColor.RED.style).append(Text.translatable(
+                    Component.literal("- ").setStyle(CKColor.RED.style).append(Component.translatable(
                             Aloha.LEAVE.key,
                             alohaMessage.name().fillColor(CKColor.YELLOW.textColor).toText()
                     ).setStyle(CKColor.GRAY.style))
@@ -95,7 +95,7 @@ public class HighContrastThemeFeature extends ThemeFeature {
 
     protected void onMissileWarsDeathMessage(MessageCache message, MissileWarsDeathMessage missileWarsDeathMessage) {
         // The args should all already have a non-null color
-        message.setThemed(TextCache.of(missileWarsDeathMessage.appearance().fillStyle(CKColor.GRAY.style)));
+        message.setThemed(TextCache.of(missileWarsDeathMessage.appearance().withStyle(CKColor.GRAY.style)));
     }
 
     protected void onFishslapChatMessage(MessageCache message, FishslapChatMessage fishslapChatMessage) {
@@ -105,7 +105,7 @@ public class HighContrastThemeFeature extends ThemeFeature {
     }
 
     @Override
-    public void onTabList(TabListCache tabList, MinecraftClient client, ActionQueue queue) {
+    public void onTabList(TabListCache tabList, Minecraft minecraft, ActionQueue queue) {
         for (TabEntryCache entry : tabList.result().entries()) {
             switch (entry.result()) {
                 case TabPing tabPing -> entry.setThemed(this.tabPing(tabPing));

@@ -15,35 +15,35 @@ import dev.yatloaf.modkrowd.cubekrowd.message.DirectMessage;
 import dev.yatloaf.modkrowd.cubekrowd.message.Direction;
 import dev.yatloaf.modkrowd.cubekrowd.message.cache.CubeKrowdMessageCache;
 import dev.yatloaf.modkrowd.cubekrowd.message.cache.MessageCache;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.tooltip.Tooltip;
-import net.minecraft.client.sound.PositionedSoundInstance;
-import net.minecraft.sound.SoundEvent;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.JsonHelper;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.components.Tooltip;
+import net.minecraft.client.resources.sounds.SimpleSoundInstance;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.util.GsonHelper;
 
 public class DirectMessageSoundFeature extends Feature {
-    public static final Identifier DEFAULT_SOUND = SoundEvents.ENTITY_ARROW_HIT_PLAYER.id();
+    public static final ResourceLocation DEFAULT_SOUND = SoundEvents.ARROW_HIT_PLAYER.location();
     public static final double DEFAULT_VOLUME = 0.5;
     public static final double MIN_VOLUME = 0;
     public static final double MAX_VOLUME = 1;
 
-    public final Text soundName;
+    public final Component soundName;
     public final Tooltip soundTooltip;
-    public final Text volumeName;
+    public final Component volumeName;
     public final Tooltip volumeTooltip;
 
-    public Identifier sound = DEFAULT_SOUND;
+    public ResourceLocation sound = DEFAULT_SOUND;
     public double volume = DEFAULT_VOLUME;
 
     public DirectMessageSoundFeature(String id, PredicateIndex allowedPredicates) {
         super(id, allowedPredicates);
-        this.soundName = Text.translatable("modkrowd.config.feature." + id + ".sound");
-        this.soundTooltip = Tooltip.of(Text.translatable("modkrowd.config.feature." + id + ".sound.tooltip"));
-        this.volumeName = Text.translatable("modkrowd.config.feature." + id + ".volume");
-        this.volumeTooltip = Tooltip.of(Text.translatable("modkrowd.config.feature." + id + ".volume.tooltip"));
+        this.soundName = Component.translatable("modkrowd.config.feature." + id + ".sound");
+        this.soundTooltip = Tooltip.create(Component.translatable("modkrowd.config.feature." + id + ".sound.tooltip"));
+        this.volumeName = Component.translatable("modkrowd.config.feature." + id + ".volume");
+        this.volumeTooltip = Tooltip.create(Component.translatable("modkrowd.config.feature." + id + ".volume.tooltip"));
     }
 
     @Override
@@ -56,11 +56,11 @@ public class DirectMessageSoundFeature extends Feature {
     }
 
     @Override
-    public AbstractEntry[] createScreenEntries(MinecraftClient client) {
+    public AbstractEntry[] createScreenEntries(Minecraft minecraft) {
         return new AbstractEntry[] {
-                new PredicateEntry(client, this),
+                new PredicateEntry(minecraft, this),
                 new IdentifierEntry(
-                        client,
+                        minecraft,
                         this.soundName,
                         this.soundTooltip,
                         this.sound,
@@ -68,7 +68,7 @@ public class DirectMessageSoundFeature extends Feature {
                         value -> this.sound = value.getPath().isBlank() ? DEFAULT_SOUND : value
                 ),
                 new DoubleEntry(
-                        client,
+                        minecraft,
                         this.volumeName,
                         this.volumeTooltip,
                         this.volume,
@@ -95,11 +95,11 @@ public class DirectMessageSoundFeature extends Feature {
             super.deserialize(source);
         } else {
             try {
-                JsonObject object = JsonHelper.asObject(source, this.id);
-                super.deserialize(JsonHelper.getElement(object, "predicate"));
-                String sound = JsonHelper.getString(object, "sound", "");
-                this.sound = sound.isBlank() ? DEFAULT_SOUND : Identifier.of(sound);
-                double volume = JsonHelper.getDouble(object, "volume", DEFAULT_VOLUME);
+                JsonObject object = GsonHelper.convertToJsonObject(source, this.id);
+                super.deserialize(GsonHelper.getNonNull(object, "predicate"));
+                String sound = GsonHelper.getAsString(object, "sound", "");
+                this.sound = sound.isBlank() ? DEFAULT_SOUND : ResourceLocation.parse(sound);
+                double volume = GsonHelper.getAsDouble(object, "volume", DEFAULT_VOLUME);
                 this.volume = Math.clamp(volume, MIN_VOLUME, MAX_VOLUME);
             } catch (JsonSyntaxException e) {
                 throw new MalformedConfigException(e);
@@ -108,11 +108,11 @@ public class DirectMessageSoundFeature extends Feature {
     }
 
     @Override
-    public void onMessage(MessageCache message, MinecraftClient client, ActionQueue queue) {
+    public void onMessage(MessageCache message, Minecraft minecraft, ActionQueue queue) {
         if (message instanceof CubeKrowdMessageCache ckMessage) {
             DirectMessage dm = ckMessage.directMessageFast();
             if (dm.isReal() && dm.direction() != Direction.OUTGOING) {
-                client.getSoundManager().play(PositionedSoundInstance.master(SoundEvent.of(this.sound), 1.0F, (float) this.volume));
+                minecraft.getSoundManager().play(SimpleSoundInstance.forUI(SoundEvent.createVariableRangeEvent(this.sound), 1.0F, (float) this.volume));
             }
         }
     }

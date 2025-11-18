@@ -1,22 +1,22 @@
 package dev.yatloaf.modkrowd.config.screen;
 
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.widget.ElementListWidget;
-import net.minecraft.client.gui.widget.TextWidget;
-import net.minecraft.text.Text;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.ContainerObjectSelectionList;
+import net.minecraft.client.gui.components.StringWidget;
+import net.minecraft.network.chat.Component;
 
-public abstract class AbstractEntry extends ElementListWidget.Entry<AbstractEntry> {
-    protected final MinecraftClient client;
-    public final TextWidget label;
+public abstract class AbstractEntry extends ContainerObjectSelectionList.Entry<AbstractEntry> {
+    protected final Minecraft minecraft;
+    public final StringWidget label;
 
-    public AbstractEntry(MinecraftClient client, Text label) {
-        this.client = client;
-        this.label = new TextWidget(0, 20, label, client.textRenderer);
+    public AbstractEntry(Minecraft minecraft, Component label) {
+        this.minecraft = minecraft;
+        this.label = new StringWidget(0, 20, label, minecraft.font);
     }
 
     @Override
-    public void render(DrawContext context, int mouseX, int mouseY, boolean hovered, float deltaTicks) {
+    public void renderContent(GuiGraphics context, int mouseX, int mouseY, boolean hovered, float deltaTicks) {
         this.label.setWidth(this.getContentWidth() - 80);
         this.label.setPosition(this.getContentX(), this.getContentY());
         this.label.render(context, mouseX, mouseY, deltaTicks);

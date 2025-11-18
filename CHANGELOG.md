@@ -2,6 +2,10 @@
 
 ## 0.3.0: Unreleased
 
+### Changed
+
+- Migrated to mojmap.
+
 ## 0.2.5: 2025-11-17
 
 ### Changed

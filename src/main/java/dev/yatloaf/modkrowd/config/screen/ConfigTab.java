@@ -2,12 +2,13 @@ package dev.yatloaf.modkrowd.config.screen;
 
 import dev.yatloaf.modkrowd.config.FeatureTab;
 import dev.yatloaf.modkrowd.config.feature.Feature;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.ScreenRect;
-import net.minecraft.client.gui.tab.Tab;
-import net.minecraft.client.gui.widget.ClickableWidget;
-import net.minecraft.client.gui.widget.ElementListWidget;
-import net.minecraft.text.Text;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.components.AbstractWidget;
+import net.minecraft.client.gui.components.ContainerObjectSelectionList;
+import net.minecraft.client.gui.components.tabs.Tab;
+import net.minecraft.client.gui.navigation.ScreenRectangle;
+import net.minecraft.network.chat.Component;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Consumer;
 
@@ -18,40 +19,40 @@ public class ConfigTab implements Tab {
     public ConfigTab(FeatureTab tab) {
         this.tab = tab;
         // width and height are set in refreshGrid(...)
-        this.listWidget = new FeatureListWidget(MinecraftClient.getInstance(), 0, 0, 0, 20);
+        this.listWidget = new FeatureListWidget(Minecraft.getInstance(), 0, 0, 0, 20);
     }
 
     @Override
-    public Text getTitle() {
+    public @NotNull Component getTabTitle() {
         return this.tab.name;
     }
 
     @Override
-    public Text getNarratedHint() {
+    public @NotNull Component getTabExtraNarration() {
         // Accessibility? This is the default implementation in GridScreenTab
-        return Text.empty();
+        return Component.empty();
     }
 
     @Override
-    public void forEachChild(Consumer<ClickableWidget> consumer) {
-        this.listWidget.forEachChild(consumer);
+    public void visitChildren(Consumer<AbstractWidget> consumer) {
+        this.listWidget.visitWidgets(consumer);
     }
 
     @Override
-    public void refreshGrid(ScreenRect tabArea) {
+    public void doLayout(ScreenRectangle tabArea) {
         // Unlike setDimensionsAndPosition, position also calls recalculateAllChildrenPositions
-        this.listWidget.position(tabArea.width(), tabArea.height(), 0, tabArea.getTop());
+        this.listWidget.updateSizeAndPosition(tabArea.width(), tabArea.height(), 0, tabArea.top());
     }
 
     public void refreshState() {
         this.listWidget.refreshState();
     }
 
-    public class FeatureListWidget extends ElementListWidget<AbstractEntry> {
-        public FeatureListWidget(MinecraftClient client, int width, int height, int y, int itemHeight) {
-            super(client, width, height, y, itemHeight);
+    public class FeatureListWidget extends ContainerObjectSelectionList<AbstractEntry> {
+        public FeatureListWidget(Minecraft minecraft, int width, int height, int y, int itemHeight) {
+            super(minecraft, width, height, y, itemHeight);
             for (Feature feature : ConfigTab.this.tab.features) {
-                for (AbstractEntry entry : feature.createScreenEntries(client)) {
+                for (AbstractEntry entry : feature.createScreenEntries(minecraft)) {
                     this.addEntry(entry);
                 }
             }

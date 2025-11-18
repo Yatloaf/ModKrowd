@@ -6,7 +6,7 @@ import dev.yatloaf.modkrowd.cubekrowd.common.SelfPlayer;
 import dev.yatloaf.modkrowd.cubekrowd.common.cache.TextCache;
 import dev.yatloaf.modkrowd.util.Util;
 import dev.yatloaf.modkrowd.util.text.StyledString;
-import net.minecraft.client.network.ClientPlayNetworkHandler;
+import net.minecraft.client.multiplayer.ClientPacketListener;
 
 public abstract class Subserver {
     // Shoutout to the CubeKrowd developers for giving each server at least 6 names:
@@ -30,9 +30,9 @@ public abstract class Subserver {
         return false;
     }
 
-    public void connect(ClientPlayNetworkHandler handler) {
+    public void connect(ClientPacketListener listener) {
         if (this.id != null) {
-            Util.sendCommandPacket(handler, CONNECT_COMMAND + this.id);
+            Util.sendCommandPacket(listener, CONNECT_COMMAND + this.id);
         } else {
             ModKrowd.LOGGER.error("[Subserver] Called .connect() on {}", this);
         }

@@ -1,7 +1,7 @@
 package dev.yatloaf.modkrowd.config.feature;
 
-import dev.yatloaf.modkrowd.config.PredicateIndex;
 import dev.yatloaf.modkrowd.config.ActionQueue;
+import dev.yatloaf.modkrowd.config.PredicateIndex;
 import dev.yatloaf.modkrowd.cubekrowd.common.Afk;
 import dev.yatloaf.modkrowd.cubekrowd.common.CKColor;
 import dev.yatloaf.modkrowd.cubekrowd.common.LatencyLevel;
@@ -15,20 +15,20 @@ import dev.yatloaf.modkrowd.cubekrowd.tablist.GameTabStatus;
 import dev.yatloaf.modkrowd.cubekrowd.tablist.GameTabSubserver;
 import dev.yatloaf.modkrowd.cubekrowd.tablist.MainTabColumn;
 import dev.yatloaf.modkrowd.cubekrowd.tablist.MainTabName;
+import dev.yatloaf.modkrowd.cubekrowd.tablist.MinigameTabName;
 import dev.yatloaf.modkrowd.cubekrowd.tablist.TabCentered;
 import dev.yatloaf.modkrowd.cubekrowd.tablist.TabPing;
-import dev.yatloaf.modkrowd.cubekrowd.tablist.MinigameTabName;
 import dev.yatloaf.modkrowd.cubekrowd.tablist.cache.TabEntryCache;
 import dev.yatloaf.modkrowd.custom.Custom;
 import dev.yatloaf.modkrowd.custom.MissileWarsTieMessage;
 import dev.yatloaf.modkrowd.custom.SelfAlohaMessage;
 import dev.yatloaf.modkrowd.util.Util;
 import dev.yatloaf.modkrowd.util.text.StyledString;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.text.MutableText;
-import net.minecraft.text.Style;
-import net.minecraft.text.Text;
-import net.minecraft.text.TextColor;
+import net.minecraft.client.Minecraft;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.Style;
+import net.minecraft.network.chat.TextColor;
 import org.jetbrains.annotations.Nullable;
 
 public class CherryThemeFeature extends CherryLiteThemeFeature {
@@ -45,10 +45,10 @@ public class CherryThemeFeature extends CherryLiteThemeFeature {
     }
 
     // Someone clean up this spaghetti
-    protected Text modifyMissileWarsTeamName(Text original) {
+    protected Component modifyMissileWarsTeamName(Component original) {
         return switch (CKColor.fromStyle(original.getStyle())) {
-            case RED -> original.copy().fillStyle(Style.EMPTY.withColor(CHERRY3));
-            case GREEN -> original.copy().fillStyle(Style.EMPTY.withColor(CHERRY6));
+            case RED -> original.copy().withStyle(Style.EMPTY.withColor(CHERRY3));
+            case GREEN -> original.copy().withStyle(Style.EMPTY.withColor(CHERRY6));
             case null, default -> original;
         };
     }
@@ -186,7 +186,7 @@ public class CherryThemeFeature extends CherryLiteThemeFeature {
 
     protected TextCache formatLatency(int latency) {
         TextColor color = this.colorLatencyLevel(LatencyLevel.fromLatency(latency));
-        return TextCache.of(Text.literal(Util.superscript(latency)).setStyle(Style.EMPTY.withColor(color)));
+        return TextCache.of(Component.literal(Util.superscript(latency)).setStyle(Style.EMPTY.withColor(color)));
     }
 
     protected TextColor colorLatencyLevel(LatencyLevel level) {
@@ -201,7 +201,7 @@ public class CherryThemeFeature extends CherryLiteThemeFeature {
     }
 
     @Override
-    public TextCache themeCustom(Custom custom, MinecraftClient client, ActionQueue queue) {
+    public TextCache themeCustom(Custom custom, Minecraft minecraft, ActionQueue queue) {
         return switch (custom) {
             case SelfAlohaMessage selfAlohaMessage -> this.selfAlohaMessage(selfAlohaMessage);
             case MissileWarsTieMessage missileWarsTieMessage -> this.missileWarsTieMessage(missileWarsTieMessage);
@@ -215,9 +215,9 @@ public class CherryThemeFeature extends CherryLiteThemeFeature {
 
     // DRY!!
 
-    private static final MutableText MW_TIE_RED =
+    private static final MutableComponent MW_TIE_RED =
             MissileWarsTieMessage.RED.copy().setStyle(Style.EMPTY.withColor(CHERRY3));
-    private static final MutableText MW_TIE_GREEN =
+    private static final MutableComponent MW_TIE_GREEN =
             MissileWarsTieMessage.GREEN.copy().setStyle(Style.EMPTY.withColor(CHERRY6));
     private static final TextCache MW_TIE_SIMULTANEOUS = TextCache.of(
             MissileWarsTieMessage.SIMULTANEOUS.text().copy().setStyle(Style.EMPTY.withColor(CHERRY4).withItalic(true))
@@ -231,8 +231,8 @@ public class CherryThemeFeature extends CherryLiteThemeFeature {
             return MW_TIE_SIMULTANEOUS;
         } else {
             long deltaTicks;
-            MutableText first;
-            MutableText last;
+            MutableComponent first;
+            MutableComponent last;
 
             if (redWinTick < greenWinTick) {
                 deltaTicks = greenWinTick - redWinTick;

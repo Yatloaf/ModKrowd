@@ -1,7 +1,7 @@
 package dev.yatloaf.modkrowd.config;
 
 import dev.yatloaf.modkrowd.config.feature.Feature;
-import net.minecraft.text.Text;
+import net.minecraft.network.chat.Component;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,7 +13,7 @@ public class FeatureTab {
 
     public final int index;
     public final String id;
-    public final Text name;
+    public final Component name;
     public final List<Feature> features;
     public final Map<String, Feature> idToFeature;
 
@@ -21,7 +21,7 @@ public class FeatureTab {
         this.parent = parent;
         this.index = index;
         this.id = id;
-        this.name = Text.translatable("modkrowd.config.tab." + id);
+        this.name = Component.translatable("modkrowd.config.tab." + id);
         this.features = new ArrayList<>();
         this.idToFeature = new HashMap<>();
     }

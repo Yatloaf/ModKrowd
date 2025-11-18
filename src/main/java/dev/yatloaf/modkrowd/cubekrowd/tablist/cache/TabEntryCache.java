@@ -1,10 +1,10 @@
 package dev.yatloaf.modkrowd.cubekrowd.tablist.cache;
 
-import dev.yatloaf.modkrowd.cubekrowd.common.cache.ThemedCache;
+import dev.yatloaf.modkrowd.config.DefaultTheme;
 import dev.yatloaf.modkrowd.cubekrowd.common.cache.TextCache;
+import dev.yatloaf.modkrowd.cubekrowd.common.cache.ThemedCache;
 import dev.yatloaf.modkrowd.cubekrowd.subserver.Subserver;
 import dev.yatloaf.modkrowd.cubekrowd.tablist.TabEntry;
-import dev.yatloaf.modkrowd.config.DefaultTheme;
 
 public abstract class TabEntryCache extends ThemedCache {
     public final int latency;

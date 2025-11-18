@@ -1,7 +1,7 @@
 package dev.yatloaf.modkrowd.cubekrowd.tablist.cache;
 
-import dev.yatloaf.modkrowd.cubekrowd.common.cache.ThemedCache;
 import dev.yatloaf.modkrowd.cubekrowd.common.cache.TextCache;
+import dev.yatloaf.modkrowd.cubekrowd.common.cache.ThemedCache;
 import dev.yatloaf.modkrowd.cubekrowd.tablist.TabHeader;
 import dev.yatloaf.modkrowd.util.text.StyledStringReader;
 

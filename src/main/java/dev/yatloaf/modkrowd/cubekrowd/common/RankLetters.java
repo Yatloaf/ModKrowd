@@ -3,8 +3,8 @@ package dev.yatloaf.modkrowd.cubekrowd.common;
 import dev.yatloaf.modkrowd.util.Util;
 import dev.yatloaf.modkrowd.util.text.StyledString;
 import dev.yatloaf.modkrowd.util.text.StyledStringReader;
-import net.minecraft.text.Style;
-import net.minecraft.util.Formatting;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Style;
 
 import java.util.EnumSet;
 import java.util.Map;
@@ -25,16 +25,16 @@ public enum RankLetters {
     ADMIN(CKColor.RED, StyledString.fromString("A", Style.EMPTY.withBold(true))),
     UNKNOWN(CKColor.WHITE, StyledString.fromString("?"));
 
-    public static final EnumSet<Formatting> PF_NONE = EnumSet.noneOf(Formatting.class);
-    public static final EnumSet<Formatting> PF_LIMITED = EnumSet.of(
-            Formatting.STRIKETHROUGH,
-            Formatting.UNDERLINE,
-            Formatting.ITALIC,
-            Formatting.RESET
+    public static final EnumSet<ChatFormatting> PF_NONE = EnumSet.noneOf(ChatFormatting.class);
+    public static final EnumSet<ChatFormatting> PF_LIMITED = EnumSet.of(
+            ChatFormatting.STRIKETHROUGH,
+            ChatFormatting.UNDERLINE,
+            ChatFormatting.ITALIC,
+            ChatFormatting.RESET
     );
-    public static final EnumSet<Formatting> PF_ALMOST_ALL = EnumSet.allOf(Formatting.class);
+    public static final EnumSet<ChatFormatting> PF_ALMOST_ALL = EnumSet.allOf(ChatFormatting.class);
     static {
-        PF_ALMOST_ALL.remove(Formatting.OBFUSCATED);
+        PF_ALMOST_ALL.remove(ChatFormatting.OBFUSCATED);
     }
 
     public final CKColor color;
@@ -51,7 +51,7 @@ public enum RankLetters {
         return source.mapNextOrDefault(FROM_LETTER, UNKNOWN);
     }
 
-    public EnumSet<Formatting> permittedFormattings() {
+    public EnumSet<ChatFormatting> permittedFormattings() {
         // Can't really know for stacked ranks
         return switch (this) {
             case ADMIN, MODERATOR, HELPER, DEVELOPER -> PF_ALMOST_ALL;

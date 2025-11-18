@@ -1,12 +1,13 @@
 package dev.yatloaf.modkrowd.config.screen;
 
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.Element;
-import net.minecraft.client.gui.Selectable;
-import net.minecraft.client.gui.tooltip.Tooltip;
-import net.minecraft.client.gui.widget.TextFieldWidget;
-import net.minecraft.text.Text;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.EditBox;
+import net.minecraft.client.gui.components.Tooltip;
+import net.minecraft.client.gui.components.events.GuiEventListener;
+import net.minecraft.client.gui.narration.NarratableEntry;
+import net.minecraft.network.chat.Component;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.function.IntConsumer;
@@ -18,20 +19,20 @@ public class IntEntry extends AbstractEntry {
     public final IntSupplier getter;
     public final IntConsumer setter;
 
-    public final TextFieldWidget textField;
+    public final EditBox editBox;
 
     private int value;
 
-    public IntEntry(MinecraftClient client, Text label, Tooltip tooltip, int startValue, int minValue, int maxValue, IntSupplier getter, IntConsumer setter) {
-        super(client, label);
+    public IntEntry(Minecraft minecraft, Component label, Tooltip tooltip, int startValue, int minValue, int maxValue, IntSupplier getter, IntConsumer setter) {
+        super(minecraft, label);
         this.label.setTooltip(tooltip);
         this.minValue = minValue;
         this.maxValue = maxValue;
         this.getter = getter;
         this.setter = setter;
-        this.textField = new TextFieldWidget(client.textRenderer, 0, 0, 64, 20, Text.empty()); // X and Y are set in render(...)
+        this.editBox = new EditBox(minecraft.font, 0, 0, 64, 20, Component.empty()); // X and Y are set in render(...)
         this.setValue(startValue);
-        this.textField.setTextPredicate(s -> {
+        this.editBox.setFilter(s -> {
             if (s.isEmpty()) return true;
             try {
                 int v = Integer.parseInt(s);
@@ -40,7 +41,7 @@ public class IntEntry extends AbstractEntry {
                 return false;
             }
         });
-        this.textField.setChangedListener(s -> {
+        this.editBox.setResponder(s -> {
             this.value = s.isEmpty() ? 0 : Integer.parseInt(s);
             this.setter.accept(this.value);
         });
@@ -48,14 +49,14 @@ public class IntEntry extends AbstractEntry {
 
     protected void setValue(int value) {
         this.value = value;
-        this.textField.setText(Integer.toString(value));
+        this.editBox.setValue(Integer.toString(value));
     }
 
     @Override
-    public void render(DrawContext context, int mouseX, int mouseY, boolean hovered, float deltaTicks) {
-        super.render(context, mouseX, mouseY, hovered, deltaTicks);
-        this.textField.setPosition(this.getContentX() + this.getContentWidth() - 64, this.getContentY());
-        this.textField.render(context, mouseX, mouseY, deltaTicks);
+    public void renderContent(GuiGraphics context, int mouseX, int mouseY, boolean hovered, float deltaTicks) {
+        super.renderContent(context, mouseX, mouseY, hovered, deltaTicks);
+        this.editBox.setPosition(this.getContentX() + this.getContentWidth() - 64, this.getContentY());
+        this.editBox.render(context, mouseX, mouseY, deltaTicks);
     }
 
     @Override
@@ -64,12 +65,12 @@ public class IntEntry extends AbstractEntry {
     }
 
     @Override
-    public List<? extends Selectable> selectableChildren() {
-        return List.of(this.textField);
+    public @NotNull List<? extends NarratableEntry> narratables() {
+        return List.of(this.editBox);
     }
 
     @Override
-    public List<? extends Element> children() {
-        return List.of(this.textField);
+    public @NotNull List<? extends GuiEventListener> children() {
+        return List.of(this.editBox);
     }
 }

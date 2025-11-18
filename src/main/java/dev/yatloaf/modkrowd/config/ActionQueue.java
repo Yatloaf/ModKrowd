@@ -1,6 +1,6 @@
 package dev.yatloaf.modkrowd.config;
 
-import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.Minecraft;
 
 public class ActionQueue {
     private boolean reloadResources = false;
@@ -14,13 +14,13 @@ public class ActionQueue {
         this.reloadChunks = true;
     }
 
-    public void flush(MinecraftClient client) {
+    public void flush(Minecraft minecraft) {
         if (this.reloadResources) {
-            client.reloadResources();
+            minecraft.reloadResourcePacks();
             this.reloadResources = false;
             this.reloadChunks = false;
         } else if (this.reloadChunks) {
-            client.worldRenderer.reload();
+            minecraft.levelRenderer.allChanged();
             this.reloadChunks = false;
         }
     }

@@ -1,12 +1,12 @@
 package dev.yatloaf.modkrowd.mixin;
 
 import dev.yatloaf.modkrowd.mixinduck.ChatHudLineDuck;
-import net.minecraft.client.gui.hud.ChatHudLine;
+import net.minecraft.client.GuiMessage;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 
-@Mixin(ChatHudLine.class)
-public class ChatHudLineMixin implements ChatHudLineDuck {
+@Mixin(GuiMessage.class)
+public class GuiMessageMixin implements ChatHudLineDuck {
     @Unique
     private int backgroundTint = 0;
 
@@ -20,8 +20,8 @@ public class ChatHudLineMixin implements ChatHudLineDuck {
         return this.backgroundTint;
     }
 
-    @Mixin(ChatHudLine.Visible.class)
-    public static class ChatHudLineVisibleMixin implements ChatHudLineDuck {
+    @Mixin(GuiMessage.Line.class)
+    public static class LineMixin implements ChatHudLineDuck {
         @Unique
         private int backgroundTint = 0;
 

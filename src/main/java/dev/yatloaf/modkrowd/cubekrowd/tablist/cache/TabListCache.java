@@ -1,7 +1,7 @@
 package dev.yatloaf.modkrowd.cubekrowd.tablist.cache;
 
-import dev.yatloaf.modkrowd.cubekrowd.common.cache.TextCacheCache;
 import dev.yatloaf.modkrowd.cubekrowd.common.cache.TextCache;
+import dev.yatloaf.modkrowd.cubekrowd.common.cache.TextCacheCache;
 import dev.yatloaf.modkrowd.cubekrowd.tablist.GameLobbyTabList;
 import dev.yatloaf.modkrowd.cubekrowd.tablist.MainTabList;
 import dev.yatloaf.modkrowd.cubekrowd.tablist.MinigameTabList;
@@ -9,11 +9,11 @@ import dev.yatloaf.modkrowd.cubekrowd.tablist.TabList;
 import dev.yatloaf.modkrowd.cubekrowd.tablist.UnknownTabList;
 import dev.yatloaf.modkrowd.cubekrowd.tablist.VanillaTabList;
 import dev.yatloaf.modkrowd.mixinduck.PlayerListHudDuck;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.hud.PlayerListHud;
-import net.minecraft.client.network.PlayerListEntry;
-import net.minecraft.text.MutableText;
-import net.minecraft.text.Text;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.components.PlayerTabOverlay;
+import net.minecraft.client.multiplayer.PlayerInfo;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 
 import java.util.Arrays;
 import java.util.List;
@@ -23,7 +23,7 @@ public class TabListCache {
     // Is this *really* necessary? Someone benchmark please
     private static final TextCacheCache CACHE = new TextCacheCache();
 
-    private final PlayerListHud hud;
+    private final PlayerTabOverlay hud;
     private final PlayerListHudDuck hudDuck;
 
     private TabList result;
@@ -31,21 +31,21 @@ public class TabListCache {
     private TabHeaderCache tabHeaderCache;
     private TabFooterCache tabFooterCache;
 
-    private List<PlayerListEntry> playerListEntries;
+    private List<PlayerInfo> playerListEntries;
     private List<TextCache> playerNames;
 
     // No nullable Integer to avoid indirection and allocation
     private long hudColor = 1L << 32;
     private long entryColor = 1L << 32;
 
-    private TabListCache(MinecraftClient client) {
-        this.hud = client.inGameHud.getPlayerListHud();
+    private TabListCache(Minecraft minecraft) {
+        this.hud = minecraft.gui.getTabList();
         this.hudDuck = (PlayerListHudDuck) this.hud;
     }
 
     public static TabListCache tryNew() {
-        MinecraftClient client = MinecraftClient.getInstance();
-        return client != null && client.player != null ? new TabListCache(client) : null;
+        Minecraft minecraft = Minecraft.getInstance();
+        return minecraft != null && minecraft.player != null ? new TabListCache(minecraft) : null;
     }
 
     public final TabList result() {
@@ -81,19 +81,19 @@ public class TabListCache {
 
     public final TabHeaderCache tabHeaderCache() {
         if (this.tabHeaderCache == null) {
-            this.tabHeaderCache = new TabHeaderCache(TextCache.of(Objects.requireNonNullElse(this.hudDuck.modKrowd$getHeader(), Text.empty())));
+            this.tabHeaderCache = new TabHeaderCache(TextCache.of(Objects.requireNonNullElse(this.hudDuck.modKrowd$getHeader(), Component.empty())));
         }
         return this.tabHeaderCache;
     }
 
     public final TabFooterCache tabFooterCache() {
         if (this.tabFooterCache == null) {
-            this.tabFooterCache = new TabFooterCache(TextCache.of(Objects.requireNonNullElse(this.hudDuck.modKrowd$getFooter(), Text.empty())));
+            this.tabFooterCache = new TabFooterCache(TextCache.of(Objects.requireNonNullElse(this.hudDuck.modKrowd$getFooter(), Component.empty())));
         }
         return this.tabFooterCache;
     }
 
-    public final List<PlayerListEntry> playerListEntries() {
+    public final List<PlayerInfo> playerListEntries() {
         if (this.playerListEntries == null) {
             this.playerListEntries = this.hudDuck.modKrowd$collectEntries();
         }
@@ -105,7 +105,7 @@ public class TabListCache {
             this.playerNames = Arrays.asList(new TextCache[this.playerListEntries().size()]);
         }
         if (this.playerNames.get(index) == null) {
-            this.playerNames.set(index, CACHE.get((MutableText) this.hud.getPlayerName(this.playerListEntries().get(index))));
+            this.playerNames.set(index, CACHE.get((MutableComponent) this.hud.getNameForDisplay(this.playerListEntries().get(index))));
         }
         return this.playerNames.get(index);
     }

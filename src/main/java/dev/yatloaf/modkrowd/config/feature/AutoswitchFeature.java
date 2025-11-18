@@ -5,32 +5,32 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSyntaxException;
 import dev.yatloaf.modkrowd.ModKrowd;
-import dev.yatloaf.modkrowd.config.exception.MalformedConfigException;
-import dev.yatloaf.modkrowd.config.PredicateIndex;
 import dev.yatloaf.modkrowd.config.ActionQueue;
+import dev.yatloaf.modkrowd.config.PredicateIndex;
+import dev.yatloaf.modkrowd.config.exception.MalformedConfigException;
 import dev.yatloaf.modkrowd.config.screen.AbstractEntry;
-import dev.yatloaf.modkrowd.config.screen.PredicateEntry;
 import dev.yatloaf.modkrowd.config.screen.IntEntry;
+import dev.yatloaf.modkrowd.config.screen.PredicateEntry;
 import dev.yatloaf.modkrowd.cubekrowd.message.cache.MessageCache;
 import dev.yatloaf.modkrowd.cubekrowd.message.cache.MissileWarsMessageCache;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.tooltip.Tooltip;
-import net.minecraft.text.Text;
-import net.minecraft.util.JsonHelper;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.components.Tooltip;
+import net.minecraft.network.chat.Component;
+import net.minecraft.util.GsonHelper;
 
 public class AutoswitchFeature extends Feature {
     public static final int MIN_DELAY = 0;
     public static final int MAX_DELAY = 280; // 14 seconds
 
-    public final Text delayName;
+    public final Component delayName;
     public final Tooltip delayTooltip;
 
     public int delay = 0;
 
     public AutoswitchFeature(String id, PredicateIndex allowedPredicates) {
         super(id, allowedPredicates);
-        this.delayName = Text.translatable("modkrowd.config.feature." + id + ".delay");
-        this.delayTooltip = Tooltip.of(Text.translatable("modkrowd.config.feature." + id + ".delay.tooltip"));
+        this.delayName = Component.translatable("modkrowd.config.feature." + id + ".delay");
+        this.delayTooltip = Tooltip.create(Component.translatable("modkrowd.config.feature." + id + ".delay.tooltip"));
     }
 
     @Override
@@ -42,11 +42,11 @@ public class AutoswitchFeature extends Feature {
     }
 
     @Override
-    public AbstractEntry[] createScreenEntries(MinecraftClient client) {
+    public AbstractEntry[] createScreenEntries(Minecraft minecraft) {
         return new AbstractEntry[] {
-                new PredicateEntry(client, this),
+                new PredicateEntry(minecraft, this),
                 new IntEntry(
-                        client,
+                        minecraft,
                         this.delayName,
                         this.delayTooltip,
                         this.delay,
@@ -72,9 +72,9 @@ public class AutoswitchFeature extends Feature {
             super.deserialize(source);
         } else {
             try {
-                JsonObject object = JsonHelper.asObject(source, this.id);
-                super.deserialize(JsonHelper.getElement(object, "predicate"));
-                int value = JsonHelper.getInt(object, "delay", 0);
+                JsonObject object = GsonHelper.convertToJsonObject(source, this.id);
+                super.deserialize(GsonHelper.getNonNull(object, "predicate"));
+                int value = GsonHelper.getAsInt(object, "delay", 0);
                 this.delay = Math.max(value, 0);
             } catch (JsonSyntaxException e) {
                 throw new MalformedConfigException(e);
@@ -83,7 +83,7 @@ public class AutoswitchFeature extends Feature {
     }
 
     @Override
-    public void onMessage(MessageCache message, MinecraftClient client, ActionQueue queue) {
+    public void onMessage(MessageCache message, Minecraft minecraft, ActionQueue queue) {
         if (message instanceof MissileWarsMessageCache mwCache && mwCache.missileWarsGameEndMessageFast().isReal()) {
             ModKrowd.startSwitchingMissileWarsLobby(this.delay);
         }

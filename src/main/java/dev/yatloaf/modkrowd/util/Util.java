@@ -4,10 +4,8 @@ import it.unimi.dsi.fastutil.chars.Char2CharMap;
 import it.unimi.dsi.fastutil.chars.Char2CharOpenHashMap;
 import net.fabricmc.loader.api.SemanticVersion;
 import net.fabricmc.loader.api.VersionParsingException;
-import net.minecraft.client.network.ClientPlayNetworkHandler;
-import net.minecraft.client.render.entity.model.EntityModelLayer;
-import net.minecraft.client.render.entity.model.EquipmentModelData;
-import net.minecraft.network.packet.c2s.play.CommandExecutionC2SPacket;
+import net.minecraft.client.multiplayer.ClientPacketListener;
+import net.minecraft.network.protocol.game.ServerboundChatCommandPacket;
 
 import java.util.Arrays;
 import java.util.List;
@@ -32,9 +30,6 @@ public final class Util {
         NUMERAL_TO_SUPERSCRIPT.put('9', '⁹');
         NUMERAL_TO_SUPERSCRIPT.put('-', '\u207B');
     }
-
-    // TODO: Find better solution to Yarn mess-up workaround
-    public static EquipmentModelData<EntityModelLayer> PLAYER_SLIM_EQUIPMENT;
 
     public static String superscript(int n) {
         char[] chars = String.valueOf(n).toCharArray();
@@ -77,8 +72,8 @@ public final class Util {
         }
     }
 
-    public static void sendCommandPacket(ClientPlayNetworkHandler handler, String command) {
-        // Fabric API mixes in handler.sendCommand() in a way that throws sometimes, so this is used instead
-        handler.sendPacket(new CommandExecutionC2SPacket(command));
+    public static void sendCommandPacket(ClientPacketListener listener, String command) {
+        // Fabric API mixes in listener.sendCommand() in a way that throws sometimes, so this is used instead
+        listener.send(new ServerboundChatCommandPacket(command));
     }
 }

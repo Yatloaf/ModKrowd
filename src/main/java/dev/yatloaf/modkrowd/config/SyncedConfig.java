@@ -9,9 +9,9 @@ import dev.yatloaf.modkrowd.cubekrowd.subserver.Subserver;
 import dev.yatloaf.modkrowd.cubekrowd.subserver.Subservers;
 import dev.yatloaf.modkrowd.cubekrowd.tablist.cache.TabListCache;
 import dev.yatloaf.modkrowd.custom.Custom;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.network.ClientConfigurationNetworkHandler;
-import net.minecraft.client.network.ClientPlayNetworkHandler;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.ClientConfigurationPacketListenerImpl;
+import net.minecraft.client.multiplayer.ClientPacketListener;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -57,11 +57,11 @@ public class SyncedConfig extends Config {
     }
 
     public void updateFeatures() {
-        MinecraftClient client = MinecraftClient.getInstance();
-        this.updateFeatures(client, ModKrowd.currentSubserver, client.player != null ? client.player.getPermissionLevel() : 0);
+        Minecraft minecraft = Minecraft.getInstance();
+        this.updateFeatures(minecraft, ModKrowd.currentSubserver, minecraft.player != null ? minecraft.player.getPermissionLevel() : 0);
     }
 
-    public synchronized void updateFeatures(MinecraftClient client, Subserver subserver, int permissionLevel) {
+    public synchronized void updateFeatures(Minecraft minecraft, Subserver subserver, int permissionLevel) {
         boolean disable = subserver != Subservers.PENDING;
 
         List<Feature> eventEnable = new ArrayList<>();
@@ -83,95 +83,95 @@ public class SyncedConfig extends Config {
         }
         ActionQueue queue = new ActionQueue();
         for (Feature f : eventEnable) {
-            f.onEnable(client, queue);
+            f.onEnable(minecraft, queue);
         }
         for (Feature f : eventDisable) {
-            f.onDisable(client, queue);
+            f.onDisable(minecraft, queue);
         }
-        queue.flush(client);
+        queue.flush(minecraft);
     }
 
-    public synchronized void onInitEnable(MinecraftClient client) {
+    public synchronized void onInitEnable(Minecraft minecraft) {
         this.enabledFeatures.clear();
         ActionQueue queue = new ActionQueue();
         for (Feature f : this.features) {
             if (f.predicate.enabled(Subservers.NONE, 0)) {
                 f.enabled = true;
                 this.enabledFeatures.add(f);
-                f.onInitEnable(client, queue);
+                f.onInitEnable(minecraft, queue);
             }
         }
-        queue.flush(client);
+        queue.flush(minecraft);
     }
 
-    public synchronized void onEndTick(MinecraftClient client) {
+    public synchronized void onEndTick(Minecraft minecraft) {
         ActionQueue queue = new ActionQueue();
         for (Feature f : this.enabledFeatures) {
-            f.onEndTick(client, queue);
+            f.onEndTick(minecraft, queue);
         }
-        queue.flush(client);
+        queue.flush(minecraft);
     }
 
-    public synchronized void onConfigurationComplete(ClientConfigurationNetworkHandler handler, MinecraftClient client) {
+    public synchronized void onConfigurationComplete(ClientConfigurationPacketListenerImpl listener, Minecraft minecraft) {
         ActionQueue queue = new ActionQueue();
         for (Feature f : this.enabledFeatures) {
-            f.onConfigurationComplete(handler, client, queue);
+            f.onConfigurationComplete(listener, minecraft, queue);
         }
-        queue.flush(client);
+        queue.flush(minecraft);
     }
 
-    public synchronized void onJoin(ClientPlayNetworkHandler handler, MinecraftClient client) {
+    public synchronized void onJoin(ClientPacketListener listener, Minecraft minecraft) {
         ActionQueue queue = new ActionQueue();
         for (Feature f : this.enabledFeatures) {
-            f.onJoin(handler, client, queue);
+            f.onJoin(listener, minecraft, queue);
         }
-        queue.flush(client);
+        queue.flush(minecraft);
     }
 
-    public synchronized void onJoinUpdated(ClientPlayNetworkHandler handler, MinecraftClient client) {
+    public synchronized void onJoinUpdated(ClientPacketListener listener, Minecraft minecraft) {
         ActionQueue queue = new ActionQueue();
         for (Feature f : this.enabledFeatures) {
-            f.onJoinUpdated(handler, client, queue);
+            f.onJoinUpdated(listener, minecraft, queue);
         }
-        queue.flush(client);
+        queue.flush(minecraft);
     }
 
-    public synchronized void onDisconnect(ClientPlayNetworkHandler handler, MinecraftClient client) {
+    public synchronized void onDisconnect(ClientPacketListener listener, Minecraft minecraft) {
         ActionQueue queue = new ActionQueue();
         for (Feature f : this.enabledFeatures) {
-            f.onDisconnect(handler, client, queue);
+            f.onDisconnect(listener, minecraft, queue);
         }
-        queue.flush(client);
+        queue.flush(minecraft);
     }
 
-    public synchronized void onMessage(MessageCache message, MinecraftClient client) {
+    public synchronized void onMessage(MessageCache message, Minecraft minecraft) {
         ActionQueue queue = new ActionQueue();
         for (Feature f : this.enabledFeatures) {
-            f.onMessage(message, client, queue);
+            f.onMessage(message, minecraft, queue);
         }
-        queue.flush(client);
+        queue.flush(minecraft);
     }
 
     public synchronized void onTabList(TabListCache tabList) {
         ActionQueue queue = new ActionQueue();
-        MinecraftClient client = MinecraftClient.getInstance();
+        Minecraft minecraft = Minecraft.getInstance();
         for (Feature f : this.enabledFeatures) {
-            f.onTabList(tabList, client, queue);
+            f.onTabList(tabList, minecraft, queue);
         }
-        queue.flush(client);
+        queue.flush(minecraft);
     }
 
     public synchronized TextCache themeCustom(Custom custom) {
         ActionQueue queue = new ActionQueue();
-        MinecraftClient client = MinecraftClient.getInstance();
+        Minecraft minecraft = Minecraft.getInstance();
         for (Feature f : this.enabledFeatures) {
-            TextCache result = f.themeCustom(custom, client, queue);
+            TextCache result = f.themeCustom(custom, minecraft, queue);
             if (result != null) {
-                queue.flush(client);
+                queue.flush(minecraft);
                 return result;
             }
         }
-        queue.flush(client);
+        queue.flush(minecraft);
         return custom.appearance();
     }
 }

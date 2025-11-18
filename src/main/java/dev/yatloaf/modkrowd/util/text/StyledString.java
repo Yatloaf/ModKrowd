@@ -2,12 +2,12 @@ package dev.yatloaf.modkrowd.util.text;
 
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntList;
-import net.minecraft.text.MutableText;
-import net.minecraft.text.Style;
-import net.minecraft.text.StyleSpriteSource;
-import net.minecraft.text.Text;
-import net.minecraft.text.TextColor;
-import net.minecraft.util.Formatting;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.FontDescription;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.Style;
+import net.minecraft.network.chat.TextColor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -23,7 +23,7 @@ import java.util.function.Function;
 import java.util.function.IntUnaryOperator;
 
 /**
- * Text but good
+ * {@link Component} but good
  */
 public class StyledString {
     // TODO: More documentation
@@ -31,13 +31,13 @@ public class StyledString {
     private static final int[] EMPTY_CODEPOINTS = new int[0];
     private static final Style[] EMPTY_STYLES = new Style[0];
     private static final Style FALSE_STYLE = Style.EMPTY
-            .withColor(Formatting.WHITE)
+            .withColor(ChatFormatting.WHITE)
             .withObfuscated(false)
             .withBold(false)
             .withStrikethrough(false)
-            .withUnderline(false)
+            .withUnderlined(false)
             .withItalic(false)
-            .withFont(StyleSpriteSource.DEFAULT);
+            .withFont(FontDescription.DEFAULT);
 
     public static final StyledString EMPTY = new StyledString(EMPTY_CODEPOINTS, EMPTY_STYLES);
     public static final StyledString SPACE = fromString(" ");
@@ -88,7 +88,7 @@ public class StyledString {
      * @return A new {@code StyledString} with a monotone style
      */
     public static StyledString fromString(@NotNull String source, @NotNull Style style) {
-        Style filledStyle = style.withParent(FALSE_STYLE);
+        Style filledStyle = style.applyTo(FALSE_STYLE);
 
         int[] codePoints = source.codePoints().toArray();
         Style[] styles = new Style[codePoints.length];
@@ -98,13 +98,13 @@ public class StyledString {
     }
 
     public static StyledString fromFormattedString(@NotNull String source, int formatChar,
-                                                   @NotNull EnumSet<Formatting> formattings) {
+                                                   @NotNull EnumSet<ChatFormatting> formattings) {
         return fromFormattedString(source, formatChar, formattings, FALSE_STYLE);
     }
 
     public static StyledString fromFormattedString(@NotNull String source, int formatChar,
-                                                   @NotNull EnumSet<Formatting> formattings, @NotNull Style startStyle) {
-        Style currentStyle = startStyle.withParent(FALSE_STYLE);
+                                                   @NotNull EnumSet<ChatFormatting> formattings, @NotNull Style startStyle) {
+        Style currentStyle = startStyle.applyTo(FALSE_STYLE);
 
         IntList codepoints = new IntArrayList(source.length());
         List<Style> styles = new ArrayList<>(source.length());
@@ -116,8 +116,8 @@ public class StyledString {
             if (ch == formatChar && sourceIterator.hasNext()) {
                 int code = sourceIterator.nextInt();
 
-                if (code <= 'z' && Formatting.byCode((char) code) instanceof Formatting f && formattings.contains(f)) {
-                    currentStyle = currentStyle.withFormatting(f);
+                if (code <= 'z' && ChatFormatting.getByCode((char) code) instanceof ChatFormatting f && formattings.contains(f)) {
+                    currentStyle = currentStyle.applyFormat(f);
                     continue;
                 }
 
@@ -135,18 +135,18 @@ public class StyledString {
         return new StyledString(codepoints.toIntArray(), styles.toArray(EMPTY_STYLES));
     }
 
-    public static StyledString fromText(@NotNull Text source) {
+    public static StyledString fromText(@NotNull Component source) {
         return fromText(source, FALSE_STYLE);
     }
 
-    public static StyledString fromText(@NotNull Text source, @NotNull Style parentStyle) {
-        Style filledParentStyle = parentStyle.withParent(FALSE_STYLE);
+    public static StyledString fromText(@NotNull Component source, @NotNull Style parentStyle) {
+        Style filledParentStyle = parentStyle.applyTo(FALSE_STYLE);
 
         IntList codepoints = new IntArrayList();
         List<Style> styles = new ArrayList<>();
 
         source.visit((style, string) -> {
-            Style filledStyle = style.withParent(filledParentStyle);
+            Style filledStyle = style.applyTo(filledParentStyle);
             string.codePoints().forEachOrdered(c -> {
                 codepoints.add(c);
                 styles.add(filledStyle);
@@ -264,11 +264,11 @@ public class StyledString {
     }
 
     /**
-     * Convert this into {@link MutableText}.
-     * @return This {@link StyledString} as a {@link MutableText}
+     * Convert this into {@link MutableComponent}.
+     * @return This {@link StyledString} as a {@link MutableComponent}
      */
-    public MutableText toText() {
-        MutableText text = Text.empty();
+    public MutableComponent toText() {
+        MutableComponent text = Component.empty();
         int index = 0;
         while (index < this.length) {
             int sectionStart = index;
@@ -277,7 +277,7 @@ public class StyledString {
                 index++;
             }
             text.append(
-                    Text.literal(
+                    Component.literal(
                             new String(this.codePoints, this.codePointsIndex + sectionStart, index - sectionStart)
                     ).setStyle(sectionStyle)
             );
@@ -509,14 +509,14 @@ public class StyledString {
         return this.length;
     }
 
-    private record RollingStyle(@Nullable Formatting color, boolean obfuscated, boolean bold, boolean strikethrough,
+    private record RollingStyle(@Nullable ChatFormatting color, boolean obfuscated, boolean bold, boolean strikethrough,
                                 boolean underline, boolean italic) {
         public static final RollingStyle DEFAULT =
                 new RollingStyle(null, false, false, false, false, false);
 
         public static RollingStyle fromStyle(Style style) {
             TextColor textColor = style.getColor();
-            Formatting color = textColor == null ? null : Formatting.byName(textColor.getName());
+            ChatFormatting color = textColor == null ? null : ChatFormatting.getByName(textColor.serialize());
             return new RollingStyle(color, style.isObfuscated(), style.isBold(), style.isStrikethrough(), style.isUnderlined(), style.isItalic());
         }
 
@@ -524,25 +524,25 @@ public class StyledString {
         public StringBuilder difference(RollingStyle previous, String formatChar, StringBuilder builder) {
             if (this.color != null && this.color != previous.color) {
                 builder.append(formatChar);
-                builder.append(this.color.getCode());
+                builder.append(this.color.getChar());
             } else if (this.lessThan(previous)) {
                 builder.append(formatChar);
-                builder.append(Formatting.RESET.getCode());
+                builder.append(ChatFormatting.RESET.getChar());
             } else {
                 if (this.obfuscated && !previous.obfuscated)
-                    this.formatting(formatChar, Formatting.OBFUSCATED, builder);
-                if (this.bold && !previous.bold) this.formatting(formatChar, Formatting.BOLD, builder);
+                    this.formatting(formatChar, ChatFormatting.OBFUSCATED, builder);
+                if (this.bold && !previous.bold) this.formatting(formatChar, ChatFormatting.BOLD, builder);
                 if (this.strikethrough && !previous.strikethrough)
-                    this.formatting(formatChar, Formatting.STRIKETHROUGH, builder);
-                if (this.underline && !previous.underline) this.formatting(formatChar, Formatting.UNDERLINE, builder);
-                if (this.italic && !previous.italic) this.formatting(formatChar, Formatting.ITALIC, builder);
+                    this.formatting(formatChar, ChatFormatting.STRIKETHROUGH, builder);
+                if (this.underline && !previous.underline) this.formatting(formatChar, ChatFormatting.UNDERLINE, builder);
+                if (this.italic && !previous.italic) this.formatting(formatChar, ChatFormatting.ITALIC, builder);
                 return builder;
             }
-            if (this.obfuscated) this.formatting(formatChar, Formatting.OBFUSCATED, builder);
-            if (this.bold) this.formatting(formatChar, Formatting.BOLD, builder);
-            if (this.strikethrough) this.formatting(formatChar, Formatting.STRIKETHROUGH, builder);
-            if (this.underline) this.formatting(formatChar, Formatting.UNDERLINE, builder);
-            if (this.italic) this.formatting(formatChar, Formatting.ITALIC, builder);
+            if (this.obfuscated) this.formatting(formatChar, ChatFormatting.OBFUSCATED, builder);
+            if (this.bold) this.formatting(formatChar, ChatFormatting.BOLD, builder);
+            if (this.strikethrough) this.formatting(formatChar, ChatFormatting.STRIKETHROUGH, builder);
+            if (this.underline) this.formatting(formatChar, ChatFormatting.UNDERLINE, builder);
+            if (this.italic) this.formatting(formatChar, ChatFormatting.ITALIC, builder);
             return builder;
         }
 
@@ -555,9 +555,9 @@ public class StyledString {
         }
 
         @SuppressWarnings("UnusedReturnValue")
-        private StringBuilder formatting(String formatChar, Formatting formatting, StringBuilder builder) {
+        private StringBuilder formatting(String formatChar, ChatFormatting formatting, StringBuilder builder) {
             builder.append(formatChar);
-            builder.append(formatting.getCode());
+            builder.append(formatting.getChar());
             return builder;
         }
     }

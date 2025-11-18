@@ -1,7 +1,7 @@
 package dev.yatloaf.modkrowd.cubekrowd.message;
 
 import dev.yatloaf.modkrowd.util.Util;
-import net.minecraft.text.TranslatableTextContent;
+import net.minecraft.network.chat.contents.TranslatableContents;
 
 import java.util.Map;
 
@@ -18,7 +18,7 @@ public enum Aloha {
 
     private static final Map<String, Aloha> FROM_KEY = Util.arrayToMap(values(), item -> item.key, item -> item);
 
-    public static Aloha parse(TranslatableTextContent content) {
+    public static Aloha parse(TranslatableContents content) {
         return FROM_KEY.getOrDefault(content.getKey(), UNKNOWN);
     }
 

@@ -2,21 +2,21 @@ package dev.yatloaf.modkrowd.custom;
 
 import dev.yatloaf.modkrowd.cubekrowd.common.CKColor;
 import dev.yatloaf.modkrowd.cubekrowd.common.cache.TextCache;
-import net.minecraft.text.MutableText;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 
 public record MissileWarsTieMessage(long redWinTick, long greenWinTick) implements Custom {
-    public static final MutableText RED =
-            Text.translatable("modkrowd.message.missilewars_tie.red").formatted(Formatting.RED);
-    public static final MutableText GREEN =
-            Text.translatable("modkrowd.message.missilewars_tie.green").formatted(Formatting.GREEN);
-    public static final TextCache SIMULTANEOUS = TextCache.of(Text.translatable(
+    public static final MutableComponent RED =
+            Component.translatable("modkrowd.message.missilewars_tie.red").withStyle(ChatFormatting.RED);
+    public static final MutableComponent GREEN =
+            Component.translatable("modkrowd.message.missilewars_tie.green").withStyle(ChatFormatting.GREEN);
+    public static final TextCache SIMULTANEOUS = TextCache.of(Component.translatable(
             "modkrowd.message.missilewars_tie.simultaneous"
     ).setStyle(CKColor.GOLD.style));
 
-    public static MutableText sequential(MutableText first, MutableText last, long deltaTicks) {
-        return Text.translatable(
+    public static MutableComponent sequential(MutableComponent first, MutableComponent last, long deltaTicks) {
+        return Component.translatable(
                 "modkrowd.message.missilewars_tie.sequential",
                 first,
                 last,
@@ -32,8 +32,8 @@ public record MissileWarsTieMessage(long redWinTick, long greenWinTick) implemen
             return SIMULTANEOUS;
         } else {
             long deltaTicks;
-            MutableText first;
-            MutableText last;
+            MutableComponent first;
+            MutableComponent last;
 
             if (this.redWinTick < this.greenWinTick) {
                 deltaTicks = this.greenWinTick - this.redWinTick;

@@ -1,9 +1,9 @@
 package dev.yatloaf.modkrowd.cubekrowd.tablist;
 
 import dev.yatloaf.modkrowd.cubekrowd.common.CKColor;
+import dev.yatloaf.modkrowd.util.Util;
 import dev.yatloaf.modkrowd.util.text.StyledString;
 import dev.yatloaf.modkrowd.util.text.StyledStringReader;
-import dev.yatloaf.modkrowd.util.Util;
 
 public record MainTabPlayers(int playerCount, boolean isReal) implements TabEntry {
     public static final MainTabPlayers FAILURE = new MainTabPlayers(-1, false);

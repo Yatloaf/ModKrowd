@@ -1,12 +1,12 @@
 package dev.yatloaf.modkrowd.cubekrowd.message.cache;
 
+import dev.yatloaf.modkrowd.cubekrowd.common.cache.TextCache;
 import dev.yatloaf.modkrowd.cubekrowd.message.Message;
 import dev.yatloaf.modkrowd.cubekrowd.message.MissileWarsDeathMessage;
 import dev.yatloaf.modkrowd.cubekrowd.message.MissileWarsGameEndMessage;
-import dev.yatloaf.modkrowd.cubekrowd.common.cache.TextCache;
 import dev.yatloaf.modkrowd.cubekrowd.subserver.MissileWarsSubserver;
 import dev.yatloaf.modkrowd.util.text.StyledStringReader;
-import net.minecraft.text.TranslatableTextContent;
+import net.minecraft.network.chat.contents.TranslatableContents;
 
 public class MissileWarsMessageCache extends MinigameMessageCache {
     private MissileWarsDeathMessage missileWarsDeathMessage;
@@ -33,7 +33,7 @@ public class MissileWarsMessageCache extends MinigameMessageCache {
 
     public final MissileWarsDeathMessage missileWarsDeathMessageFast() {
         if (this.missileWarsDeathMessage == null) {
-            if (this.original.text().getContent() instanceof TranslatableTextContent content) {
+            if (this.original.text().getContents() instanceof TranslatableContents content) {
                 this.missileWarsDeathMessage = MissileWarsDeathMessage.parseFast(content);
             } else {
                 this.missileWarsDeathMessage = MissileWarsDeathMessage.FAILURE;

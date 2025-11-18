@@ -5,8 +5,8 @@ import dev.yatloaf.modkrowd.cubekrowd.subserver.CreativeSubserver;
 import dev.yatloaf.modkrowd.cubekrowd.subserver.CubeKrowdSubserver;
 import dev.yatloaf.modkrowd.cubekrowd.subserver.MissileWarsSubserver;
 import dev.yatloaf.modkrowd.cubekrowd.subserver.Subserver;
-import net.minecraft.text.Style;
-import net.minecraft.text.Text;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.Style;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -23,14 +23,14 @@ public class Predicate {
     public static final Predicate ALWAYS = new Predicate("always", CKColor.GREEN.style, Test::always);
 
     public final String id;
-    public final Text name;
-    public final Text tooltip;
+    public final Component name;
+    public final Component tooltip;
     public final Test test;
 
     public Predicate(String id, Style style, Test test) {
         this.id = id;
-        this.name = Text.translatable("modkrowd.config.predicate." + id).setStyle(style);
-        this.tooltip = Text.translatable("modkrowd.config.predicate." + id + ".tooltip");
+        this.name = Component.translatable("modkrowd.config.predicate." + id).setStyle(style);
+        this.tooltip = Component.translatable("modkrowd.config.predicate." + id + ".tooltip");
         this.test = test;
         FROM_ID.put(id, this);
     }

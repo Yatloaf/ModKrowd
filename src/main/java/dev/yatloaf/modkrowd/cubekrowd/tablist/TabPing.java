@@ -1,9 +1,9 @@
 package dev.yatloaf.modkrowd.cubekrowd.tablist;
 
 import dev.yatloaf.modkrowd.cubekrowd.common.CKColor;
+import dev.yatloaf.modkrowd.util.Util;
 import dev.yatloaf.modkrowd.util.text.StyledString;
 import dev.yatloaf.modkrowd.util.text.StyledStringReader;
-import dev.yatloaf.modkrowd.util.Util;
 
 public record TabPing(int latency, boolean isReal) implements TabEntry {
     public static final TabPing FAILURE = new TabPing(-1, false);

@@ -2,7 +2,7 @@ package dev.yatloaf.modkrowd.cubekrowd.subserver;
 
 import dev.yatloaf.modkrowd.cubekrowd.common.CKColor;
 import dev.yatloaf.modkrowd.cubekrowd.common.MinigameTeam;
-import net.minecraft.client.network.ClientPlayNetworkHandler;
+import net.minecraft.client.multiplayer.ClientPacketListener;
 
 public class MissileWarsSubserver extends MinigameSubserver {
     private static final Subserver[] EMPTY = new Subserver[0];
@@ -24,11 +24,11 @@ public class MissileWarsSubserver extends MinigameSubserver {
         };
     }
 
-    public boolean tryConnectNext(ClientPlayNetworkHandler handler, int index) {
+    public boolean tryConnectNext(ClientPacketListener listener, int index) {
         if (this.nextSubservers.length <= index) {
             return false;
         } else {
-            this.nextSubservers[index].connect(handler);
+            this.nextSubservers[index].connect(listener);
             return true;
         }
     }

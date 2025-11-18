@@ -1,8 +1,8 @@
 package dev.yatloaf.modkrowd.cubekrowd.message.cache;
 
-import dev.yatloaf.modkrowd.cubekrowd.message.Message;
-import dev.yatloaf.modkrowd.cubekrowd.common.cache.ThemedCache;
 import dev.yatloaf.modkrowd.cubekrowd.common.cache.TextCache;
+import dev.yatloaf.modkrowd.cubekrowd.common.cache.ThemedCache;
+import dev.yatloaf.modkrowd.cubekrowd.message.Message;
 import dev.yatloaf.modkrowd.cubekrowd.subserver.CubeKrowdSubserver;
 import dev.yatloaf.modkrowd.cubekrowd.subserver.FakeSubserver;
 import dev.yatloaf.modkrowd.cubekrowd.subserver.FishslapSubserver;

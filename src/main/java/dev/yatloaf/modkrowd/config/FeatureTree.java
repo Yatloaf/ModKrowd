@@ -5,15 +5,15 @@ import dev.yatloaf.modkrowd.config.feature.AutoswitchFeature;
 import dev.yatloaf.modkrowd.config.feature.BlockCutoutFeature;
 import dev.yatloaf.modkrowd.config.feature.CherryLiteThemeFeature;
 import dev.yatloaf.modkrowd.config.feature.CherryThemeFeature;
-import dev.yatloaf.modkrowd.config.feature.ShadedTabThemeFeature;
 import dev.yatloaf.modkrowd.config.feature.DirectMessageSoundFeature;
 import dev.yatloaf.modkrowd.config.feature.Feature;
 import dev.yatloaf.modkrowd.config.feature.HighContrastThemeFeature;
 import dev.yatloaf.modkrowd.config.feature.MessagePreviewFeature;
 import dev.yatloaf.modkrowd.config.feature.ReloadResourcesFeature;
 import dev.yatloaf.modkrowd.config.feature.SeparateChatHistoryFeature;
+import dev.yatloaf.modkrowd.config.feature.ShadedTabThemeFeature;
 import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.block.Blocks;
+import net.minecraft.world.level.block.Blocks;
 
 import java.util.ArrayList;
 import java.util.HashMap;

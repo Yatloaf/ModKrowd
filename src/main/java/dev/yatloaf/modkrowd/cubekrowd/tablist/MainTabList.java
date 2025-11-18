@@ -5,12 +5,12 @@ import dev.yatloaf.modkrowd.cubekrowd.common.SelfPlayer;
 import dev.yatloaf.modkrowd.cubekrowd.common.cache.TextCache;
 import dev.yatloaf.modkrowd.cubekrowd.subserver.Subserver;
 import dev.yatloaf.modkrowd.cubekrowd.subserver.Subservers;
-import dev.yatloaf.modkrowd.cubekrowd.tablist.cache.TabListCache;
 import dev.yatloaf.modkrowd.cubekrowd.tablist.cache.TabEntryCache;
+import dev.yatloaf.modkrowd.cubekrowd.tablist.cache.TabListCache;
 import dev.yatloaf.modkrowd.util.text.StyledString;
 import dev.yatloaf.modkrowd.util.text.StyledStringReader;
 import it.unimi.dsi.fastutil.ints.IntSet;
-import net.minecraft.client.network.PlayerListEntry;
+import net.minecraft.client.multiplayer.PlayerInfo;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -30,7 +30,7 @@ public record MainTabList(EntryCache[] entries, EntryCache[] players, EntryCache
     private static final IntSet SPECIAL_INDEXES = IntSet.of(0, 17, 18, 19, 20, 40, 60);
 
     public static MainTabList parseFast(TabListCache source) {
-        List<PlayerListEntry> playerListEntries = source.playerListEntries();
+        List<PlayerInfo> playerListEntries = source.playerListEntries();
         if (playerListEntries.size() < 80) return FAILURE;
 
         MainTabColumn currentColumn = MainTabColumn.FAILURE;

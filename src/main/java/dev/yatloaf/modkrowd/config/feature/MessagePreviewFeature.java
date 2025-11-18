@@ -5,28 +5,28 @@ import dev.yatloaf.modkrowd.config.ActionQueue;
 import dev.yatloaf.modkrowd.config.PredicateIndex;
 import dev.yatloaf.modkrowd.cubekrowd.command.PreviewCommands;
 import dev.yatloaf.modkrowd.cubekrowd.common.CKColor;
+import dev.yatloaf.modkrowd.cubekrowd.common.cache.TextCache;
 import dev.yatloaf.modkrowd.cubekrowd.message.DirectMessage;
 import dev.yatloaf.modkrowd.cubekrowd.message.cache.CubeKrowdMessageCache;
 import dev.yatloaf.modkrowd.cubekrowd.message.cache.MessageCache;
-import dev.yatloaf.modkrowd.cubekrowd.common.cache.TextCache;
 import dev.yatloaf.modkrowd.mixinduck.ChatHudLineDuck;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.font.TextRenderer;
-import net.minecraft.client.gui.hud.ChatHudLine;
-import net.minecraft.client.gui.hud.MessageIndicator;
-import net.minecraft.client.gui.screen.ChatScreen;
-import net.minecraft.client.util.ChatMessages;
-import net.minecraft.text.OrderedText;
-import net.minecraft.text.Text;
+import net.minecraft.client.GuiMessage;
+import net.minecraft.client.GuiMessageTag;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.components.ComponentRenderUtils;
+import net.minecraft.client.gui.screens.ChatScreen;
+import net.minecraft.network.chat.Component;
+import net.minecraft.util.FormattedCharSequence;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class MessagePreviewFeature extends Feature {
-    public static final MessageIndicator PREVIEW_INDICATOR = new MessageIndicator(
-            CKColor.LIGHT_PURPLE.textColor.getRgb(),
+    public static final GuiMessageTag PREVIEW_INDICATOR = new GuiMessageTag(
+            CKColor.LIGHT_PURPLE.textColor.getValue(),
             null,
-            Text.literal("Preview message"),
+            Component.literal("Preview message"),
             "ModKrowd:Preview"
     );
     public static final int PREVIEW_BACKGROUND_TINT = 0x5F005F;
@@ -38,20 +38,20 @@ public class MessagePreviewFeature extends Feature {
 
     private TextCache linedMessage = null;
     private int linedWidth = 0;
-    private List<ChatHudLine.Visible> previewMessageLines = List.of();
+    private List<GuiMessage.Line> previewMessageLines = List.of();
 
     public MessagePreviewFeature(String id, PredicateIndex allowedPredicates) {
         super(id, allowedPredicates);
     }
 
     @Override
-    public void onDisable(MinecraftClient client, ActionQueue queue) {
+    public void onDisable(Minecraft minecraft, ActionQueue queue) {
         this.replyTarget = null;
     }
 
     @Override
-    public void onMessage(MessageCache message, MinecraftClient client, ActionQueue queue) {
-        if (!(client.currentScreen instanceof ChatScreen)) {
+    public void onMessage(MessageCache message, Minecraft minecraft, ActionQueue queue) {
+        if (!(minecraft.screen instanceof ChatScreen)) {
             this.clearPreviewMessage();
         }
         if (message instanceof CubeKrowdMessageCache ckMessage) {
@@ -63,7 +63,7 @@ public class MessagePreviewFeature extends Feature {
     }
 
     @Override
-    public void onEndTick(MinecraftClient client, ActionQueue queue) {
+    public void onEndTick(Minecraft minecraft, ActionQueue queue) {
         if (ModKrowd.tick >= this.removePreview) {
             this.clearPreviewMessage();
         }
@@ -73,21 +73,21 @@ public class MessagePreviewFeature extends Feature {
         return this.previewMessage != TextCache.EMPTY;
     }
 
-    public List<ChatHudLine.Visible> getPreviewMessageLines(int width, TextRenderer textRenderer) {
+    public List<GuiMessage.Line> getPreviewMessageLines(int width, Font textRenderer) {
         if (this.linedMessage == this.previewMessage && this.linedWidth == width) {
             return this.previewMessageLines;
         }
 
-        List<OrderedText> orderedTextLines = ChatMessages.breakRenderedChatMessageLines(
+        List<FormattedCharSequence> orderedTextLines = ComponentRenderUtils.wrapComponents(
                 this.previewMessage.text(), width, textRenderer
         );
 
-        List<ChatHudLine.Visible> visibleLines = new ArrayList<>(orderedTextLines.size());
+        List<GuiMessage.Line> visibleLines = new ArrayList<>(orderedTextLines.size());
         for (int l = orderedTextLines.size() - 1; l >= 0; l--) {
-            OrderedText currentLine = orderedTextLines.get(l);
+            FormattedCharSequence currentLine = orderedTextLines.get(l);
             boolean endOfEntry = l == orderedTextLines.size() - 1;
 
-            ChatHudLine.Visible visible = new ChatHudLine.Visible(
+            GuiMessage.Line visible = new GuiMessage.Line(
                     Integer.MIN_VALUE, currentLine, PREVIEW_INDICATOR, endOfEntry
             );
             ((ChatHudLineDuck)(Object) visible).modKrowd$setBackgroundTint(PREVIEW_BACKGROUND_TINT);

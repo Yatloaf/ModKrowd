@@ -14,7 +14,7 @@ import dev.yatloaf.modkrowd.config.exception.WriteConfigException;
 import dev.yatloaf.modkrowd.config.feature.Feature;
 import net.fabricmc.loader.api.SemanticVersion;
 import net.fabricmc.loader.api.VersionParsingException;
-import net.minecraft.util.JsonHelper;
+import net.minecraft.util.GsonHelper;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -54,10 +54,10 @@ public class Config extends FeatureTree {
                 );
             }
 
-            this.selectedTab = this.idToTab.getOrDefault(JsonHelper.getString(root, "selected_tab", ""), this.APPEARANCE);
+            this.selectedTab = this.idToTab.getOrDefault(GsonHelper.getAsString(root, "selected_tab", ""), this.APPEARANCE);
 
-            if (JsonHelper.hasJsonObject(root, "features")) {
-                JsonObject features = JsonHelper.getObject(root, "features");
+            if (GsonHelper.isObjectNode(root, "features")) {
+                JsonObject features = GsonHelper.getAsJsonObject(root, "features");
                 for (Map.Entry<String, JsonElement> featureEntry : features.entrySet()) {
                     String featureKey = featureEntry.getKey();
                     if (this.idToFeature.containsKey(featureKey)) {
@@ -110,11 +110,11 @@ public class Config extends FeatureTree {
     }
 
     private static SemanticVersion asSemanticVersion(JsonElement element, String name) throws JsonParseException {
-        String string = JsonHelper.asString(element, name);
+        String string = GsonHelper.convertToString(element, name);
         try {
             return SemanticVersion.parse(string);
         } catch (VersionParsingException e) {
-            throw new JsonParseException("Expected " + element + " to be a SemanticVersion, was " + JsonHelper.getType(element));
+            throw new JsonParseException("Expected " + element + " to be a SemanticVersion, was " + GsonHelper.getType(element));
         }
     }
 }

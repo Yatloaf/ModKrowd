@@ -1,50 +1,54 @@
 package dev.yatloaf.modkrowd.config.screen;
 
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.Element;
-import net.minecraft.client.gui.Selectable;
-import net.minecraft.client.gui.tooltip.Tooltip;
-import net.minecraft.client.gui.widget.TextFieldWidget;
-import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.EditBox;
+import net.minecraft.client.gui.components.Tooltip;
+import net.minecraft.client.gui.components.events.GuiEventListener;
+import net.minecraft.client.gui.narration.NarratableEntry;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
+/**
+ * {@code Identifier} <3
+ */
 public class IdentifierEntry extends AbstractEntry {
-    public final Supplier<Identifier> getter;
-    public final Consumer<Identifier> setter;
+    public final Supplier<ResourceLocation> getter;
+    public final Consumer<ResourceLocation> setter;
 
-    public final TextFieldWidget textField;
+    public final EditBox editBox;
 
-    private Identifier value;
+    private ResourceLocation value;
 
-    public IdentifierEntry(MinecraftClient client, Text label, Tooltip tooltip, Identifier startValue, Supplier<Identifier> getter, Consumer<Identifier> setter) {
-        super(client, label);
+    public IdentifierEntry(Minecraft minecraft, Component label, Tooltip tooltip, ResourceLocation startValue, Supplier<ResourceLocation> getter, Consumer<ResourceLocation> setter) {
+        super(minecraft, label);
         this.label.setTooltip(tooltip);
         this.getter = getter;
         this.setter = setter;
-        this.textField = new TextFieldWidget(client.textRenderer, 0, 0, 128, 20, Text.empty()); // X and Y are set in render(...)
-        this.textField.setMaxLength(256);
+        this.editBox = new EditBox(minecraft.font, 0, 0, 128, 20, Component.empty()); // X and Y are set in render(...)
+        this.editBox.setMaxLength(256);
         this.setValue(startValue);
-        this.textField.setChangedListener(s -> {
-            this.value = Identifier.of(s);
+        this.editBox.setResponder(s -> {
+            this.value = ResourceLocation.parse(s);
             this.setter.accept(this.value);
         });
     }
 
-    protected void setValue(Identifier value) {
+    protected void setValue(ResourceLocation value) {
         this.value = value;
-        this.textField.setText(value.toString());
+        this.editBox.setValue(value.toString());
     }
 
     @Override
-    public void render(DrawContext context, int mouseX, int mouseY, boolean hovered, float deltaTicks) {
-        super.render(context, mouseX, mouseY, hovered, deltaTicks);
-        this.textField.setPosition(this.getContentX() + this.getContentWidth() - 128, this.getContentY());
-        this.textField.render(context, mouseX, mouseY, deltaTicks);
+    public void renderContent(GuiGraphics context, int mouseX, int mouseY, boolean hovered, float deltaTicks) {
+        super.renderContent(context, mouseX, mouseY, hovered, deltaTicks);
+        this.editBox.setPosition(this.getContentX() + this.getContentWidth() - 128, this.getContentY());
+        this.editBox.render(context, mouseX, mouseY, deltaTicks);
     }
 
     @Override
@@ -53,12 +57,12 @@ public class IdentifierEntry extends AbstractEntry {
     }
 
     @Override
-    public List<? extends Selectable> selectableChildren() {
-        return List.of(this.textField);
+    public @NotNull List<? extends NarratableEntry> narratables() {
+        return List.of(this.editBox);
     }
 
     @Override
-    public List<? extends Element> children() {
-        return List.of(this.textField);
+    public @NotNull List<? extends GuiEventListener> children() {
+        return List.of(this.editBox);
     }
 }

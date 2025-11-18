@@ -3,9 +3,9 @@ package dev.yatloaf.modkrowd.cubekrowd.tablist;
 import dev.yatloaf.modkrowd.cubekrowd.common.cache.TextCache;
 import dev.yatloaf.modkrowd.cubekrowd.subserver.Subserver;
 import dev.yatloaf.modkrowd.cubekrowd.subserver.Subservers;
-import dev.yatloaf.modkrowd.cubekrowd.tablist.cache.TabListCache;
 import dev.yatloaf.modkrowd.cubekrowd.tablist.cache.TabEntryCache;
-import net.minecraft.client.network.PlayerListEntry;
+import dev.yatloaf.modkrowd.cubekrowd.tablist.cache.TabListCache;
+import net.minecraft.client.multiplayer.PlayerInfo;
 
 import java.util.List;
 
@@ -13,7 +13,7 @@ public record UnknownTabList(EntryCache[] entries) implements TabList {
     public static final EntryCache[] EMPTY_ENTRIES = new EntryCache[0];
 
     public static UnknownTabList parse(TabListCache source) {
-        List<PlayerListEntry> playerListEntries = source.playerListEntries();
+        List<PlayerInfo> playerListEntries = source.playerListEntries();
 
         EntryCache[] entries = new EntryCache[playerListEntries.size()];
         for (int index = 0; index < entries.length; index++) {

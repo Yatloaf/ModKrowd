@@ -1,20 +1,21 @@
 package dev.yatloaf.modkrowd;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import dev.yatloaf.modkrowd.config.Config;
-import dev.yatloaf.modkrowd.config.screen.ConfigScreen;
 import dev.yatloaf.modkrowd.config.SyncedConfig;
+import dev.yatloaf.modkrowd.config.screen.ConfigScreen;
+import dev.yatloaf.modkrowd.cubekrowd.common.CubeKrowd;
 import dev.yatloaf.modkrowd.cubekrowd.message.KickedMessage;
 import dev.yatloaf.modkrowd.cubekrowd.message.WhereamiMessage;
 import dev.yatloaf.modkrowd.cubekrowd.message.cache.CubeKrowdMessageCache;
-import dev.yatloaf.modkrowd.cubekrowd.common.CubeKrowd;
 import dev.yatloaf.modkrowd.cubekrowd.message.cache.MessageCache;
 import dev.yatloaf.modkrowd.cubekrowd.subserver.CubeKrowdSubserver;
 import dev.yatloaf.modkrowd.cubekrowd.subserver.MissileWarsSubserver;
 import dev.yatloaf.modkrowd.cubekrowd.subserver.Subserver;
 import dev.yatloaf.modkrowd.cubekrowd.subserver.Subservers;
 import dev.yatloaf.modkrowd.cubekrowd.tablist.cache.TabListCache;
-import dev.yatloaf.modkrowd.mixin.ClientCommonNetworkHandlerAccessor;
-import dev.yatloaf.modkrowd.mixin.KeyBindingAccessor;
+import dev.yatloaf.modkrowd.mixin.ClientCommonPacketListenerImplAccessor;
+import dev.yatloaf.modkrowd.mixin.KeyMappingAccessor;
 import dev.yatloaf.modkrowd.util.Util;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;
@@ -25,15 +26,14 @@ import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.Version;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.screen.ChatScreen;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.network.ClientConfigurationNetworkHandler;
-import net.minecraft.client.network.ClientPlayNetworkHandler;
-import net.minecraft.client.network.ServerInfo;
-import net.minecraft.client.option.KeyBinding;
-import net.minecraft.client.util.InputUtil;
-import net.minecraft.util.Identifier;
+import net.minecraft.client.KeyMapping;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.ChatScreen;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.multiplayer.ClientConfigurationPacketListenerImpl;
+import net.minecraft.client.multiplayer.ClientPacketListener;
+import net.minecraft.client.multiplayer.ServerData;
+import net.minecraft.resources.ResourceLocation;
 import org.lwjgl.glfw.GLFW;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -59,9 +59,9 @@ public class ModKrowd implements ClientModInitializer {
 	public static TabListCache currentTabListCache = null; // Else ExceptionInInitializerError
 	public static long tick = 0; // Chances are this won't overflow in your lifetime
 
-	public static KeyBinding OPTIONS_KEY;
-	public static KeyBinding TOGGLE_MESSAGE_PREVIEW_KEY;
-	public static KeyBinding NEXT_SUBSERVER_KEY;
+	public static KeyMapping OPTIONS_KEY;
+	public static KeyMapping TOGGLE_MESSAGE_PREVIEW_KEY;
+	public static KeyMapping NEXT_SUBSERVER_KEY;
 	public static boolean INIT = false; // TODO: Better, somehow
 
 	private static boolean pendingTabListCache = true;
@@ -85,13 +85,13 @@ public class ModKrowd implements ClientModInitializer {
 		};
 		LOGGER.info(hello[ThreadLocalRandom.current().nextInt(hello.length)]);
 
-		KeyBinding.Category category = KeyBinding.Category.create(Identifier.of("modkrowd", "modkrowd"));
-		OPTIONS_KEY = KeyBindingHelper.registerKeyBinding(new KeyBinding("key.modkrowd.options",
-				InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_UNKNOWN, category));
-		TOGGLE_MESSAGE_PREVIEW_KEY = KeyBindingHelper.registerKeyBinding(new KeyBinding("key.modkrowd.toggle_message_preview",
-				InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_UNKNOWN, category));
-		NEXT_SUBSERVER_KEY = KeyBindingHelper.registerKeyBinding(new KeyBinding("key.modkrowd.next_subserver",
-				InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_UNKNOWN, category));
+		KeyMapping.Category category = KeyMapping.Category.register(ResourceLocation.fromNamespaceAndPath("modkrowd", "modkrowd"));
+		OPTIONS_KEY = KeyBindingHelper.registerKeyBinding(new KeyMapping("key.modkrowd.options",
+				InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_UNKNOWN, category));
+		TOGGLE_MESSAGE_PREVIEW_KEY = KeyBindingHelper.registerKeyBinding(new KeyMapping("key.modkrowd.toggle_message_preview",
+				InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_UNKNOWN, category));
+		NEXT_SUBSERVER_KEY = KeyBindingHelper.registerKeyBinding(new KeyMapping("key.modkrowd.next_subserver",
+				InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_UNKNOWN, category));
 		INIT = true;
 
 		ClientConfigurationConnectionEvents.COMPLETE.register(ModKrowd::onConfigurationComplete);
@@ -101,7 +101,7 @@ public class ModKrowd implements ClientModInitializer {
 		ClientLifecycleEvents.CLIENT_STOPPING.register(ModKrowd::onClientStopping);
 
 		CONFIG.tryDeserialize(CONFIG_FILE);
-		CONFIG.onInitEnable(MinecraftClient.getInstance());
+		CONFIG.onInitEnable(Minecraft.getInstance());
 	}
 
 	public static void invalidateTabListCache() {
@@ -142,17 +142,17 @@ public class ModKrowd implements ClientModInitializer {
 	}
 
 	private static void tickSwitchingMissileWarsLobby() {
-		MinecraftClient client = MinecraftClient.getInstance();
+		Minecraft minecraft = Minecraft.getInstance();
 
 		// Wait until no ChatScreen is open or the force tick has been reached
 		if (mwSwitchStatus == MwSwitchStatus.DELAY && (
-				mwSwitchForceTick <= tick || mwSwitchTick <= tick && !(client.currentScreen instanceof ChatScreen)
+				mwSwitchForceTick <= tick || mwSwitchTick <= tick && !(minecraft.screen instanceof ChatScreen)
 		)) {
 
-            ClientPlayNetworkHandler handler = client.getNetworkHandler();
-			if (handler != null
+            ClientPacketListener listener = minecraft.getConnection();
+			if (listener != null
 					&& currentSubserver instanceof MissileWarsSubserver mwSubserver
-					&& mwSubserver.tryConnectNext(handler, mwSwitchIndex)) {
+					&& mwSubserver.tryConnectNext(listener, mwSwitchIndex)) {
 				mwSwitchStatus = MwSwitchStatus.CONNECTING;
 			} else {
 				mwSwitchStatus = MwSwitchStatus.IDLE;
@@ -160,19 +160,19 @@ public class ModKrowd implements ClientModInitializer {
 		}
 	}
 
-	private static void onConfigurationComplete(ClientConfigurationNetworkHandler handler, MinecraftClient client) {
-		ServerInfo info = ((ClientCommonNetworkHandlerAccessor) handler).getServerInfo();
-		if (info != null && CubeKrowd.addressIsCubeKrowd(info.address)) {
+	private static void onConfigurationComplete(ClientConfigurationPacketListenerImpl listener, Minecraft minecraft) {
+		ServerData info = ((ClientCommonPacketListenerImplAccessor) listener).getServerData();
+		if (info != null && CubeKrowd.addressIsCubeKrowd(info.ip)) {
 			currentSubserver = Subservers.PENDING;
 		} else {
 			currentSubserver = Subservers.NONE;
 		}
 		CONFIG.updateFeatures();
 
-		CONFIG.onConfigurationComplete(handler, client);
+		CONFIG.onConfigurationComplete(listener, minecraft);
 	}
 
-	private static void onJoin(ClientPlayNetworkHandler handler, PacketSender sender, MinecraftClient client) {
+	private static void onJoin(ClientPacketListener listener, PacketSender sender, Minecraft minecraft) {
 		invalidateTabListCache(); // *Hopefully* late enough for inGameHud to be initialized
 
 		mwSwitchStatus = MwSwitchStatus.IDLE;
@@ -181,44 +181,44 @@ public class ModKrowd implements ClientModInitializer {
 		mwSwitchIndex = 0;
 
 		if (currentSubserver instanceof CubeKrowdSubserver) {
-			Util.sendCommandPacket(handler, CubeKrowd.SUBSERVER_COMMAND);
+			Util.sendCommandPacket(listener, CubeKrowd.SUBSERVER_COMMAND);
 		}
-		CONFIG.onJoin(handler, client);
+		CONFIG.onJoin(listener, minecraft);
 	}
 
-	private static void onDisconnect(ClientPlayNetworkHandler handler, MinecraftClient client) {
+	private static void onDisconnect(ClientPacketListener listener, Minecraft minecraft) {
 		currentSubserver = Subservers.NONE;
-		CONFIG.onDisconnect(handler, client);
+		CONFIG.onDisconnect(listener, minecraft);
 		CONFIG.updateFeatures();
 	}
 
-	private static void onEndClientTick(MinecraftClient client) {
+	private static void onEndClientTick(Minecraft minecraft) {
 		tick++;
 
 		tickSwitchingMissileWarsLobby();
-		tickKeys(client);
+		tickKeys(minecraft);
 		checkTabListCache();
 
-		CONFIG.onEndTick(client);
+		CONFIG.onEndTick(minecraft);
 	}
 
-	private static void tickKeys(MinecraftClient client) {
-		if (OPTIONS_KEY.wasPressed()) {
-			client.setScreen(createConfigScreen(client.currentScreen));
-			((KeyBindingAccessor) OPTIONS_KEY).callReset();
+	private static void tickKeys(Minecraft minecraft) {
+		if (OPTIONS_KEY.consumeClick()) {
+			minecraft.setScreen(createConfigScreen(minecraft.screen));
+			((KeyMappingAccessor) OPTIONS_KEY).callRelease();
 		}
-		if (NEXT_SUBSERVER_KEY.wasPressed()) {
+		if (NEXT_SUBSERVER_KEY.consumeClick()) {
 			startSwitchingMissileWarsLobby(0);
-			((KeyBindingAccessor) NEXT_SUBSERVER_KEY).callReset();
+			((KeyMappingAccessor) NEXT_SUBSERVER_KEY).callRelease();
 		}
 	}
 
-	private static void onClientStopping(MinecraftClient client) {
+	private static void onClientStopping(Minecraft minecraft) {
 		CONFIG.trySerialize(CONFIG_FILE);
 	}
 
 	public static void onMessage(MessageCache message) {
-		MinecraftClient client = MinecraftClient.getInstance();
+		Minecraft minecraft = Minecraft.getInstance();
 
 		if (message instanceof CubeKrowdMessageCache ckCache) {
 			if (currentSubserver == Subservers.PENDING) {
@@ -226,7 +226,7 @@ public class ModKrowd implements ClientModInitializer {
 				if (whereamiMessage.isReal()) {
 					currentSubserver = whereamiMessage.subserver();
 					CONFIG.updateFeatures();
-					CONFIG.onJoinUpdated(client.getNetworkHandler(), client);
+					CONFIG.onJoinUpdated(minecraft.getConnection(), minecraft);
 					message.setBlocked(true);
 					return;
 				}
@@ -236,7 +236,7 @@ public class ModKrowd implements ClientModInitializer {
 				KickedMessage kickedMessage = ckCache.kickedMessageFast();
 				if (kickedMessage.isReal() && kickedMessage.subserver() instanceof MissileWarsSubserver || ckCache.unavailableMessageFast().isReal()) {
 					mwSwitchIndex += 1;
-					if (!mwSubserver.tryConnectNext(client.getNetworkHandler(), mwSwitchIndex)) {
+					if (!mwSubserver.tryConnectNext(minecraft.getConnection(), mwSwitchIndex)) {
 						mwSwitchStatus = MwSwitchStatus.IDLE;
 						mwSwitchTick = 0;
 						mwSwitchForceTick = 0;
@@ -246,7 +246,7 @@ public class ModKrowd implements ClientModInitializer {
 			}
 		}
 
-		CONFIG.onMessage(message, client);
+		CONFIG.onMessage(message, minecraft);
 	}
 
 	private enum MwSwitchStatus {

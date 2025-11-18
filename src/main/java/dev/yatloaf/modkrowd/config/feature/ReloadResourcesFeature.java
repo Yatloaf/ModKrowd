@@ -2,7 +2,7 @@ package dev.yatloaf.modkrowd.config.feature;
 
 import dev.yatloaf.modkrowd.config.ActionQueue;
 import dev.yatloaf.modkrowd.config.PredicateIndex;
-import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.Minecraft;
 
 public class ReloadResourcesFeature extends Feature {
     public ReloadResourcesFeature(String id, PredicateIndex allowedPredicates) {
@@ -10,12 +10,12 @@ public class ReloadResourcesFeature extends Feature {
     }
 
     @Override
-    public void onEnable(MinecraftClient client, ActionQueue queue) {
+    public void onEnable(Minecraft minecraft, ActionQueue queue) {
         queue.queueReloadResources();
     }
 
     @Override
-    public void onDisable(MinecraftClient client, ActionQueue queue) {
+    public void onDisable(Minecraft minecraft, ActionQueue queue) {
         queue.queueReloadResources();
     }
 }

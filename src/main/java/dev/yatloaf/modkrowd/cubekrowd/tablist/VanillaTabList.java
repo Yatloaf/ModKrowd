@@ -6,9 +6,9 @@ import dev.yatloaf.modkrowd.cubekrowd.common.cache.TextCache;
 import dev.yatloaf.modkrowd.cubekrowd.subserver.RealSubserver;
 import dev.yatloaf.modkrowd.cubekrowd.subserver.Subserver;
 import dev.yatloaf.modkrowd.cubekrowd.subserver.Subservers;
-import dev.yatloaf.modkrowd.cubekrowd.tablist.cache.TabListCache;
 import dev.yatloaf.modkrowd.cubekrowd.tablist.cache.TabEntryCache;
-import net.minecraft.client.network.PlayerListEntry;
+import dev.yatloaf.modkrowd.cubekrowd.tablist.cache.TabListCache;
+import net.minecraft.client.multiplayer.PlayerInfo;
 
 import java.util.List;
 
@@ -17,7 +17,7 @@ public record VanillaTabList(EntryCache[] entries, EntryCache[] players, EntryCa
     public static final VanillaTabList FAILURE = new VanillaTabList(EMPTY_ENTRIES, EMPTY_ENTRIES, null, Subservers.NONE, false);
 
     public static VanillaTabList parseFast(TabListCache source) {
-        List<PlayerListEntry> playerListEntries = source.playerListEntries();
+        List<PlayerInfo> playerListEntries = source.playerListEntries();
         if (playerListEntries.isEmpty()) {
             return FAILURE;
         }
@@ -35,7 +35,7 @@ public record VanillaTabList(EntryCache[] entries, EntryCache[] players, EntryCa
         String selfName = SelfPlayer.username();
         EntryCache self = null;
         for (int index = 0; index < playerListEntries.size(); index++) {
-            PlayerListEntry playerListEntry = playerListEntries.get(index);
+            PlayerInfo playerListEntry = playerListEntries.get(index);
             TextCache name = source.getPlayerName(index);
             EntryCache entryCache = new EntryCache(name, playerListEntry.getLatency(), yourGame);
             entries[index] = entryCache;

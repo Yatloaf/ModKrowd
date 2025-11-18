@@ -1,8 +1,8 @@
 package dev.yatloaf.modkrowd.cubekrowd.common.cache;
 
 import dev.yatloaf.modkrowd.util.text.StyledString;
-import net.minecraft.text.MutableText;
-import net.minecraft.text.Text;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import org.jetbrains.annotations.NotNull;
 
 public abstract class TextCache {
@@ -12,13 +12,13 @@ public abstract class TextCache {
     public static final TextCache EMPTY = new OfEmpty();
 
     /**
-     * Get the {@link MutableText} representation after generating it if required.
+     * Get the {@link MutableComponent} representation after generating it if required.
      * <p>
      * <b>Do not mutate this object without copying it first.</b>
      *
-     * @return The {@link MutableText} representation of the original.
+     * @return The {@link MutableComponent} representation of the original.
      */
-    public abstract MutableText text();
+    public abstract MutableComponent text();
 
     /**
      * Get the {@link StyledString} representation after generating it if required.
@@ -35,19 +35,19 @@ public abstract class TextCache {
     public abstract String string();
 
     /**
-     * Box a {@link MutableText}, deferring and caching its conversion into {@link StyledString} or {@link String}.
+     * Box a {@link MutableComponent}, deferring and caching its conversion into {@link StyledString} or {@link String}.
      * <p>
      * <b>Do not mutate the source after boxing without copying it first.</b>
      *
-     * @param text The original {@link MutableText}.
+     * @param text The original {@link MutableComponent}.
      * @return A cache of the original and its converted forms.
      */
-    public static TextCache of(@NotNull MutableText text) {
+    public static TextCache of(@NotNull MutableComponent text) {
         return new OfText(text);
     }
 
     /**
-     * Box a {@link StyledString}, deferring and caching its conversion into {@link MutableText} or {@link String}.
+     * Box a {@link StyledString}, deferring and caching its conversion into {@link MutableComponent} or {@link String}.
      *
      * @param styledString The original {@link StyledString}.
      * @return A cache of the original and its converted forms.
@@ -57,17 +57,17 @@ public abstract class TextCache {
     }
 
     private static class OfText extends TextCache {
-        private final MutableText text;
+        private final MutableComponent text;
 
         private StyledString styledString;
         private String string;
 
-        private OfText(MutableText text) {
+        private OfText(MutableComponent text) {
             this.text = text;
         }
 
         @Override
-        public final MutableText text() {
+        public final MutableComponent text() {
             return this.text;
         }
 
@@ -91,7 +91,7 @@ public abstract class TextCache {
     private static class OfStyledString extends TextCache {
         private final StyledString styledString;
 
-        private MutableText text;
+        private MutableComponent text;
         private String string;
 
         private OfStyledString(StyledString styledString) {
@@ -99,7 +99,7 @@ public abstract class TextCache {
         }
 
         @Override
-        public MutableText text() {
+        public MutableComponent text() {
             if (this.text == null) {
                 this.text = this.styledString.toText();
             }
@@ -122,10 +122,10 @@ public abstract class TextCache {
     }
 
     private static class OfEmpty extends TextCache {
-        private static final MutableText EMPTY_TEXT = Text.empty();
+        private static final MutableComponent EMPTY_TEXT = Component.empty();
 
         @Override
-        public MutableText text() {
+        public MutableComponent text() {
             return EMPTY_TEXT;
         }
 

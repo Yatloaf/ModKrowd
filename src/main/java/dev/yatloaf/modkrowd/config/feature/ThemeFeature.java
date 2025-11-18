@@ -1,9 +1,9 @@
 package dev.yatloaf.modkrowd.config.feature;
 
 import dev.yatloaf.modkrowd.ModKrowd;
-import dev.yatloaf.modkrowd.config.PredicateIndex;
 import dev.yatloaf.modkrowd.config.ActionQueue;
-import net.minecraft.client.MinecraftClient;
+import dev.yatloaf.modkrowd.config.PredicateIndex;
+import net.minecraft.client.Minecraft;
 
 public class ThemeFeature extends Feature {
     public ThemeFeature(String id, PredicateIndex allowedPredicates) {
@@ -11,12 +11,12 @@ public class ThemeFeature extends Feature {
     }
 
     @Override
-    public void onEnable(MinecraftClient client, ActionQueue queue) {
+    public void onEnable(Minecraft minecraft, ActionQueue queue) {
         ModKrowd.invalidateTabListCache();
     }
 
     @Override
-    public void onDisable(MinecraftClient client, ActionQueue queue) {
+    public void onDisable(Minecraft minecraft, ActionQueue queue) {
         ModKrowd.invalidateTabListCache();
     }
 }

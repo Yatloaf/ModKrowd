@@ -6,11 +6,11 @@ import dev.yatloaf.modkrowd.cubekrowd.common.cache.TextCache;
 import dev.yatloaf.modkrowd.cubekrowd.subserver.MinigameSubserver;
 import dev.yatloaf.modkrowd.cubekrowd.subserver.Subserver;
 import dev.yatloaf.modkrowd.cubekrowd.subserver.Subservers;
-import dev.yatloaf.modkrowd.cubekrowd.tablist.cache.TabListCache;
 import dev.yatloaf.modkrowd.cubekrowd.tablist.cache.TabEntryCache;
+import dev.yatloaf.modkrowd.cubekrowd.tablist.cache.TabListCache;
 import dev.yatloaf.modkrowd.util.text.StyledString;
 import dev.yatloaf.modkrowd.util.text.StyledStringReader;
-import net.minecraft.client.network.PlayerListEntry;
+import net.minecraft.client.multiplayer.PlayerInfo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +21,7 @@ public record MinigameTabList(EntryCache[] entries, EntryCache[] players, EntryC
     public static final MinigameTabList FAILURE = new MinigameTabList(EMPTY_ENTRIES, EMPTY_ENTRIES, null, Subservers.NONE, false);
 
     public static MinigameTabList parseFast(TabListCache source) {
-        List<PlayerListEntry> playerListEntries = source.playerListEntries();
+        List<PlayerInfo> playerListEntries = source.playerListEntries();
         if (playerListEntries.size() < 80) return FAILURE;
 
         StyledString styledString40 = source.getPlayerName(40).styledString();
@@ -38,7 +38,7 @@ public record MinigameTabList(EntryCache[] entries, EntryCache[] players, EntryC
         String selfName = SelfPlayer.username();
         EntryCache self = null;
         for (int index = 0; index < playerListEntries.size(); index++) {
-            PlayerListEntry playerListEntry = playerListEntries.get(index);
+            PlayerInfo playerListEntry = playerListEntries.get(index);
             TextCache name = source.getPlayerName(index);
             boolean isPlayer = isLoaded && index >= 62 && index <= 79 && !name.string().isBlank() && !name.styledString().contains(___AND);
 

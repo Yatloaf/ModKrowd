@@ -1,8 +1,8 @@
 package dev.yatloaf.modkrowd.config.feature;
 
+import dev.yatloaf.modkrowd.config.ActionQueue;
 import dev.yatloaf.modkrowd.config.DefaultTheme;
 import dev.yatloaf.modkrowd.config.PredicateIndex;
-import dev.yatloaf.modkrowd.config.ActionQueue;
 import dev.yatloaf.modkrowd.cubekrowd.common.CKColor;
 import dev.yatloaf.modkrowd.cubekrowd.common.CubeKrowd;
 import dev.yatloaf.modkrowd.cubekrowd.common.LatencyLevel;
@@ -22,20 +22,20 @@ import dev.yatloaf.modkrowd.cubekrowd.tablist.GameTabLabel;
 import dev.yatloaf.modkrowd.cubekrowd.tablist.GameTabMode;
 import dev.yatloaf.modkrowd.cubekrowd.tablist.GameTabPlayers;
 import dev.yatloaf.modkrowd.cubekrowd.tablist.MainTabColumn;
-import dev.yatloaf.modkrowd.cubekrowd.tablist.TabCentered;
-import dev.yatloaf.modkrowd.cubekrowd.tablist.TabPing;
 import dev.yatloaf.modkrowd.cubekrowd.tablist.MainTabPlayers;
+import dev.yatloaf.modkrowd.cubekrowd.tablist.TabCentered;
 import dev.yatloaf.modkrowd.cubekrowd.tablist.TabFooter;
 import dev.yatloaf.modkrowd.cubekrowd.tablist.TabFooterSection;
 import dev.yatloaf.modkrowd.cubekrowd.tablist.TabHeader;
+import dev.yatloaf.modkrowd.cubekrowd.tablist.TabPing;
 import dev.yatloaf.modkrowd.cubekrowd.tablist.cache.TabEntryCache;
 import dev.yatloaf.modkrowd.cubekrowd.tablist.cache.TabFooterCache;
 import dev.yatloaf.modkrowd.cubekrowd.tablist.cache.TabHeaderCache;
 import dev.yatloaf.modkrowd.cubekrowd.tablist.cache.TabListCache;
 import dev.yatloaf.modkrowd.util.text.StyledString;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.text.Style;
-import net.minecraft.text.TextColor;
+import net.minecraft.client.Minecraft;
+import net.minecraft.network.chat.Style;
+import net.minecraft.network.chat.TextColor;
 import org.jetbrains.annotations.Nullable;
 
 public class CherryLiteThemeFeature extends ThemeFeature {
@@ -47,14 +47,14 @@ public class CherryLiteThemeFeature extends ThemeFeature {
     public static final TextColor CHERRY6 = TextColor.fromRgb(0xf5daef);
 
     public static final int STEM_T = 0x80271620;
-    public static final int CHERRY6_T = 0x20000000 | CHERRY6.getRgb();
+    public static final int CHERRY6_T = 0x20000000 | CHERRY6.getValue();
 
     public CherryLiteThemeFeature(String id, PredicateIndex allowedPredicates) {
         super(id, allowedPredicates);
     }
 
     @Override
-    public void onMessage(MessageCache message, MinecraftClient client, ActionQueue queue) {
+    public void onMessage(MessageCache message, Minecraft minecraft, ActionQueue queue) {
         message.setBackgroundTint(STEM_T);
         switch (message.result()) {
             case AlohaMessage alohaMessage -> message.setThemed(this.alohaMessage(alohaMessage));
@@ -106,7 +106,7 @@ public class CherryLiteThemeFeature extends ThemeFeature {
     }
 
     protected TextCache missileWarsDeathMessage(MissileWarsDeathMessage message) {
-        return TextCache.of(message.appearance().fillStyle(Style.EMPTY.withColor(CHERRY1)));
+        return TextCache.of(message.appearance().withStyle(Style.EMPTY.withColor(CHERRY1)));
     }
 
     protected TextCache fishslapChatMessage(FishslapChatMessage message) {
@@ -119,7 +119,7 @@ public class CherryLiteThemeFeature extends ThemeFeature {
     }
 
     @Override
-    public void onTabList(TabListCache tabList, MinecraftClient client, ActionQueue queue) {
+    public void onTabList(TabListCache tabList, Minecraft minecraft, ActionQueue queue) {
         for (TabEntryCache entry : tabList.result().entries()) {
             this.onTabEntry(entry);
         }

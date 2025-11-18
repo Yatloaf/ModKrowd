@@ -1,13 +1,13 @@
 package dev.yatloaf.modkrowd.cubekrowd.tablist;
 
 import dev.yatloaf.modkrowd.cubekrowd.common.cache.TextCache;
-import dev.yatloaf.modkrowd.cubekrowd.subserver.Subservers;
 import dev.yatloaf.modkrowd.cubekrowd.subserver.Subserver;
-import dev.yatloaf.modkrowd.cubekrowd.tablist.cache.TabListCache;
+import dev.yatloaf.modkrowd.cubekrowd.subserver.Subservers;
 import dev.yatloaf.modkrowd.cubekrowd.tablist.cache.TabEntryCache;
+import dev.yatloaf.modkrowd.cubekrowd.tablist.cache.TabListCache;
 import dev.yatloaf.modkrowd.util.text.StyledString;
 import dev.yatloaf.modkrowd.util.text.StyledStringReader;
-import net.minecraft.client.network.PlayerListEntry;
+import net.minecraft.client.multiplayer.PlayerInfo;
 
 import java.util.List;
 import java.util.function.Function;
@@ -17,7 +17,7 @@ public record GameLobbyTabList(EntryCache[] entries, boolean isReal) implements 
     public static final GameLobbyTabList FAILURE = new GameLobbyTabList(EMPTY_ENTRIES, false);
 
     public static GameLobbyTabList parseFast(TabListCache source) {
-        List<PlayerListEntry> playerListEntries = source.playerListEntries();
+        List<PlayerInfo> playerListEntries = source.playerListEntries();
         if (playerListEntries.size() < 80) return FAILURE;
 
         StyledString styledString40 = source.getPlayerName(40).styledString();
@@ -28,7 +28,7 @@ public record GameLobbyTabList(EntryCache[] entries, boolean isReal) implements 
 
         EntryCache[] entries = new EntryCache[playerListEntries.size()];
         for (int index = 0; index < playerListEntries.size(); index++) {
-            PlayerListEntry playerListEntry = playerListEntries.get(index);
+            PlayerInfo playerListEntry = playerListEntries.get(index);
             EntryCache entryCache = new EntryCache(source.getPlayerName(index), index, playerListEntry.getLatency());
             entries[index] = entryCache;
         }

@@ -6,9 +6,9 @@ import dev.yatloaf.modkrowd.cubekrowd.subserver.MinigameSubserver;
 import dev.yatloaf.modkrowd.cubekrowd.tablist.cache.TabEntryCache;
 import dev.yatloaf.modkrowd.util.text.StyledString;
 import dev.yatloaf.modkrowd.util.text.StyledStringReader;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.text.Style;
-import net.minecraft.util.Formatting;
+import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
+import net.minecraft.network.chat.Style;
 
 import java.util.EnumSet;
 
@@ -40,16 +40,16 @@ public class SelfPlayer {
     }
 
     public static String username() {
-        return MinecraftClient.getInstance().getSession().getUsername();
+        return Minecraft.getInstance().getUser().getName();
     }
 
     public static StyledString tryFormat(String message) {
-        EnumSet<Formatting> permittedFormattings = SelfPlayer.rankNameSoft().rank().letters().permittedFormattings();
+        EnumSet<ChatFormatting> permittedFormattings = SelfPlayer.rankNameSoft().rank().letters().permittedFormattings();
         return StyledString.fromFormattedString(message, '&', permittedFormattings);
     }
 
     public static StyledString tryFormat(String message, Style startStyle) {
-        EnumSet<Formatting> permittedFormattings = SelfPlayer.rankNameSoft().rank().letters().permittedFormattings();
+        EnumSet<ChatFormatting> permittedFormattings = SelfPlayer.rankNameSoft().rank().letters().permittedFormattings();
         return StyledString.fromFormattedString(message, '&', permittedFormattings, startStyle);
     }
 }

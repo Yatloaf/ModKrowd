@@ -3,10 +3,10 @@ package dev.yatloaf.modkrowd.config.feature;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSyntaxException;
+import dev.yatloaf.modkrowd.config.ActionQueue;
 import dev.yatloaf.modkrowd.config.Predicate;
 import dev.yatloaf.modkrowd.config.PredicateIndex;
 import dev.yatloaf.modkrowd.config.exception.MalformedConfigException;
-import dev.yatloaf.modkrowd.config.ActionQueue;
 import dev.yatloaf.modkrowd.config.screen.AbstractEntry;
 import dev.yatloaf.modkrowd.config.screen.PredicateEntry;
 import dev.yatloaf.modkrowd.cubekrowd.common.cache.TextCache;
@@ -17,17 +17,17 @@ import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientConfigurationConnectionEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.network.ClientConfigurationNetworkHandler;
-import net.minecraft.client.network.ClientPlayNetworkHandler;
-import net.minecraft.text.MutableText;
-import net.minecraft.text.Text;
-import net.minecraft.util.JsonHelper;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.ClientConfigurationPacketListenerImpl;
+import net.minecraft.client.multiplayer.ClientPacketListener;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.util.GsonHelper;
 
 public class Feature {
     public final String id;
-    public final MutableText name;
-    public final MutableText tooltip;
+    public final MutableComponent name;
+    public final MutableComponent tooltip;
     public final PredicateIndex allowedPredicates;
 
     // Only used in SyncedConfig
@@ -36,8 +36,8 @@ public class Feature {
 
     public Feature(String id, PredicateIndex allowedPredicates) {
         this.id = id;
-        this.name = Text.translatable("modkrowd.config.feature." + id);
-        this.tooltip = Text.translatable("modkrowd.config.feature." + id + ".tooltip");
+        this.name = Component.translatable("modkrowd.config.feature." + id);
+        this.tooltip = Component.translatable("modkrowd.config.feature." + id + ".tooltip");
         this.allowedPredicates = allowedPredicates;
     }
 
@@ -46,9 +46,9 @@ public class Feature {
         this.enabled = source.enabled;
     }
 
-    public AbstractEntry[] createScreenEntries(MinecraftClient client) {
+    public AbstractEntry[] createScreenEntries(Minecraft minecraft) {
         return new AbstractEntry[]{
-                new PredicateEntry(client, this)
+                new PredicateEntry(minecraft, this)
         };
     }
 
@@ -58,7 +58,7 @@ public class Feature {
 
     public void deserialize(JsonElement source) throws MalformedConfigException {
         try {
-            this.predicate = Predicate.FROM_ID.getOrDefault(JsonHelper.asString(source, this.id), Predicate.NEVER);
+            this.predicate = Predicate.FROM_ID.getOrDefault(GsonHelper.convertToString(source, this.id), Predicate.NEVER);
         } catch (JsonSyntaxException e) {
             throw new MalformedConfigException(e);
         }
@@ -69,30 +69,30 @@ public class Feature {
      *
      * @see ClientLifecycleEvents#CLIENT_STARTED
      *
-     * @param client The {@link MinecraftClient} instance.
+     * @param minecraft The {@link Minecraft} instance.
      * @param queue  The {@link ActionQueue} that is flushed after iterating through the features.
      */
-    public void onInitEnable(MinecraftClient client, ActionQueue queue) {
+    public void onInitEnable(Minecraft minecraft, ActionQueue queue) {
 
     }
 
     /**
      * Called after the feature is enabled by entering a server or changing the settings.
      *
-     * @param client The {@link MinecraftClient} instance.
+     * @param minecraft The {@link Minecraft} instance.
      * @param queue  The {@link ActionQueue} that is flushed after iterating through the features.
      */
-    public void onEnable(MinecraftClient client, ActionQueue queue) {
+    public void onEnable(Minecraft minecraft, ActionQueue queue) {
 
     }
 
     /**
      * Called after the feature is disabled by leaving a server or changing the settings.
      *
-     * @param client The {@link MinecraftClient} instance.
+     * @param minecraft The {@link Minecraft} instance.
      * @param queue  The {@link ActionQueue} that is flushed after iterating through the features.
      */
-    public void onDisable(MinecraftClient client, ActionQueue queue) {
+    public void onDisable(Minecraft minecraft, ActionQueue queue) {
 
     }
 
@@ -101,11 +101,11 @@ public class Feature {
      *
      * @see ClientConfigurationConnectionEvents#COMPLETE
      *
-     * @param handler The {@link ClientPlayNetworkHandler} instance.
-     * @param client  The {@link MinecraftClient} instance.
+     * @param listener The {@link ClientPacketListener} instance.
+     * @param minecraft  The {@link Minecraft} instance.
      * @param queue   The {@link ActionQueue} that is flushed after iterating through the features.
      */
-    public void onConfigurationComplete(ClientConfigurationNetworkHandler handler, MinecraftClient client, ActionQueue queue) {
+    public void onConfigurationComplete(ClientConfigurationPacketListenerImpl listener, Minecraft minecraft, ActionQueue queue) {
 
     }
 
@@ -114,22 +114,22 @@ public class Feature {
      *
      * @see ClientPlayConnectionEvents#JOIN
      *
-     * @param handler The {@link ClientPlayNetworkHandler} instance.
-     * @param client  The {@link MinecraftClient} instance.
+     * @param listener The {@link ClientPacketListener} instance.
+     * @param minecraft  The {@link Minecraft} instance.
      * @param queue   The {@link ActionQueue} that is flushed after iterating through the features.
      */
-    public void onJoin(ClientPlayNetworkHandler handler, MinecraftClient client, ActionQueue queue) {
+    public void onJoin(ClientPacketListener listener, Minecraft minecraft, ActionQueue queue) {
 
     }
 
     /**
      * Called after joining a server, when the {@code /whereami} response is received, if the feature is enabled.
      *
-     * @param handler The {@link ClientPlayNetworkHandler} instance.
-     * @param client  The {@link MinecraftClient} instance.
+     * @param listener The {@link ClientPacketListener} instance.
+     * @param minecraft  The {@link Minecraft} instance.
      * @param queue   The {@link ActionQueue} that is flushed after iterating through the features.
      */
-    public void onJoinUpdated(ClientPlayNetworkHandler handler, MinecraftClient client, ActionQueue queue) {
+    public void onJoinUpdated(ClientPacketListener listener, Minecraft minecraft, ActionQueue queue) {
 
     }
 
@@ -138,11 +138,11 @@ public class Feature {
      *
      * @see ClientPlayConnectionEvents#DISCONNECT
      *
-     * @param handler The {@link ClientPlayNetworkHandler} instance.
-     * @param client  The {@link MinecraftClient} instance.
+     * @param listener The {@link ClientPacketListener} instance.
+     * @param minecraft  The {@link Minecraft} instance.
      * @param queue   The {@link ActionQueue} that is flushed after iterating through the features.
      */
-    public void onDisconnect(ClientPlayNetworkHandler handler, MinecraftClient client, ActionQueue queue) {
+    public void onDisconnect(ClientPacketListener listener, Minecraft minecraft, ActionQueue queue) {
 
     }
 
@@ -151,10 +151,10 @@ public class Feature {
      *
      * @see ClientTickEvents#END_CLIENT_TICK
      *
-     * @param client The {@link MinecraftClient} instance.
+     * @param minecraft The {@link Minecraft} instance.
      * @param queue  The {@link ActionQueue} that is flushed after iterating through the features.
      */
-    public void onEndTick(MinecraftClient client, ActionQueue queue) {
+    public void onEndTick(Minecraft minecraft, ActionQueue queue) {
 
     }
 
@@ -162,10 +162,10 @@ public class Feature {
      * Called when a game message is received if the feature is enabled.
      *
      * @param message The message with convenient methods for parsing and modifying.
-     * @param client  The {@link MinecraftClient} instance.
+     * @param minecraft  The {@link Minecraft} instance.
      * @param queue   The {@link ActionQueue} that is flushed after iterating through the features.
      */
-    public void onMessage(MessageCache message, MinecraftClient client, ActionQueue queue) {
+    public void onMessage(MessageCache message, Minecraft minecraft, ActionQueue queue) {
 
     }
 
@@ -173,10 +173,10 @@ public class Feature {
      * Called when the tab list is updated if the feature is enabled.
      *
      * @param tabList The tab list with convenient methods for parsing and modifying.
-     * @param client  The {@link MinecraftClient} instance.
+     * @param minecraft  The {@link Minecraft} instance.
      * @param queue   The {@link ActionQueue} that is flushed after iterating through the features.
      */
-    public void onTabList(TabListCache tabList, MinecraftClient client, ActionQueue queue) {
+    public void onTabList(TabListCache tabList, Minecraft minecraft, ActionQueue queue) {
 
     }
 
@@ -184,11 +184,11 @@ public class Feature {
      * Allows a feature to theme a custom message sent by the mod itself, overriding the default style.
      *
      * @param custom The message to be themed.
-     * @param client The {@link MinecraftClient} instance.
+     * @param minecraft The {@link Minecraft} instance.
      * @param queue  The {@link ActionQueue} that is flushed after iterating through the features.
      * @return The themed custom message, or {@code null} if this feature does not theme it.
      */
-    public TextCache themeCustom(Custom custom, MinecraftClient client, ActionQueue queue) {
+    public TextCache themeCustom(Custom custom, Minecraft minecraft, ActionQueue queue) {
         return null;
     }
 }

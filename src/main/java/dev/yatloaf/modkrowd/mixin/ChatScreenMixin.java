@@ -3,11 +3,11 @@ package dev.yatloaf.modkrowd.mixin;
 import dev.yatloaf.modkrowd.ModKrowd;
 import dev.yatloaf.modkrowd.config.feature.Feature;
 import dev.yatloaf.modkrowd.cubekrowd.command.PreviewCommands;
-import net.minecraft.client.gui.screen.ChatScreen;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.widget.TextFieldWidget;
-import net.minecraft.client.input.KeyInput;
-import net.minecraft.text.Text;
+import net.minecraft.client.gui.components.EditBox;
+import net.minecraft.client.gui.screens.ChatScreen;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.input.KeyEvent;
+import net.minecraft.network.chat.Component;
 import org.apache.commons.lang3.StringUtils;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -21,9 +21,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class ChatScreenMixin extends Screen {
     // MESSAGE_PREVIEW
 
-    @Shadow protected TextFieldWidget chatField;
+    @Shadow protected EditBox input;
 
-    protected ChatScreenMixin(Text title) {
+    protected ChatScreenMixin(Component title) {
         super(title);
     }
 
@@ -35,26 +35,26 @@ public class ChatScreenMixin extends Screen {
 
     // Handle quick toggle key
     @Inject(method = "keyPressed", at = @At("HEAD"))
-    private void keyPressedInject(KeyInput input, CallbackInfoReturnable<Boolean> cir) {
-        if (ModKrowd.INIT && ModKrowd.TOGGLE_MESSAGE_PREVIEW_KEY.matchesKey(input)) {
+    private void keyPressedInject(KeyEvent input, CallbackInfoReturnable<Boolean> cir) {
+        if (ModKrowd.INIT && ModKrowd.TOGGLE_MESSAGE_PREVIEW_KEY.matches(input)) {
             Feature f = ModKrowd.CONFIG.MESSAGE_PREVIEW;
             // Next predicate
             f.predicate = f.allowedPredicates.index.get((f.allowedPredicates.index.indexOf(f.predicate) + 1) % f.allowedPredicates.index.size());
             ModKrowd.CONFIG.updateFeatures();
             if (f.enabled) {
-                updatePreview(this.chatField.getText());
+                updatePreview(this.input.getValue());
             }
         }
     }
 
     // Clear even if the feature is disabled
-    @Inject(method = "sendMessage", at = @At("HEAD"))
-    private void sendMessageInject(String chatText, boolean addToHistory, CallbackInfo ci) {
+    @Inject(method = "handleChatInput", at = @At("HEAD"))
+    private void handleChatInputInject(String chatText, boolean addToHistory, CallbackInfo ci) {
         ModKrowd.CONFIG.MESSAGE_PREVIEW.queueClearPreviewMessage();
     }
 
-    @Inject(method = "onChatFieldUpdate", at = @At("TAIL"))
-    private void onChatFieldUpdateInject(String chatText, CallbackInfo ci) {
+    @Inject(method = "onEdited", at = @At("TAIL"))
+    private void onEditedInject(String chatText, CallbackInfo ci) {
         if (ModKrowd.CONFIG.MESSAGE_PREVIEW.enabled) {
             updatePreview(chatText);
         }

@@ -10,16 +10,16 @@ import dev.yatloaf.modkrowd.ModKrowd;
 import dev.yatloaf.modkrowd.cubekrowd.common.CKColor;
 import dev.yatloaf.modkrowd.cubekrowd.common.CubeKrowd;
 import dev.yatloaf.modkrowd.cubekrowd.common.RankBrackets;
+import dev.yatloaf.modkrowd.cubekrowd.common.SelfPlayer;
 import dev.yatloaf.modkrowd.cubekrowd.common.cache.TextCache;
 import dev.yatloaf.modkrowd.cubekrowd.message.DirectMessage;
 import dev.yatloaf.modkrowd.cubekrowd.message.Direction;
 import dev.yatloaf.modkrowd.cubekrowd.subserver.MainSubserver;
-import dev.yatloaf.modkrowd.cubekrowd.common.SelfPlayer;
 import dev.yatloaf.modkrowd.util.Util;
 import dev.yatloaf.modkrowd.util.text.StyledString;
-import net.minecraft.text.MutableText;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Random;
@@ -73,7 +73,7 @@ public final class PreviewCommands {
                         .then(argument("message", StringArgumentType.greedyString())
                                 .executes(context -> {
                                     if (ModKrowd.CONFIG.MESSAGE_PREVIEW.replyTarget == null) {
-                                        throw result(Text.literal("No reply target").formatted(Formatting.RED));
+                                        throw result(Component.literal("No reply target").withStyle(ChatFormatting.RED));
                                     }
                                     String target = ModKrowd.CONFIG.MESSAGE_PREVIEW.replyTarget;
                                     String message = StringArgumentType.getString(context, "message");
@@ -112,8 +112,8 @@ public final class PreviewCommands {
         command(
                 literal("coin").executes(context -> {
                     checkChattymote();
-                    throw result(Text.literal(SelfPlayer.username() + " flips a coin. It shows ").formatted(Formatting.LIGHT_PURPLE)
-                            .append(Text.literal("#####").formatted(Formatting.OBFUSCATED)));
+                    throw result(Component.literal(SelfPlayer.username() + " flips a coin. It shows ").withStyle(ChatFormatting.LIGHT_PURPLE)
+                            .append(Component.literal("#####").withStyle(ChatFormatting.OBFUSCATED)));
                 })
         );
         chattymote1("%s congratulates %s",
@@ -124,15 +124,15 @@ public final class PreviewCommands {
                 literal("dice")
                         .executes(context -> {
                             checkChattymote();
-                            throw result(Text.literal(SelfPlayer.username() + " throws a 6 sided dice. It shows ").formatted(Formatting.LIGHT_PURPLE)
-                                    .append(Text.literal("0").formatted(Formatting.OBFUSCATED)));
+                            throw result(Component.literal(SelfPlayer.username() + " throws a 6 sided dice. It shows ").withStyle(ChatFormatting.LIGHT_PURPLE)
+                                    .append(Component.literal("0").withStyle(ChatFormatting.OBFUSCATED)));
                         })
                         .then(argument("sides", StringArgumentType.word())
                                 .executes(context -> {
                                     checkChattymote();
                                     String sides = Util.normalizeIntOr(StringArgumentType.getString(context, "sides"), "NaN");
-                                    throw result(Text.literal(SelfPlayer.username() + " throws a " + sides + " sided dice. It shows ").formatted(Formatting.LIGHT_PURPLE)
-                                            .append(Text.literal("0").formatted(Formatting.OBFUSCATED)));
+                                    throw result(Component.literal(SelfPlayer.username() + " throws a " + sides + " sided dice. It shows ").withStyle(ChatFormatting.LIGHT_PURPLE)
+                                            .append(Component.literal("0").withStyle(ChatFormatting.OBFUSCATED)));
                                 }))
         );
         chattymote0("%s dances", "dance");
@@ -152,7 +152,7 @@ public final class PreviewCommands {
         command(
                 literal("meow").executes(context -> {
                     checkChattymote();
-                    throw result(Text.literal(SelfPlayer.username() + currentMeow).formatted(Formatting.LIGHT_PURPLE));
+                    throw result(Component.literal(SelfPlayer.username() + currentMeow).withStyle(ChatFormatting.LIGHT_PURPLE));
                 })
         );
         chattymote0("%s thought they could be op", "opme");
@@ -179,19 +179,19 @@ public final class PreviewCommands {
                 literal("welcome")
                         .executes(context -> {
                             checkChattymote();
-                            throw result(Text.literal(SelfPlayer.username() + ": Welcome to ").formatted(Formatting.LIGHT_PURPLE)
-                                    .append(Text.literal("Cube").formatted(Formatting.DARK_AQUA))
-                                    .append(Text.literal("Krowd").formatted(Formatting.GOLD))
-                                    .append(Text.literal("!").formatted(Formatting.LIGHT_PURPLE)));
+                            throw result(Component.literal(SelfPlayer.username() + ": Welcome to ").withStyle(ChatFormatting.LIGHT_PURPLE)
+                                    .append(Component.literal("Cube").withStyle(ChatFormatting.DARK_AQUA))
+                                    .append(Component.literal("Krowd").withStyle(ChatFormatting.GOLD))
+                                    .append(Component.literal("!").withStyle(ChatFormatting.LIGHT_PURPLE)));
                         })
                         .then(argument("player", StringArgumentType.greedyString())
                                 .executes(context -> {
                                     checkChattymote();
                                     String player = StringArgumentType.getString(context, "player");
-                                    throw result(Text.literal(SelfPlayer.username() + ": Welcome to ").formatted(Formatting.LIGHT_PURPLE)
-                                            .append(Text.literal("Cube").formatted(Formatting.DARK_AQUA))
-                                            .append(Text.literal("Krowd").formatted(Formatting.GOLD))
-                                            .append(Text.literal(" " + player + "!").formatted(Formatting.LIGHT_PURPLE)));
+                                    throw result(Component.literal(SelfPlayer.username() + ": Welcome to ").withStyle(ChatFormatting.LIGHT_PURPLE)
+                                            .append(Component.literal("Cube").withStyle(ChatFormatting.DARK_AQUA))
+                                            .append(Component.literal("Krowd").withStyle(ChatFormatting.GOLD))
+                                            .append(Component.literal(" " + player + "!").withStyle(ChatFormatting.LIGHT_PURPLE)));
                                 })),
                 "wel"
         );
@@ -275,7 +275,7 @@ public final class PreviewCommands {
                 literal(canonical)
                         .executes(context -> {
                             checkChattymote();
-                            throw result(Text.literal(format.formatted(SelfPlayer.username())).formatted(Formatting.LIGHT_PURPLE));
+                            throw result(Component.literal(format.formatted(SelfPlayer.username())).withStyle(ChatFormatting.LIGHT_PURPLE));
                         }),
                 aliases
         );
@@ -295,7 +295,7 @@ public final class PreviewCommands {
                                 .executes(context -> {
                                     checkChattymote();
                                     String arg1 = StringArgumentType.getString(context, "arg1");
-                                    throw result(Text.literal(format.formatted(SelfPlayer.username(), arg1)).formatted(Formatting.LIGHT_PURPLE));
+                                    throw result(Component.literal(format.formatted(SelfPlayer.username(), arg1)).withStyle(ChatFormatting.LIGHT_PURPLE));
                                 })),
                 aliases
         );
@@ -316,14 +316,14 @@ public final class PreviewCommands {
                                     checkChattymote();
                                     String arg1 = StringArgumentType.getString(context, "arg1");
                                     String arg2 = "2";
-                                    throw result(Text.literal(format.formatted(SelfPlayer.username(), arg1, arg2)).formatted(Formatting.LIGHT_PURPLE));
+                                    throw result(Component.literal(format.formatted(SelfPlayer.username(), arg1, arg2)).withStyle(ChatFormatting.LIGHT_PURPLE));
                                 })
                                 .then(argument("arg2", StringArgumentType.word())
                                         .executes(context -> {
                                             checkChattymote();
                                             String arg1 = StringArgumentType.getString(context, "arg1");
                                             String arg2 = StringArgumentType.getString(context, "arg2");
-                                            throw result(Text.literal(format.formatted(SelfPlayer.username(), arg1, arg2)).formatted(Formatting.LIGHT_PURPLE));
+                                            throw result(Component.literal(format.formatted(SelfPlayer.username(), arg1, arg2)).withStyle(ChatFormatting.LIGHT_PURPLE));
                                         }))),
                 aliases
         );
@@ -344,13 +344,13 @@ public final class PreviewCommands {
                 literal(canonical)
                         .executes(context -> {
                             checkChattymote();
-                            throw result(Text.literal(format0.formatted(SelfPlayer.username())).formatted(Formatting.LIGHT_PURPLE));
+                            throw result(Component.literal(format0.formatted(SelfPlayer.username())).withStyle(ChatFormatting.LIGHT_PURPLE));
                         })
                         .then(argument("arg1", StringArgumentType.greedyString())
                                 .executes(context -> {
                                     checkChattymote();
                                     String arg1 = StringArgumentType.getString(context, "arg1");
-                                    throw result(Text.literal(format1.formatted(SelfPlayer.username(), arg1)).formatted(Formatting.LIGHT_PURPLE));
+                                    throw result(Component.literal(format1.formatted(SelfPlayer.username(), arg1)).withStyle(ChatFormatting.LIGHT_PURPLE));
                                 })),
                 aliases
         );
@@ -362,10 +362,10 @@ public final class PreviewCommands {
      */
     public static void checkChattymote() throws PreviewResult {
         if (!(ModKrowd.currentSubserver instanceof MainSubserver)) {
-            throw result(Text.literal("Not available on this server").formatted(Formatting.RED));
+            throw result(Component.literal("Not available on this server").withStyle(ChatFormatting.RED));
         }
         if (SelfPlayer.rankNameSoft().rank().brackets() == RankBrackets.NONE) {
-            throw result(Text.literal("Yellow brackets required").formatted(Formatting.RED));
+            throw result(Component.literal("Yellow brackets required").withStyle(ChatFormatting.RED));
         }
     }
 
@@ -375,7 +375,7 @@ public final class PreviewCommands {
      * @param value The preview text, or {@code null} if there is no preview
      * @return The exception to be thrown
      */
-    public static PreviewResult result(MutableText value) {
+    public static PreviewResult result(MutableComponent value) {
         return new PreviewResult(TextCache.of(value));
     }
 

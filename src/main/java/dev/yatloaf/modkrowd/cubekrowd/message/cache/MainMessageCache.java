@@ -1,10 +1,10 @@
 package dev.yatloaf.modkrowd.cubekrowd.message.cache;
 
+import dev.yatloaf.modkrowd.cubekrowd.common.cache.TextCache;
 import dev.yatloaf.modkrowd.cubekrowd.message.AlohaMessage;
 import dev.yatloaf.modkrowd.cubekrowd.message.FishslapChatMessage;
 import dev.yatloaf.modkrowd.cubekrowd.message.MainChatMessage;
 import dev.yatloaf.modkrowd.cubekrowd.message.Message;
-import dev.yatloaf.modkrowd.cubekrowd.common.cache.TextCache;
 import dev.yatloaf.modkrowd.util.text.StyledStringReader;
 
 public class MainMessageCache extends CubeKrowdMessageCache {
