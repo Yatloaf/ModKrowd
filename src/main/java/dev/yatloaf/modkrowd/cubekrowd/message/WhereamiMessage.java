@@ -1,7 +1,6 @@
 package dev.yatloaf.modkrowd.cubekrowd.message;
 
 import dev.yatloaf.modkrowd.cubekrowd.common.CKColor;
-import dev.yatloaf.modkrowd.cubekrowd.subserver.RealSubserver;
 import dev.yatloaf.modkrowd.cubekrowd.subserver.Subserver;
 import dev.yatloaf.modkrowd.cubekrowd.subserver.Subservers;
 import dev.yatloaf.modkrowd.util.text.StyledString;
@@ -16,7 +15,7 @@ public record WhereamiMessage(Subserver subserver, boolean isReal) implements Me
         if (!source.skipIfNext(WHEREAMI_RESPONSE_PREFIX)) return FAILURE;
         source.skipUntilAfter(" ");
         Subserver subserver = Subservers.fromId(source.readAll().toUnstyledString());
-        if (subserver instanceof RealSubserver) {
+        if (subserver.isReal) {
             return new WhereamiMessage(subserver, true);
         } else {
             return FAILURE;

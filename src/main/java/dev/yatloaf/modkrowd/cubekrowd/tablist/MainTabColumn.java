@@ -19,7 +19,7 @@ public record MainTabColumn(Subserver subserver, String subserverName, int[] pla
     public static MainTabColumn readFast(StyledStringReader source) {
         String subserverName = source.readUntil(" [").toUnstyledString();
         Subserver subserver = Subservers.fromTabName(subserverName);
-        if (subserver == Subservers.UNKNOWN) return FAILURE;
+        if (!subserver.isReal) return FAILURE;
 
         source.skipUntilAfter("[");
         int[] playerCounts;

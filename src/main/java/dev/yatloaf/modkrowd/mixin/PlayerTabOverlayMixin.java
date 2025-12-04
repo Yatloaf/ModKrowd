@@ -2,7 +2,6 @@ package dev.yatloaf.modkrowd.mixin;
 
 import dev.yatloaf.modkrowd.ModKrowd;
 import dev.yatloaf.modkrowd.cubekrowd.common.cache.TextCache;
-import dev.yatloaf.modkrowd.cubekrowd.subserver.CubeKrowdSubserver;
 import dev.yatloaf.modkrowd.cubekrowd.tablist.UnknownTabList;
 import dev.yatloaf.modkrowd.cubekrowd.tablist.cache.TabEntryCache;
 import dev.yatloaf.modkrowd.mixinduck.PlayerListHudDuck;
@@ -106,7 +105,7 @@ public abstract class PlayerTabOverlayMixin implements PlayerListHudDuck {
 	// Theme header
 	@Redirect(method = "render", at = @At(value = "INVOKE", ordinal = 0, target = "Lnet/minecraft/client/gui/Font;split(Lnet/minecraft/network/chat/FormattedText;I)Ljava/util/List;"))
 	private List<FormattedCharSequence> splitRedirect0(Font instance, FormattedText text, int width) {
-        return ModKrowd.currentSubserver instanceof CubeKrowdSubserver
+        return ModKrowd.currentSubserver.isCubeKrowd
 				? instance.split(ModKrowd.currentTabListCache.tabHeaderCache().themedOrDefault().text(), width)
 				: instance.split(text, width);
     }
@@ -114,7 +113,7 @@ public abstract class PlayerTabOverlayMixin implements PlayerListHudDuck {
 	// Theme footer
 	@Redirect(method = "render", at = @At(value = "INVOKE", ordinal = 1, target = "Lnet/minecraft/client/gui/Font;split(Lnet/minecraft/network/chat/FormattedText;I)Ljava/util/List;"))
 	private List<FormattedCharSequence> splitRedirect1(Font instance, FormattedText text, int width) {
-        return ModKrowd.currentSubserver instanceof CubeKrowdSubserver
+        return ModKrowd.currentSubserver.isCubeKrowd
 				? instance.split(ModKrowd.currentTabListCache.tabFooterCache().themedOrDefault().text(), width)
 				: instance.split(text, width);
     }

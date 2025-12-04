@@ -3,7 +3,6 @@ package dev.yatloaf.modkrowd.cubekrowd.tablist;
 import dev.yatloaf.modkrowd.ModKrowd;
 import dev.yatloaf.modkrowd.cubekrowd.common.SelfPlayer;
 import dev.yatloaf.modkrowd.cubekrowd.common.cache.TextCache;
-import dev.yatloaf.modkrowd.cubekrowd.subserver.MinigameSubserver;
 import dev.yatloaf.modkrowd.cubekrowd.subserver.Subserver;
 import dev.yatloaf.modkrowd.cubekrowd.subserver.Subservers;
 import dev.yatloaf.modkrowd.cubekrowd.tablist.cache.TabEntryCache;
@@ -30,7 +29,7 @@ public record MinigameTabList(EntryCache[] entries, EntryCache[] players, EntryC
         StyledString styledString61 = source.getPlayerName(61).styledString();
         if (TabCentered.parse(styledString61, GameTabLabel.YOUR_GAME::parseSpecific).content() != GameTabLabel.YOUR_GAME) return FAILURE;
 
-        boolean isLoaded = ModKrowd.currentSubserver.isReal();
+        boolean isLoaded = ModKrowd.currentSubserver.isReal;
         Subserver yourGame = isLoaded ? ModKrowd.currentSubserver : Subservers.UNKNOWN;
 
         EntryCache[] entries = new EntryCache[playerListEntries.size()];
@@ -90,11 +89,7 @@ public record MinigameTabList(EntryCache[] entries, EntryCache[] players, EntryC
 
         protected TabEntry createResult() {
             if (this.isPlayer) {
-                if (this.subserver instanceof MinigameSubserver minigameSubserver) {
-                    return MinigameTabName.readFast(StyledStringReader.of(this.original.styledString()), minigameSubserver);
-                } else {
-                    return TabEntry.FAILURE;
-                }
+                return MinigameTabName.readFast(StyledStringReader.of(this.original.styledString()), this.subserver);
             } else if ((this.index + 1) % 20 <= 2) { // Top 2 rows and bottom 1 row
                 if (this.index == 19) {
                     return TabPing.readFast(StyledStringReader.of(this.original.styledString()));

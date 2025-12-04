@@ -1,10 +1,8 @@
 package dev.yatloaf.modkrowd.config;
 
 import dev.yatloaf.modkrowd.cubekrowd.common.CKColor;
-import dev.yatloaf.modkrowd.cubekrowd.subserver.CreativeSubserver;
-import dev.yatloaf.modkrowd.cubekrowd.subserver.CubeKrowdSubserver;
-import dev.yatloaf.modkrowd.cubekrowd.subserver.MissileWarsSubserver;
 import dev.yatloaf.modkrowd.cubekrowd.subserver.Subserver;
+import dev.yatloaf.modkrowd.cubekrowd.subserver.TeamSet;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 
@@ -47,17 +45,19 @@ public class Predicate {
             return false;
         }
         static boolean cubeKrowd(Subserver subserver, int permissionLevel) {
-            return subserver instanceof CubeKrowdSubserver;
+            return subserver.isCubeKrowd;
         }
         static boolean creative(Subserver subserver, int permissionLevel) {
-            return switch (subserver) {
-                case CreativeSubserver ignored -> true;
-                case CubeKrowdSubserver ignored -> false;
-                default -> permissionLevel >= 2;
-            };
+            if (subserver.allowCheats) {
+                return true;
+            } else if (subserver.isCubeKrowd) {
+                return false;
+            } else {
+                return permissionLevel >= 2;
+            }
         }
         static boolean missileWars(Subserver subserver, int permissionLevel) {
-            return subserver instanceof MissileWarsSubserver;
+            return subserver.teams == TeamSet.MISSILEWARS;
         }
         static boolean always(Subserver subserver, int permissionLevel) {
             return true;

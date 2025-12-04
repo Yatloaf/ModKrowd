@@ -14,7 +14,6 @@ import dev.yatloaf.modkrowd.cubekrowd.common.SelfPlayer;
 import dev.yatloaf.modkrowd.cubekrowd.common.cache.TextCache;
 import dev.yatloaf.modkrowd.cubekrowd.message.DirectMessage;
 import dev.yatloaf.modkrowd.cubekrowd.message.Direction;
-import dev.yatloaf.modkrowd.cubekrowd.subserver.MainSubserver;
 import dev.yatloaf.modkrowd.util.Util;
 import dev.yatloaf.modkrowd.util.text.StyledString;
 import net.minecraft.ChatFormatting;
@@ -361,7 +360,7 @@ public final class PreviewCommands {
      * @throws PreviewResult If chattymotes are not available
      */
     public static void checkChattymote() throws PreviewResult {
-        if (!(ModKrowd.currentSubserver instanceof MainSubserver)) {
+        if (!ModKrowd.currentSubserver.hasChattymotes) {
             throw result(Component.literal("Not available on this server").withStyle(ChatFormatting.RED));
         }
         if (SelfPlayer.rankNameSoft().rank().brackets() == RankBrackets.NONE) {

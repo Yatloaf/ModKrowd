@@ -16,7 +16,7 @@ public record ConnectingMessage(Subserver subserver, boolean isReal) implements 
         reader.skipUntilAfter(CONNECTING_TO);
 
         Subserver subserver = Subservers.fromListName(reader.readUntil(ELLIPSES).toUnstyledString());
-        if (!subserver.isReal()) return FAILURE;
+        if (!subserver.isReal) return FAILURE;
 
         if (!reader.skipIfNext(ELLIPSES)) return FAILURE;
         if (!reader.isAtEnd()) return FAILURE;

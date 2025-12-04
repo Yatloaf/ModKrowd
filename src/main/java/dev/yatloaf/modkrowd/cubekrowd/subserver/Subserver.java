@@ -1,87 +1,90 @@
 package dev.yatloaf.modkrowd.cubekrowd.subserver;
 
-import dev.yatloaf.modkrowd.ModKrowd;
-import dev.yatloaf.modkrowd.cubekrowd.common.MinigameTeamName;
-import dev.yatloaf.modkrowd.cubekrowd.common.SelfPlayer;
+import dev.yatloaf.modkrowd.cubekrowd.common.CKColor;
+import dev.yatloaf.modkrowd.cubekrowd.common.MinigameTeam;
 import dev.yatloaf.modkrowd.cubekrowd.common.cache.TextCache;
 import dev.yatloaf.modkrowd.util.Util;
-import dev.yatloaf.modkrowd.util.text.StyledString;
 import net.minecraft.client.multiplayer.ClientPacketListener;
 
-public abstract class Subserver {
+public class Subserver {
     // Shoutout to the CubeKrowd developers for giving each server at least 6 names:
     // id           [/server]
     // listName     [/glist]
     // tabNames     Tab List, BuildComp Tab List
     // ---          [/cklist], Connecting to...
 
-    private static final String CONNECT_COMMAND = "connect ";
+    private static final String CONNECT_COMMAND = "connect %s";
+
     public final String id;
     public final String listName;
     public final String[] tabNames;
 
-    public Subserver(String id, String listName, String... tabNames) {
+    public final TeamSet teams;
+    private final FormatChat formatChat;
+
+    public final boolean allowCheats;
+    public final boolean hasChattymotes;
+    public final boolean isMinigame;
+    public final boolean isCubeKrowd;
+    public final boolean isReal;
+
+    public Subserver[] nextSubservers = null;
+
+    public Subserver(
+            String id,
+            String listName,
+            String[] tabNames,
+            TeamSet teams,
+            FormatChat formatChat,
+            boolean allowCheats,
+            boolean hasChattymotes,
+            boolean isMinigame,
+            boolean isCubeKrowd,
+            boolean isReal
+    ) {
         this.id = id;
-        this.tabNames = tabNames;
         this.listName = listName;
+        this.tabNames = tabNames;
+        this.teams = teams;
+        this.formatChat = formatChat;
+        this.allowCheats = allowCheats;
+        this.hasChattymotes = hasChattymotes;
+        this.isMinigame = isMinigame;
+        this.isCubeKrowd = isCubeKrowd;
+        this.isReal = isReal;
     }
 
-    public boolean isReal() {
-        return false;
+    public static SubserverBuilder builder() {
+        return new SubserverBuilder();
+    }
+
+    public TextCache formatChat(String message) {
+        return this.formatChat.formatChat(message);
+    }
+
+    public MinigameTeam teamFromColor(CKColor color) {
+        return this.teams.teamFromColor(color);
     }
 
     public void connect(ClientPacketListener listener) {
         if (this.id != null) {
-            Util.sendCommandPacket(listener, CONNECT_COMMAND + this.id);
-        } else {
-            ModKrowd.LOGGER.error("[Subserver] Called .connect() on {}", this);
+            Util.sendCommandPacket(listener, CONNECT_COMMAND.formatted(this.id));
         }
     }
 
-    public TextCache formatChat(String message) {
-        return TextCache.EMPTY;
-    }
-
-    public static TextCache formatChatMain(String message) {
-        StyledString prefix = SelfPlayer.rankNameSoft().appearance();
-
-        if (StyledString.EMPTY.equals(prefix)) {
-            return TextCache.EMPTY;
+    /**
+     * Try to connect to the next subserver.
+     * @param listener The {@link ClientPacketListener} for sending the command packet.
+     * @param index The number of times this has been unsuccessfully tried so far.
+     * @return The subserver that is now being connected to, or {@code null} if there is no subserver left.
+     */
+    public Subserver tryConnectNext(ClientPacketListener listener, int index) {
+        if (this.nextSubservers == null || this.nextSubservers.length <= index) {
+            return null;
         } else {
-            StyledString formatted = SelfPlayer.tryFormat(message);
-            return TextCache.of(StyledString.concat(prefix, StyledString.SPACE, formatted));
-        }
-    }
-
-    public static TextCache formatChatMinigame(String message) {
-        MinigameTeamName teamName = SelfPlayer.teamNameSoft();
-
-        if (teamName != MinigameTeamName.FAILURE) {
-            StyledString formatted = SelfPlayer.tryFormat(message);
-            return TextCache.of(StyledString.concat(
-                    StyledString.fromString("<"),
-                    teamName.appearance(),
-                    StyledString.fromString("> "),
-                    formatted
-            ));
-        } else {
-            return TextCache.EMPTY;
-        }
-    }
-
-    public static TextCache formatChatMixed(String message) {
-        StyledString prefix = SelfPlayer.rankNameSoft().appearance();
-
-        if (StyledString.EMPTY.equals(prefix)) {
-            return TextCache.EMPTY;
-        } else {
-            StyledString formatted = SelfPlayer.tryFormat(message);
-            return TextCache.of(StyledString.concat(
-                    StyledString.fromString("<"),
-                    prefix,
-                    StyledString.fromString("> "),
-                    formatted
-            ));
+            Subserver destination = this.nextSubservers[index];
+            destination.connect(listener);
+            return destination;
         }
     }
 }

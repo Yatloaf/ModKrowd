@@ -3,15 +3,15 @@ package dev.yatloaf.modkrowd.cubekrowd.message.cache;
 import dev.yatloaf.modkrowd.cubekrowd.common.cache.TextCache;
 import dev.yatloaf.modkrowd.cubekrowd.message.Message;
 import dev.yatloaf.modkrowd.cubekrowd.message.MinigameChatMessage;
-import dev.yatloaf.modkrowd.cubekrowd.subserver.MinigameSubserver;
+import dev.yatloaf.modkrowd.cubekrowd.subserver.Subserver;
 import dev.yatloaf.modkrowd.util.text.StyledStringReader;
 
 public class MinigameMessageCache extends CubeKrowdMessageCache { // NOT a superclass of FishslapMessageCache
-    public final MinigameSubserver subserver;
+    public final Subserver subserver;
 
     private MinigameChatMessage minigameChatMessage;
 
-    public MinigameMessageCache(TextCache original, MinigameSubserver subserver) {
+    public MinigameMessageCache(TextCache original, Subserver subserver) {
         super(original);
         this.subserver = subserver;
     }

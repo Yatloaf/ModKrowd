@@ -9,8 +9,6 @@ import dev.yatloaf.modkrowd.cubekrowd.message.KickedMessage;
 import dev.yatloaf.modkrowd.cubekrowd.message.WhereamiMessage;
 import dev.yatloaf.modkrowd.cubekrowd.message.cache.CubeKrowdMessageCache;
 import dev.yatloaf.modkrowd.cubekrowd.message.cache.MessageCache;
-import dev.yatloaf.modkrowd.cubekrowd.subserver.CubeKrowdSubserver;
-import dev.yatloaf.modkrowd.cubekrowd.subserver.MissileWarsSubserver;
 import dev.yatloaf.modkrowd.cubekrowd.subserver.Subserver;
 import dev.yatloaf.modkrowd.cubekrowd.subserver.Subservers;
 import dev.yatloaf.modkrowd.cubekrowd.tablist.cache.TabListCache;
@@ -65,10 +63,7 @@ public class ModKrowd implements ClientModInitializer {
 	public static boolean INIT = false; // TODO: Better, somehow
 
 	private static boolean pendingTabListCache = true;
-	private static MwSwitchStatus mwSwitchStatus = MwSwitchStatus.IDLE;
-	private static long mwSwitchTick = 0;
-	private static long mwSwitchForceTick = 0;
-	private static int mwSwitchIndex = 0;
+	private static SwitchStatus switchStatus = SwitchIdle.INSTANCE;
 
 	@Override
 	public void onInitializeClient() {
@@ -133,10 +128,10 @@ public class ModKrowd implements ClientModInitializer {
 	}
 
 	public static void startSwitchingMissileWarsLobby(int delay) {
-		if (mwSwitchStatus != MwSwitchStatus.CONNECTING) {
-			mwSwitchTick = tick + delay;
-			mwSwitchForceTick = tick + 280; // 14 seconds
-			mwSwitchStatus = MwSwitchStatus.DELAY;
+		if (!(switchStatus instanceof SwitchConnecting)) {
+			long switchTick = tick + delay;
+			long forceTick = tick + 280; // 14 seconds
+			switchStatus = new SwitchDelay(0, switchTick, forceTick);
 			tickSwitchingMissileWarsLobby();
 		}
 	}
@@ -145,18 +140,18 @@ public class ModKrowd implements ClientModInitializer {
 		Minecraft minecraft = Minecraft.getInstance();
 
 		// Wait until no ChatScreen is open or the force tick has been reached
-		if (mwSwitchStatus == MwSwitchStatus.DELAY && (
-				mwSwitchForceTick <= tick || mwSwitchTick <= tick && !(minecraft.screen instanceof ChatScreen)
+		if (switchStatus instanceof SwitchDelay(int index, long switchTick, long forceTick) && (
+				forceTick <= tick || switchTick <= tick && !(minecraft.screen instanceof ChatScreen)
 		)) {
-
             ClientPacketListener listener = minecraft.getConnection();
-			if (listener != null
-					&& currentSubserver instanceof MissileWarsSubserver mwSubserver
-					&& mwSubserver.tryConnectNext(listener, mwSwitchIndex)) {
-				mwSwitchStatus = MwSwitchStatus.CONNECTING;
-			} else {
-				mwSwitchStatus = MwSwitchStatus.IDLE;
-			}
+            if (listener != null) {
+                Subserver destination = currentSubserver.tryConnectNext(listener, index);
+                if (destination != null) {
+                    switchStatus = new SwitchConnecting(index, currentSubserver, destination);
+                } else {
+                    switchStatus = SwitchIdle.INSTANCE;
+                }
+            }
 		}
 	}
 
@@ -175,12 +170,9 @@ public class ModKrowd implements ClientModInitializer {
 	private static void onJoin(ClientPacketListener listener, PacketSender sender, Minecraft minecraft) {
 		invalidateTabListCache(); // *Hopefully* late enough for inGameHud to be initialized
 
-		mwSwitchStatus = MwSwitchStatus.IDLE;
-		mwSwitchTick = 0;
-		mwSwitchForceTick = 0;
-		mwSwitchIndex = 0;
+		switchStatus = SwitchIdle.INSTANCE;
 
-		if (currentSubserver instanceof CubeKrowdSubserver) {
+		if (currentSubserver.isCubeKrowd) {
 			Util.sendCommandPacket(listener, CubeKrowd.SUBSERVER_COMMAND);
 		}
 		CONFIG.onJoin(listener, minecraft);
@@ -232,26 +224,27 @@ public class ModKrowd implements ClientModInitializer {
 				}
 			}
 
-			if (mwSwitchStatus == MwSwitchStatus.CONNECTING && currentSubserver instanceof MissileWarsSubserver mwSubserver) {
+			if (switchStatus instanceof SwitchConnecting(int index, Subserver sender, Subserver destination) && sender == currentSubserver) {
 				KickedMessage kickedMessage = ckCache.kickedMessageFast();
-				if (kickedMessage.isReal() && kickedMessage.subserver() instanceof MissileWarsSubserver || ckCache.unavailableMessageFast().isReal()) {
-					mwSwitchIndex += 1;
-					if (!mwSubserver.tryConnectNext(minecraft.getConnection(), mwSwitchIndex)) {
-						mwSwitchStatus = MwSwitchStatus.IDLE;
-						mwSwitchTick = 0;
-						mwSwitchForceTick = 0;
-						mwSwitchIndex = 0;
-					}
-				}
+				if (kickedMessage.isReal() && kickedMessage.subserver() == destination || ckCache.unavailableMessageFast().isReal()) {
+					index += 1;
+                    destination = currentSubserver.tryConnectNext(minecraft.getConnection(), index);
+                    if (destination != null) {
+                        switchStatus = new SwitchConnecting(index, sender, destination);
+                    } else {
+                        switchStatus = SwitchIdle.INSTANCE;
+                    }
+                }
 			}
 		}
 
 		CONFIG.onMessage(message, minecraft);
 	}
 
-	private enum MwSwitchStatus {
-		IDLE,
-		DELAY,
-		CONNECTING
-	}
+    private interface SwitchStatus {}
+    private record SwitchIdle() implements SwitchStatus {
+        private static final SwitchIdle INSTANCE = new SwitchIdle();
+    }
+    private record SwitchDelay(int index, long switchTick, long forceTick) implements SwitchStatus {}
+    private record SwitchConnecting(int index, Subserver sender, Subserver destination) implements SwitchStatus {}
 }

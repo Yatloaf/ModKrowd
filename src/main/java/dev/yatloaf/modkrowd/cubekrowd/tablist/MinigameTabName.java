@@ -2,7 +2,7 @@ package dev.yatloaf.modkrowd.cubekrowd.tablist;
 
 import dev.yatloaf.modkrowd.cubekrowd.common.Afk;
 import dev.yatloaf.modkrowd.cubekrowd.common.MinigameTeamName;
-import dev.yatloaf.modkrowd.cubekrowd.subserver.MinigameSubserver;
+import dev.yatloaf.modkrowd.cubekrowd.subserver.Subserver;
 import dev.yatloaf.modkrowd.util.text.StyledString;
 import dev.yatloaf.modkrowd.util.text.StyledStringReader;
 
@@ -11,7 +11,7 @@ import java.util.function.UnaryOperator;
 public record MinigameTabName(Afk afk, MinigameTeamName teamName, boolean isReal) implements TabEntry {
     public static final MinigameTabName FAILURE = new MinigameTabName(Afk.UNKNOWN, MinigameTeamName.FAILURE, false);
 
-    public static MinigameTabName readFast(StyledStringReader source, MinigameSubserver subserver) {
+    public static MinigameTabName readFast(StyledStringReader source, Subserver subserver) {
         Afk afk = Afk.read(source);
         if (!afk.isReal()) return FAILURE;
 

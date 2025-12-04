@@ -15,7 +15,7 @@ public record KickedMessage(Subserver subserver, String reason, boolean isReal) 
         if (!source.skipIfNext(CAG2)) return FAILURE;
 
         Subserver subserver = Subservers.fromId(source.readUntil(":").toUnstyledString());
-        if (!subserver.isReal()) return FAILURE;
+        if (!subserver.isReal) return FAILURE;
 
         source.skipUntilAfter(":");
         String reason = source.readAll().toUnstyledString();

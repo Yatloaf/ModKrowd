@@ -3,7 +3,6 @@ package dev.yatloaf.modkrowd.cubekrowd.tablist;
 import dev.yatloaf.modkrowd.ModKrowd;
 import dev.yatloaf.modkrowd.cubekrowd.common.SelfPlayer;
 import dev.yatloaf.modkrowd.cubekrowd.common.cache.TextCache;
-import dev.yatloaf.modkrowd.cubekrowd.subserver.RealSubserver;
 import dev.yatloaf.modkrowd.cubekrowd.subserver.Subserver;
 import dev.yatloaf.modkrowd.cubekrowd.subserver.Subservers;
 import dev.yatloaf.modkrowd.cubekrowd.tablist.cache.TabEntryCache;
@@ -28,7 +27,7 @@ public record VanillaTabList(EntryCache[] entries, EntryCache[] players, EntryCa
             return FAILURE;
         }
 
-        boolean isLoaded = ModKrowd.currentSubserver instanceof RealSubserver;
+        boolean isLoaded = ModKrowd.currentSubserver.isReal;
         Subserver yourGame = isLoaded ? ModKrowd.currentSubserver : Subservers.UNKNOWN;
 
         EntryCache[] entries = new EntryCache[playerListEntries.size()];

@@ -5,6 +5,11 @@
 ### Changed
 
 - Migrated to mojmap.
+- Rewrote lots of code to be more maintainable.
+
+### Fixed
+
+- Message Preview showing chattymotes on BuildTeam.
 
 ## 0.2.5: 2025-11-17
 

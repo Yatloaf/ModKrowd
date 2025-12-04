@@ -4,7 +4,7 @@ import dev.yatloaf.modkrowd.cubekrowd.common.cache.TextCache;
 import dev.yatloaf.modkrowd.cubekrowd.message.Message;
 import dev.yatloaf.modkrowd.cubekrowd.message.MissileWarsDeathMessage;
 import dev.yatloaf.modkrowd.cubekrowd.message.MissileWarsGameEndMessage;
-import dev.yatloaf.modkrowd.cubekrowd.subserver.MissileWarsSubserver;
+import dev.yatloaf.modkrowd.cubekrowd.subserver.Subserver;
 import dev.yatloaf.modkrowd.util.text.StyledStringReader;
 import net.minecraft.network.chat.contents.TranslatableContents;
 
@@ -12,7 +12,7 @@ public class MissileWarsMessageCache extends MinigameMessageCache {
     private MissileWarsDeathMessage missileWarsDeathMessage;
     private MissileWarsGameEndMessage missileWarsGameEndMessage;
 
-    public MissileWarsMessageCache(TextCache original, MissileWarsSubserver subserver) {
+    public MissileWarsMessageCache(TextCache original, Subserver subserver) {
         super(original, subserver);
     }
 
