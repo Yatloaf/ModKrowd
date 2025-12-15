@@ -10,7 +10,7 @@ import dev.yatloaf.modkrowd.cubekrowd.common.MinigameTeamName;
 import dev.yatloaf.modkrowd.cubekrowd.common.Rank;
 import dev.yatloaf.modkrowd.cubekrowd.common.RankName;
 import dev.yatloaf.modkrowd.cubekrowd.common.cache.TextCache;
-import dev.yatloaf.modkrowd.cubekrowd.message.MissileWarsDeathMessage;
+import dev.yatloaf.modkrowd.cubekrowd.message.DeathMessage;
 import dev.yatloaf.modkrowd.cubekrowd.tablist.GameTabStatus;
 import dev.yatloaf.modkrowd.cubekrowd.tablist.GameTabSubserver;
 import dev.yatloaf.modkrowd.cubekrowd.tablist.MainTabColumn;
@@ -37,11 +37,11 @@ public class CherryThemeFeature extends CherryLiteThemeFeature {
     }
 
     @Override
-    protected TextCache missileWarsDeathMessage(MissileWarsDeathMessage message) {
-        MissileWarsDeathMessage modifiedMessage = message
+    protected TextCache deathMessage(DeathMessage message) {
+        DeathMessage modifiedMessage = message
                 .mapVictim(this::modifyMissileWarsTeamName)
                 .mapKillerIfPresent(this::modifyMissileWarsTeamName);
-        return super.missileWarsDeathMessage(modifiedMessage);
+        return super.deathMessage(modifiedMessage);
     }
 
     // Someone clean up this spaghetti

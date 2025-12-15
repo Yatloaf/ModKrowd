@@ -13,7 +13,6 @@ import dev.yatloaf.modkrowd.config.screen.IdentifierEntry;
 import dev.yatloaf.modkrowd.config.screen.PredicateEntry;
 import dev.yatloaf.modkrowd.cubekrowd.message.DirectMessage;
 import dev.yatloaf.modkrowd.cubekrowd.message.Direction;
-import dev.yatloaf.modkrowd.cubekrowd.message.cache.CubeKrowdMessageCache;
 import dev.yatloaf.modkrowd.cubekrowd.message.cache.MessageCache;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Tooltip;
@@ -109,11 +108,8 @@ public class DirectMessageSoundFeature extends Feature {
 
     @Override
     public void onMessage(MessageCache message, Minecraft minecraft, ActionQueue queue) {
-        if (message instanceof CubeKrowdMessageCache ckMessage) {
-            DirectMessage dm = ckMessage.directMessageFast();
-            if (dm.isReal() && dm.direction() != Direction.OUTGOING) {
-                minecraft.getSoundManager().play(SimpleSoundInstance.forUI(SoundEvent.createVariableRangeEvent(this.sound), 1.0F, (float) this.volume));
-            }
+        if (message.result() instanceof DirectMessage dm && dm.direction() != Direction.OUTGOING) {
+            minecraft.getSoundManager().play(SimpleSoundInstance.forUI(SoundEvent.createVariableRangeEvent(this.sound), 1.0F, (float) this.volume));
         }
     }
 }

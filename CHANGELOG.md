@@ -10,6 +10,7 @@
 ### Fixed
 
 - Message Preview showing chattymotes on BuildTeam.
+- Messages not being themed when received while switching servers.
 
 ## 0.2.5: 2025-11-17
 

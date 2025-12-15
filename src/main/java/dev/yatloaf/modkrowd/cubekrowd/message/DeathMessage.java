@@ -7,12 +7,12 @@ import net.minecraft.network.chat.contents.TranslatableContents;
 
 import java.util.function.UnaryOperator;
 
-public record MissileWarsDeathMessage(String key, Component victim, Component killer, Component item, boolean isReal) implements Message {
-    public static final MissileWarsDeathMessage FAILURE = new MissileWarsDeathMessage(
+public record DeathMessage(String key, Component victim, Component killer, Component item, boolean isReal) implements Message {
+    public static final DeathMessage FAILURE = new DeathMessage(
             "death.attack.generic", Component.empty(), null, null, false
     );
 
-    public static MissileWarsDeathMessage parseFast(ComponentContents contents) {
+    public static DeathMessage parseFast(ComponentContents contents) {
         if (!(contents instanceof TranslatableContents translatable)) return FAILURE;
 
         String key = translatable.getKey();
@@ -46,18 +46,18 @@ public record MissileWarsDeathMessage(String key, Component victim, Component ki
             item = Component.literal(args[0].toString());
         }
 
-        return new MissileWarsDeathMessage(key, victim, killer, item, true);
+        return new DeathMessage(key, victim, killer, item, true);
     }
 
-    public MissileWarsDeathMessage mapVictim(UnaryOperator<Component> mapper) {
-        return new MissileWarsDeathMessage(this.key, mapper.apply(this.victim), this.killer, this.item, this.isReal);
+    public DeathMessage mapVictim(UnaryOperator<Component> mapper) {
+        return new DeathMessage(this.key, mapper.apply(this.victim), this.killer, this.item, this.isReal);
     }
 
-    public MissileWarsDeathMessage mapKillerIfPresent(UnaryOperator<Component> mapper) {
+    public DeathMessage mapKillerIfPresent(UnaryOperator<Component> mapper) {
         if (this.killer == null) {
             return this;
         } else {
-            return new MissileWarsDeathMessage(this.key, this.victim, mapper.apply(this.killer), this.item, this.isReal);
+            return new DeathMessage(this.key, this.victim, mapper.apply(this.killer), this.item, this.isReal);
         }
     }
 

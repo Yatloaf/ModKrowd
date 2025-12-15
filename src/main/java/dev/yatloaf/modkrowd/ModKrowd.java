@@ -6,8 +6,9 @@ import dev.yatloaf.modkrowd.config.SyncedConfig;
 import dev.yatloaf.modkrowd.config.screen.ConfigScreen;
 import dev.yatloaf.modkrowd.cubekrowd.common.CubeKrowd;
 import dev.yatloaf.modkrowd.cubekrowd.message.KickedMessage;
+import dev.yatloaf.modkrowd.cubekrowd.message.Message;
+import dev.yatloaf.modkrowd.cubekrowd.message.UnavailableMessage;
 import dev.yatloaf.modkrowd.cubekrowd.message.WhereamiMessage;
-import dev.yatloaf.modkrowd.cubekrowd.message.cache.CubeKrowdMessageCache;
 import dev.yatloaf.modkrowd.cubekrowd.message.cache.MessageCache;
 import dev.yatloaf.modkrowd.cubekrowd.subserver.Subserver;
 import dev.yatloaf.modkrowd.cubekrowd.subserver.Subservers;
@@ -212,31 +213,29 @@ public class ModKrowd implements ClientModInitializer {
 	public static void onMessage(MessageCache message) {
 		Minecraft minecraft = Minecraft.getInstance();
 
-		if (message instanceof CubeKrowdMessageCache ckCache) {
-			if (currentSubserver == Subservers.PENDING) {
-				WhereamiMessage whereamiMessage = ckCache.whereamiMessageFast();
-				if (whereamiMessage.isReal()) {
-					currentSubserver = whereamiMessage.subserver();
-					CONFIG.updateFeatures();
-					CONFIG.onJoinUpdated(minecraft.getConnection(), minecraft);
-					message.setBlocked(true);
-					return;
-				}
-			}
+        if (currentSubserver == Subservers.PENDING) {
+            if (message.result() instanceof WhereamiMessage whereamiMessage) {
+                currentSubserver = whereamiMessage.subserver();
+                CONFIG.updateFeatures();
+                CONFIG.onJoinUpdated(minecraft.getConnection(), minecraft);
+                message.setBlocked(true);
+                return;
+            }
+        }
 
-			if (switchStatus instanceof SwitchConnecting(int index, Subserver sender, Subserver destination) && sender == currentSubserver) {
-				KickedMessage kickedMessage = ckCache.kickedMessageFast();
-				if (kickedMessage.isReal() && kickedMessage.subserver() == destination || ckCache.unavailableMessageFast().isReal()) {
-					index += 1;
-                    destination = currentSubserver.tryConnectNext(minecraft.getConnection(), index);
-                    if (destination != null) {
-                        switchStatus = new SwitchConnecting(index, sender, destination);
-                    } else {
-                        switchStatus = SwitchIdle.INSTANCE;
-                    }
+        if (switchStatus instanceof SwitchConnecting(int index, Subserver sender, Subserver destination) && sender == currentSubserver) {
+            Message result = message.result();
+            if (result instanceof UnavailableMessage
+                    || result instanceof KickedMessage kickedMessage && kickedMessage.subserver() == destination) {
+                index += 1;
+                destination = currentSubserver.tryConnectNext(minecraft.getConnection(), index);
+                if (destination != null) {
+                    switchStatus = new SwitchConnecting(index, sender, destination);
+                } else {
+                    switchStatus = SwitchIdle.INSTANCE;
                 }
-			}
-		}
+            }
+        }
 
 		CONFIG.onMessage(message, minecraft);
 	}

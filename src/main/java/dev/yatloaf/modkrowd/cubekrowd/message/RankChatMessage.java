@@ -6,10 +6,10 @@ import dev.yatloaf.modkrowd.util.text.StyledStringReader;
 
 import java.util.function.UnaryOperator;
 
-public record MainChatMessage(RankName sender, StyledString content, boolean isReal) implements Message {
-    public static final MainChatMessage FAILURE = new MainChatMessage(RankName.FAILURE, StyledString.EMPTY, false);
+public record RankChatMessage(RankName sender, StyledString content, boolean isReal) implements Message {
+    public static final RankChatMessage FAILURE = new RankChatMessage(RankName.FAILURE, StyledString.EMPTY, false);
 
-    public static MainChatMessage readFast(StyledStringReader source) {
+    public static RankChatMessage readFast(StyledStringReader source) {
         RankName sender = RankName.readFast(source);
         if (!sender.isReal()) return FAILURE;
 
@@ -17,7 +17,7 @@ public record MainChatMessage(RankName sender, StyledString content, boolean isR
 
         StyledString content = source.readAll().isolate();
 
-        return new MainChatMessage(sender, content, true);
+        return new RankChatMessage(sender, content, true);
     }
 
     public StyledString appearance() {
@@ -28,7 +28,7 @@ public record MainChatMessage(RankName sender, StyledString content, boolean isR
         );
     }
 
-    public MainChatMessage mapSender(UnaryOperator<RankName> mapper) {
-        return new MainChatMessage(mapper.apply(this.sender), this.content, this.isReal);
+    public RankChatMessage mapSender(UnaryOperator<RankName> mapper) {
+        return new RankChatMessage(mapper.apply(this.sender), this.content, this.isReal);
     }
 }

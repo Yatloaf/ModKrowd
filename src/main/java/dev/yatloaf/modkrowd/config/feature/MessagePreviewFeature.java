@@ -7,7 +7,6 @@ import dev.yatloaf.modkrowd.cubekrowd.command.PreviewCommands;
 import dev.yatloaf.modkrowd.cubekrowd.common.CKColor;
 import dev.yatloaf.modkrowd.cubekrowd.common.cache.TextCache;
 import dev.yatloaf.modkrowd.cubekrowd.message.DirectMessage;
-import dev.yatloaf.modkrowd.cubekrowd.message.cache.CubeKrowdMessageCache;
 import dev.yatloaf.modkrowd.cubekrowd.message.cache.MessageCache;
 import dev.yatloaf.modkrowd.mixinduck.ChatHudLineDuck;
 import net.minecraft.client.GuiMessage;
@@ -54,11 +53,9 @@ public class MessagePreviewFeature extends Feature {
         if (!(minecraft.screen instanceof ChatScreen)) {
             this.clearPreviewMessage();
         }
-        if (message instanceof CubeKrowdMessageCache ckMessage) {
-            DirectMessage dm = ckMessage.directMessageFast();
-            if (dm.isReal()) {
-                this.replyTarget = dm.other();
-            }
+
+        if (message.result() instanceof DirectMessage dm) {
+            this.replyTarget = dm.other();
         }
     }
 

@@ -11,9 +11,9 @@ import dev.yatloaf.modkrowd.cubekrowd.common.cache.TextCache;
 import dev.yatloaf.modkrowd.cubekrowd.message.AfkMessage;
 import dev.yatloaf.modkrowd.cubekrowd.message.Aloha;
 import dev.yatloaf.modkrowd.cubekrowd.message.AlohaMessage;
-import dev.yatloaf.modkrowd.cubekrowd.message.FishslapChatMessage;
-import dev.yatloaf.modkrowd.cubekrowd.message.MainChatMessage;
-import dev.yatloaf.modkrowd.cubekrowd.message.MissileWarsDeathMessage;
+import dev.yatloaf.modkrowd.cubekrowd.message.MixedChatMessage;
+import dev.yatloaf.modkrowd.cubekrowd.message.RankChatMessage;
+import dev.yatloaf.modkrowd.cubekrowd.message.DeathMessage;
 import dev.yatloaf.modkrowd.cubekrowd.message.cache.MessageCache;
 import dev.yatloaf.modkrowd.cubekrowd.tablist.MainTabName;
 import dev.yatloaf.modkrowd.cubekrowd.tablist.MinigameTabName;
@@ -42,9 +42,9 @@ public class HighContrastThemeFeature extends ThemeFeature {
         switch (message.result()) {
             case AlohaMessage alohaMessage -> this.onAlohaMessage(message, alohaMessage);
             case AfkMessage afkMessage -> this.onAfkMessage(message, afkMessage);
-            case MainChatMessage mainChatMessage -> this.onMainChatMessage(message, mainChatMessage);
-            case MissileWarsDeathMessage missileWarsDeathMessage -> this.onMissileWarsDeathMessage(message, missileWarsDeathMessage);
-            case FishslapChatMessage fishslapChatMessage -> this.onFishslapChatMessage(message, fishslapChatMessage);
+            case RankChatMessage rankChatMessage -> this.onRankChatMessage(message, rankChatMessage);
+            case DeathMessage deathMessage -> this.onDeathMessage(message, deathMessage);
+            case MixedChatMessage mixedChatMessage -> this.onMixedChatMessage(message, mixedChatMessage);
             default -> {}
         }
     }
@@ -87,20 +87,20 @@ public class HighContrastThemeFeature extends ThemeFeature {
         }
     }
 
-    protected void onMainChatMessage(MessageCache message, MainChatMessage mainChatMessage) {
-        switch (mainChatMessage.sender().rank().letters()) {
-            case RESPECTED, VETERAN, DEVELOPER -> message.setThemed(TextCache.of(mainChatMessage.mapSender(this::modifyRankName).appearance()));
+    protected void onRankChatMessage(MessageCache message, RankChatMessage rankChatMessage) {
+        switch (rankChatMessage.sender().rank().letters()) {
+            case RESPECTED, VETERAN, DEVELOPER -> message.setThemed(TextCache.of(rankChatMessage.mapSender(this::modifyRankName).appearance()));
         }
     }
 
-    protected void onMissileWarsDeathMessage(MessageCache message, MissileWarsDeathMessage missileWarsDeathMessage) {
+    protected void onDeathMessage(MessageCache message, DeathMessage deathMessage) {
         // The args should all already have a non-null color
-        message.setThemed(TextCache.of(missileWarsDeathMessage.appearance().withStyle(CKColor.GRAY.style)));
+        message.setThemed(TextCache.of(deathMessage.appearance().withStyle(CKColor.GRAY.style)));
     }
 
-    protected void onFishslapChatMessage(MessageCache message, FishslapChatMessage fishslapChatMessage) {
-        switch (fishslapChatMessage.sender().rank().letters()) {
-            case RESPECTED, VETERAN, DEVELOPER -> message.setThemed(TextCache.of(fishslapChatMessage.mapSender(this::modifyRankName).appearance()));
+    protected void onMixedChatMessage(MessageCache message, MixedChatMessage mixedChatMessage) {
+        switch (mixedChatMessage.sender().rank().letters()) {
+            case RESPECTED, VETERAN, DEVELOPER -> message.setThemed(TextCache.of(mixedChatMessage.mapSender(this::modifyRankName).appearance()));
         }
     }
 

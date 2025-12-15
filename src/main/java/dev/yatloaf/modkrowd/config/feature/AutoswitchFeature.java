@@ -11,8 +11,8 @@ import dev.yatloaf.modkrowd.config.exception.MalformedConfigException;
 import dev.yatloaf.modkrowd.config.screen.AbstractEntry;
 import dev.yatloaf.modkrowd.config.screen.IntEntry;
 import dev.yatloaf.modkrowd.config.screen.PredicateEntry;
+import dev.yatloaf.modkrowd.cubekrowd.message.MissileWarsGameEndMessage;
 import dev.yatloaf.modkrowd.cubekrowd.message.cache.MessageCache;
-import dev.yatloaf.modkrowd.cubekrowd.message.cache.MissileWarsMessageCache;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.network.chat.Component;
@@ -84,7 +84,7 @@ public class AutoswitchFeature extends Feature {
 
     @Override
     public void onMessage(MessageCache message, Minecraft minecraft, ActionQueue queue) {
-        if (message instanceof MissileWarsMessageCache mwCache && mwCache.missileWarsGameEndMessageFast().isReal()) {
+        if (message.result() instanceof MissileWarsGameEndMessage) {
             ModKrowd.startSwitchingMissileWarsLobby(this.delay);
         }
     }

@@ -5,10 +5,10 @@ import dev.yatloaf.modkrowd.cubekrowd.subserver.Subserver;
 import dev.yatloaf.modkrowd.util.text.StyledString;
 import dev.yatloaf.modkrowd.util.text.StyledStringReader;
 
-public record MinigameChatMessage(MinigameTeamName teamName, StyledString content, boolean isReal) implements Message {
-    public static final MinigameChatMessage FAILURE = new MinigameChatMessage(MinigameTeamName.FAILURE, StyledString.EMPTY, false);
+public record TeamChatMessage(MinigameTeamName teamName, StyledString content, boolean isReal) implements Message {
+    public static final TeamChatMessage FAILURE = new TeamChatMessage(MinigameTeamName.FAILURE, StyledString.EMPTY, false);
 
-    public static MinigameChatMessage readFast(StyledStringReader source, Subserver subserver) {
+    public static TeamChatMessage readFast(StyledStringReader source, Subserver subserver) {
         if (!source.skipIfNext("<")) return FAILURE;
 
         MinigameTeamName teamName = MinigameTeamName.readFast(source, subserver);
@@ -19,6 +19,6 @@ public record MinigameChatMessage(MinigameTeamName teamName, StyledString conten
         StyledString content = source.readAll().isolate();
         if (content.isEmpty()) return FAILURE;
 
-        return new MinigameChatMessage(teamName, content, true);
+        return new TeamChatMessage(teamName, content, true);
     }
 }

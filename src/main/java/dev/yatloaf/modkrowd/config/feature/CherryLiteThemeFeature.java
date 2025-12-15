@@ -13,10 +13,10 @@ import dev.yatloaf.modkrowd.cubekrowd.message.AfkMessage;
 import dev.yatloaf.modkrowd.cubekrowd.message.AlohaMessage;
 import dev.yatloaf.modkrowd.cubekrowd.message.ConnectingMessage;
 import dev.yatloaf.modkrowd.cubekrowd.message.DirectMessage;
-import dev.yatloaf.modkrowd.cubekrowd.message.FishslapChatMessage;
-import dev.yatloaf.modkrowd.cubekrowd.message.MainChatMessage;
-import dev.yatloaf.modkrowd.cubekrowd.message.MinigameChatMessage;
-import dev.yatloaf.modkrowd.cubekrowd.message.MissileWarsDeathMessage;
+import dev.yatloaf.modkrowd.cubekrowd.message.MixedChatMessage;
+import dev.yatloaf.modkrowd.cubekrowd.message.RankChatMessage;
+import dev.yatloaf.modkrowd.cubekrowd.message.TeamChatMessage;
+import dev.yatloaf.modkrowd.cubekrowd.message.DeathMessage;
 import dev.yatloaf.modkrowd.cubekrowd.message.cache.MessageCache;
 import dev.yatloaf.modkrowd.cubekrowd.tablist.GameTabLabel;
 import dev.yatloaf.modkrowd.cubekrowd.tablist.GameTabMode;
@@ -61,10 +61,10 @@ public class CherryLiteThemeFeature extends ThemeFeature {
             case AfkMessage afkMessage -> message.setThemed(this.afkMessage(afkMessage));
             case DirectMessage directMessage -> message.setThemed(this.directMessage(directMessage));
             case ConnectingMessage connectingMessage -> message.setThemed(this.connectingMessage(connectingMessage));
-            case MainChatMessage mainChatMessage -> message.setThemed(this.mainChatMessage(mainChatMessage));
-            case MinigameChatMessage minigameChatMessage -> message.setThemed(this.minigameChatMessage(minigameChatMessage));
-            case MissileWarsDeathMessage missileWarsDeathMessage -> message.setThemed(this.missileWarsDeathMessage(missileWarsDeathMessage));
-            case FishslapChatMessage fishslapChatMessage -> message.setThemed(this.fishslapChatMessage(fishslapChatMessage));
+            case RankChatMessage rankChatMessage -> message.setThemed(this.rankChatMessage(rankChatMessage));
+            case TeamChatMessage teamChatMessage -> message.setThemed(this.teamChatMessage(teamChatMessage));
+            case DeathMessage deathMessage -> message.setThemed(this.deathMessage(deathMessage));
+            case MixedChatMessage mixedChatMessage -> message.setThemed(this.mixedChatMessage(mixedChatMessage));
             default -> {}
         }
     }
@@ -88,7 +88,7 @@ public class CherryLiteThemeFeature extends ThemeFeature {
         return TextCache.of(message.appearance().fillColor(CHERRY4));
     }
 
-    protected TextCache mainChatMessage(MainChatMessage message) {
+    protected TextCache rankChatMessage(RankChatMessage message) {
         return TextCache.of(StyledString.concat(
                 this.rankName(message.sender()),
                 StyledString.SPACE,
@@ -96,7 +96,7 @@ public class CherryLiteThemeFeature extends ThemeFeature {
         ));
     }
 
-    protected TextCache minigameChatMessage(MinigameChatMessage message) {
+    protected TextCache teamChatMessage(TeamChatMessage message) {
         return TextCache.of(StyledString.concat(
                 StyledString.fromString("<").fillColor(CHERRY6),
                 this.minigameTeamName(message.teamName()),
@@ -105,11 +105,11 @@ public class CherryLiteThemeFeature extends ThemeFeature {
         ));
     }
 
-    protected TextCache missileWarsDeathMessage(MissileWarsDeathMessage message) {
+    protected TextCache deathMessage(DeathMessage message) {
         return TextCache.of(message.appearance().withStyle(Style.EMPTY.withColor(CHERRY1)));
     }
 
-    protected TextCache fishslapChatMessage(FishslapChatMessage message) {
+    protected TextCache mixedChatMessage(MixedChatMessage message) {
         return TextCache.of(StyledString.concat(
                 StyledString.fromString("<").fillColor(CHERRY6),
                 this.rankName(message.sender()),

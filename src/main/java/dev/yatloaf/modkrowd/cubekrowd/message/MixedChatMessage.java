@@ -6,10 +6,10 @@ import dev.yatloaf.modkrowd.util.text.StyledStringReader;
 
 import java.util.function.UnaryOperator;
 
-public record FishslapChatMessage(RankName sender, StyledString content, boolean isReal) implements Message {
-    public static final FishslapChatMessage FAILURE = new FishslapChatMessage(RankName.FAILURE, StyledString.EMPTY, false);
+public record MixedChatMessage(RankName sender, StyledString content, boolean isReal) implements Message {
+    public static final MixedChatMessage FAILURE = new MixedChatMessage(RankName.FAILURE, StyledString.EMPTY, false);
 
-    public static FishslapChatMessage readFast(StyledStringReader source) {
+    public static MixedChatMessage readFast(StyledStringReader source) {
         if (!source.skipIfNext("<")) return FAILURE;
 
         RankName sender = RankName.readFast(source);
@@ -20,7 +20,7 @@ public record FishslapChatMessage(RankName sender, StyledString content, boolean
         StyledString content = source.readAll().isolate();
         if (content.isEmpty()) return FAILURE;
 
-        return new FishslapChatMessage(sender, content, true);
+        return new MixedChatMessage(sender, content, true);
     }
 
     public StyledString appearance() {
@@ -32,7 +32,7 @@ public record FishslapChatMessage(RankName sender, StyledString content, boolean
         );
     }
 
-    public FishslapChatMessage mapSender(UnaryOperator<RankName> mapper) {
-        return new FishslapChatMessage(mapper.apply(this.sender), this.content, this.isReal);
+    public MixedChatMessage mapSender(UnaryOperator<RankName> mapper) {
+        return new MixedChatMessage(mapper.apply(this.sender), this.content, this.isReal);
     }
 }
