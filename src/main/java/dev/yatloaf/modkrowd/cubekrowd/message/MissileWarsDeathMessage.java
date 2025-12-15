@@ -1,6 +1,7 @@
 package dev.yatloaf.modkrowd.cubekrowd.message;
 
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.ComponentContents;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.contents.TranslatableContents;
 
@@ -11,11 +12,13 @@ public record MissileWarsDeathMessage(String key, Component victim, Component ki
             "death.attack.generic", Component.empty(), null, null, false
     );
 
-    public static MissileWarsDeathMessage parseFast(TranslatableContents content) {
-        String key = content.getKey();
+    public static MissileWarsDeathMessage parseFast(ComponentContents contents) {
+        if (!(contents instanceof TranslatableContents translatable)) return FAILURE;
+
+        String key = translatable.getKey();
         if (!key.startsWith("death.attack") && !key.startsWith("death.fell")) return FAILURE;
 
-        Object[] args = content.getArgs();
+        Object[] args = translatable.getArgs();
         if (args.length < 1) return FAILURE;
 
         Component victim;

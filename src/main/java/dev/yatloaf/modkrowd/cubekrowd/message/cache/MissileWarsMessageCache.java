@@ -6,7 +6,6 @@ import dev.yatloaf.modkrowd.cubekrowd.message.MissileWarsDeathMessage;
 import dev.yatloaf.modkrowd.cubekrowd.message.MissileWarsGameEndMessage;
 import dev.yatloaf.modkrowd.cubekrowd.subserver.Subserver;
 import dev.yatloaf.modkrowd.util.text.StyledStringReader;
-import net.minecraft.network.chat.contents.TranslatableContents;
 
 public class MissileWarsMessageCache extends MinigameMessageCache {
     private MissileWarsDeathMessage missileWarsDeathMessage;
@@ -33,11 +32,7 @@ public class MissileWarsMessageCache extends MinigameMessageCache {
 
     public final MissileWarsDeathMessage missileWarsDeathMessageFast() {
         if (this.missileWarsDeathMessage == null) {
-            if (this.original.text().getContents() instanceof TranslatableContents content) {
-                this.missileWarsDeathMessage = MissileWarsDeathMessage.parseFast(content);
-            } else {
-                this.missileWarsDeathMessage = MissileWarsDeathMessage.FAILURE;
-            }
+            this.missileWarsDeathMessage = MissileWarsDeathMessage.parseFast(this.original.text().getContents());
         }
         return this.missileWarsDeathMessage;
     }

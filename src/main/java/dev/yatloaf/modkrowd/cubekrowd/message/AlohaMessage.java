@@ -3,17 +3,20 @@ package dev.yatloaf.modkrowd.cubekrowd.message;
 import dev.yatloaf.modkrowd.cubekrowd.common.CKColor;
 import dev.yatloaf.modkrowd.util.text.StyledString;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.ComponentContents;
 import net.minecraft.network.chat.contents.TranslatableContents;
 
 public record AlohaMessage(Aloha aloha, StyledString name, boolean isReal) implements Message {
-    public static final AlohaMessage FAILED = new AlohaMessage(Aloha.UNKNOWN, StyledString.EMPTY, false);
+    public static final AlohaMessage FAILURE = new AlohaMessage(Aloha.UNKNOWN, StyledString.EMPTY, false);
 
-    public static AlohaMessage parseFast(TranslatableContents content) {
-        Aloha aloha = Aloha.parse(content);
-        if (!aloha.isReal()) return FAILED;
+    public static AlohaMessage parseFast(ComponentContents contents) {
+        if (!(contents instanceof TranslatableContents translatable)) return FAILURE;
 
-        Object[] args = content.getArgs();
-        if (args.length < 1) return FAILED;
+        Aloha aloha = Aloha.parse(translatable);
+        if (!aloha.isReal()) return FAILURE;
+
+        Object[] args = translatable.getArgs();
+        if (args.length < 1) return FAILURE;
 
         StyledString name;
         if (args[0] instanceof Component text) {
