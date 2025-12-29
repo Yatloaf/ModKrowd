@@ -8,9 +8,8 @@ import dev.yatloaf.modkrowd.ModKrowd;
 import dev.yatloaf.modkrowd.config.ActionQueue;
 import dev.yatloaf.modkrowd.config.PredicateIndex;
 import dev.yatloaf.modkrowd.config.exception.MalformedConfigException;
-import dev.yatloaf.modkrowd.config.screen.AbstractEntry;
-import dev.yatloaf.modkrowd.config.screen.IntEntry;
-import dev.yatloaf.modkrowd.config.screen.PredicateEntry;
+import dev.yatloaf.modkrowd.config.screen.FeatureEntry;
+import dev.yatloaf.modkrowd.cubekrowd.common.CKColor;
 import dev.yatloaf.modkrowd.cubekrowd.message.MissileWarsGameEndMessage;
 import dev.yatloaf.modkrowd.cubekrowd.message.cache.MessageCache;
 import net.minecraft.client.Minecraft;
@@ -29,7 +28,7 @@ public class AutoswitchFeature extends Feature {
 
     public AutoswitchFeature(String id, PredicateIndex allowedPredicates) {
         super(id, allowedPredicates);
-        this.delayName = Component.translatable("modkrowd.config.feature." + id + ".delay");
+        this.delayName = Component.translatable("modkrowd.config.feature." + id + ".delay").withStyle(CKColor.GRAY.style);
         this.delayTooltip = Tooltip.create(Component.translatable("modkrowd.config.feature." + id + ".delay.tooltip"));
     }
 
@@ -42,20 +41,16 @@ public class AutoswitchFeature extends Feature {
     }
 
     @Override
-    public AbstractEntry[] createScreenEntries(Minecraft minecraft) {
-        return new AbstractEntry[] {
-                new PredicateEntry(minecraft, this),
-                new IntEntry(
-                        minecraft,
-                        this.delayName,
-                        this.delayTooltip,
-                        this.delay,
-                        MIN_DELAY,
-                        MAX_DELAY,
-                        () -> this.delay,
-                        value -> this.delay = value
-                )
-        };
+    public void addOptions(FeatureEntry featureEntry) {
+        featureEntry.addInt(this.delayName, this.delayTooltip, this.delay, MIN_DELAY, MAX_DELAY, this::getDelay, this::setDelay);
+    }
+
+    private int getDelay() {
+        return this.delay;
+    }
+
+    private void setDelay(int delay) {
+        this.delay = delay;
     }
 
     @Override

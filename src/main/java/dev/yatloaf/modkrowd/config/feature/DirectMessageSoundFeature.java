@@ -7,10 +7,8 @@ import com.google.gson.JsonSyntaxException;
 import dev.yatloaf.modkrowd.config.ActionQueue;
 import dev.yatloaf.modkrowd.config.PredicateIndex;
 import dev.yatloaf.modkrowd.config.exception.MalformedConfigException;
-import dev.yatloaf.modkrowd.config.screen.AbstractEntry;
-import dev.yatloaf.modkrowd.config.screen.DoubleEntry;
-import dev.yatloaf.modkrowd.config.screen.IdentifierEntry;
-import dev.yatloaf.modkrowd.config.screen.PredicateEntry;
+import dev.yatloaf.modkrowd.config.screen.FeatureEntry;
+import dev.yatloaf.modkrowd.cubekrowd.common.CKColor;
 import dev.yatloaf.modkrowd.cubekrowd.message.DirectMessage;
 import dev.yatloaf.modkrowd.cubekrowd.message.Direction;
 import dev.yatloaf.modkrowd.cubekrowd.message.cache.MessageCache;
@@ -39,9 +37,9 @@ public class DirectMessageSoundFeature extends Feature {
 
     public DirectMessageSoundFeature(String id, PredicateIndex allowedPredicates) {
         super(id, allowedPredicates);
-        this.soundName = Component.translatable("modkrowd.config.feature." + id + ".sound");
+        this.soundName = Component.translatable("modkrowd.config.feature." + id + ".sound").withStyle(CKColor.GRAY.style);
         this.soundTooltip = Tooltip.create(Component.translatable("modkrowd.config.feature." + id + ".sound.tooltip"));
-        this.volumeName = Component.translatable("modkrowd.config.feature." + id + ".volume");
+        this.volumeName = Component.translatable("modkrowd.config.feature." + id + ".volume").withStyle(CKColor.GRAY.style);
         this.volumeTooltip = Tooltip.create(Component.translatable("modkrowd.config.feature." + id + ".volume.tooltip"));
     }
 
@@ -55,28 +53,29 @@ public class DirectMessageSoundFeature extends Feature {
     }
 
     @Override
-    public AbstractEntry[] createScreenEntries(Minecraft minecraft) {
-        return new AbstractEntry[] {
-                new PredicateEntry(minecraft, this),
-                new IdentifierEntry(
-                        minecraft,
-                        this.soundName,
-                        this.soundTooltip,
-                        this.sound,
-                        () -> this.sound,
-                        value -> this.sound = value.getPath().isBlank() ? DEFAULT_SOUND : value
-                ),
-                new DoubleEntry(
-                        minecraft,
-                        this.volumeName,
-                        this.volumeTooltip,
-                        this.volume,
-                        MIN_VOLUME,
-                        MAX_VOLUME,
-                        () -> this.volume,
-                        value -> this.volume = value
-                )
-        };
+    public void addOptions(FeatureEntry featureEntry) {
+        featureEntry.addIdentifier(this.soundName, this.soundTooltip, this.sound, this::getSound, this::setSound);
+        featureEntry.addDouble(this.volumeName, this.volumeTooltip, this.volume, MIN_VOLUME, MAX_VOLUME, this::getVolume, this::setVolume);
+    }
+
+    private ResourceLocation getSound() {
+        return this.sound;
+    }
+
+    private void setSound(ResourceLocation value) {
+        if (value.getPath().isBlank()) {
+            this.sound = DEFAULT_SOUND;
+        } else {
+            this.sound = value;
+        }
+    }
+
+    private double getVolume() {
+        return this.volume;
+    }
+
+    private void setVolume(double value) {
+        this.volume = value;
     }
 
     @Override

@@ -42,29 +42,34 @@ public class ConfigTab implements Tab {
     public void doLayout(ScreenRectangle tabArea) {
         // Unlike setDimensionsAndPosition, position also calls recalculateAllChildrenPositions
         this.listWidget.updateSizeAndPosition(tabArea.width(), tabArea.height(), 0, tabArea.top());
+        this.listWidget.arrangeElements();
     }
 
     public void refreshState() {
         this.listWidget.refreshState();
     }
 
-    public class FeatureListWidget extends ContainerObjectSelectionList<AbstractEntry> {
+    public class FeatureListWidget extends ContainerObjectSelectionList<FeatureEntry> {
         public FeatureListWidget(Minecraft minecraft, int width, int height, int y, int itemHeight) {
             super(minecraft, width, height, y, itemHeight);
             for (Feature feature : ConfigTab.this.tab.features) {
-                for (AbstractEntry entry : feature.createScreenEntries(minecraft)) {
-                    this.addEntry(entry);
-                }
+                FeatureEntry entry = new FeatureEntry(feature);
+                entry.arrangeElements();
+                this.addEntry(entry, entry.getHeight());
             }
         }
 
         public void refreshState() {
-            this.children().forEach(AbstractEntry::refreshState);
+            this.children().forEach(FeatureEntry::refreshState);
+        }
+
+        public void arrangeElements() {
+            this.children().forEach(FeatureEntry::arrangeElements);
         }
 
         @Override
         public int getRowWidth() {
-            return 256;
+            return 384;
         }
     }
 }

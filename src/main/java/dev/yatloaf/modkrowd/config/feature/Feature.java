@@ -7,8 +7,7 @@ import dev.yatloaf.modkrowd.config.ActionQueue;
 import dev.yatloaf.modkrowd.config.Predicate;
 import dev.yatloaf.modkrowd.config.PredicateIndex;
 import dev.yatloaf.modkrowd.config.exception.MalformedConfigException;
-import dev.yatloaf.modkrowd.config.screen.AbstractEntry;
-import dev.yatloaf.modkrowd.config.screen.PredicateEntry;
+import dev.yatloaf.modkrowd.config.screen.FeatureEntry;
 import dev.yatloaf.modkrowd.cubekrowd.common.cache.TextCache;
 import dev.yatloaf.modkrowd.cubekrowd.message.cache.MessageCache;
 import dev.yatloaf.modkrowd.cubekrowd.tablist.cache.TabListCache;
@@ -18,6 +17,7 @@ import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientConfigurationConnectionEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.multiplayer.ClientConfigurationPacketListenerImpl;
 import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.network.chat.Component;
@@ -27,7 +27,7 @@ import net.minecraft.util.GsonHelper;
 public class Feature {
     public final String id;
     public final MutableComponent name;
-    public final MutableComponent tooltip;
+    public final Tooltip tooltip;
     public final PredicateIndex allowedPredicates;
 
     // Only used in SyncedConfig
@@ -37,7 +37,7 @@ public class Feature {
     public Feature(String id, PredicateIndex allowedPredicates) {
         this.id = id;
         this.name = Component.translatable("modkrowd.config.feature." + id);
-        this.tooltip = Component.translatable("modkrowd.config.feature." + id + ".tooltip");
+        this.tooltip = Tooltip.create(Component.translatable("modkrowd.config.feature." + id + ".tooltip"));
         this.allowedPredicates = allowedPredicates;
     }
 
@@ -46,10 +46,8 @@ public class Feature {
         this.enabled = source.enabled;
     }
 
-    public AbstractEntry[] createScreenEntries(Minecraft minecraft) {
-        return new AbstractEntry[]{
-                new PredicateEntry(minecraft, this)
-        };
+    public void addOptions(FeatureEntry featureEntry) {
+
     }
 
     public JsonElement serialize() {

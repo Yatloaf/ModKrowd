@@ -4,6 +4,7 @@
 
 ### Changed
 
+- Improved config screen.
 - Migrated to mojmap.
 - Rewrote lots of code to be more maintainable.
 - Updated parsing in line with CubeKrowd.
