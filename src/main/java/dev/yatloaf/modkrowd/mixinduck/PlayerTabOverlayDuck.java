@@ -7,7 +7,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public interface PlayerListHudDuck {
+public interface PlayerTabOverlayDuck {
     @Nullable MutableComponent modKrowd$getHeader();
     @Nullable MutableComponent modKrowd$getFooter();
     @NotNull List<PlayerInfo> modKrowd$collectEntries();

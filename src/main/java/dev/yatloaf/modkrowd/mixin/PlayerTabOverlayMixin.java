@@ -4,7 +4,7 @@ import dev.yatloaf.modkrowd.ModKrowd;
 import dev.yatloaf.modkrowd.cubekrowd.common.cache.TextCache;
 import dev.yatloaf.modkrowd.cubekrowd.tablist.UnknownTabList;
 import dev.yatloaf.modkrowd.cubekrowd.tablist.cache.TabEntryCache;
-import dev.yatloaf.modkrowd.mixinduck.PlayerListHudDuck;
+import dev.yatloaf.modkrowd.mixinduck.PlayerTabOverlayDuck;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.Font;
@@ -33,7 +33,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.util.List;
 
 @Mixin(PlayerTabOverlay.class)
-public abstract class PlayerTabOverlayMixin implements PlayerListHudDuck {
+public abstract class PlayerTabOverlayMixin implements PlayerTabOverlayDuck {
 	// PING_DISPLAY
 	// DINNERBONE_GRUMM
 

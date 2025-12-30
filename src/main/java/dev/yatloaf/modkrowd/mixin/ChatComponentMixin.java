@@ -4,7 +4,8 @@ import com.llamalad7.mixinextras.sugar.Local;
 import dev.yatloaf.modkrowd.ModKrowd;
 import dev.yatloaf.modkrowd.cubekrowd.common.cache.TextCache;
 import dev.yatloaf.modkrowd.cubekrowd.message.cache.MessageCache;
-import dev.yatloaf.modkrowd.mixinduck.ChatHudLineDuck;
+import dev.yatloaf.modkrowd.mixinduck.GuiMessageDuck;
+import dev.yatloaf.modkrowd.mixinduck.GuiMessageLineDuck;
 import dev.yatloaf.modkrowd.util.ChainedListView;
 import net.minecraft.client.GuiMessage;
 import net.minecraft.client.GuiMessageTag;
@@ -74,7 +75,7 @@ public abstract class ChatComponentMixin {
     // Lambda method! line is argsOnly due to being passed from outside
     @ModifyArg(method = "method_71992", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/ARGB;color(FI)I", ordinal = 0))
     private int withAlphaArg(int color, @Local(argsOnly = true) @NotNull GuiMessage.Line line) {
-        ChatHudLineDuck lineDuck = (ChatHudLineDuck)(Object) line;
+        GuiMessageLineDuck lineDuck = (GuiMessageLineDuck)(Object) line;
         return color | lineDuck.modKrowd$getBackgroundTint();
     }
 
@@ -97,7 +98,7 @@ public abstract class ChatComponentMixin {
 
         if (!messageCache.blocked()) {
             GuiMessage displayedLine = new GuiMessage(this.minecraft.gui.getGuiTicks(), messageCache.themedOrDefault().text(), signatureData, indicator);
-            ((ChatHudLineDuck)(Object) displayedLine).modKrowd$setBackgroundTint(messageCache.backgroundTint());
+            ((GuiMessageDuck)(Object) displayedLine).modKrowd$setBackgroundTint(messageCache.backgroundTint());
             this.addMessageToDisplayQueue(displayedLine);
             this.addMessageToQueue(displayedLine);
         }
@@ -107,11 +108,11 @@ public abstract class ChatComponentMixin {
 
     @ModifyArg(method = "addMessageToDisplayQueue", at = @At(value = "INVOKE", target = "Ljava/util/List;add(ILjava/lang/Object;)V"))
     private Object addArg(Object t, @Local(argsOnly = true) @NotNull GuiMessage message) {
-        ChatHudLineDuck messageDuck = (ChatHudLineDuck)(Object) message;
-        // We would cast to ChatHudLine.Visible to undo type erasure, but this has to be a double cast anyway
-        ChatHudLineDuck visibleDuck = (ChatHudLineDuck) t;
-        visibleDuck.modKrowd$setBackgroundTint(messageDuck.modKrowd$getBackgroundTint());
-        return visibleDuck;
+        GuiMessageDuck messageDuck = (GuiMessageDuck)(Object) message;
+        // We would cast to GuiMessage.Line to undo type erasure, but this has to be a double cast anyway
+        GuiMessageLineDuck lineDuck = (GuiMessageLineDuck) t;
+        lineDuck.modKrowd$setBackgroundTint(messageDuck.modKrowd$getBackgroundTint());
+        return lineDuck;
     }
 
     @Redirect(method = "getClickedComponentStyleAt", at = @At(value = "FIELD", target = "Lnet/minecraft/client/gui/components/ChatComponent;trimmedMessages:Ljava/util/List;"))

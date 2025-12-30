@@ -8,7 +8,7 @@ import dev.yatloaf.modkrowd.cubekrowd.tablist.MinigameTabList;
 import dev.yatloaf.modkrowd.cubekrowd.tablist.TabList;
 import dev.yatloaf.modkrowd.cubekrowd.tablist.UnknownTabList;
 import dev.yatloaf.modkrowd.cubekrowd.tablist.VanillaTabList;
-import dev.yatloaf.modkrowd.mixinduck.PlayerListHudDuck;
+import dev.yatloaf.modkrowd.mixinduck.PlayerTabOverlayDuck;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.PlayerTabOverlay;
 import net.minecraft.client.multiplayer.PlayerInfo;
@@ -24,7 +24,7 @@ public class TabListCache {
     private static final TextCacheCache CACHE = new TextCacheCache();
 
     private final PlayerTabOverlay hud;
-    private final PlayerListHudDuck hudDuck;
+    private final PlayerTabOverlayDuck hudDuck;
 
     private TabList result;
 
@@ -40,7 +40,7 @@ public class TabListCache {
 
     private TabListCache(Minecraft minecraft) {
         this.hud = minecraft.gui.getTabList();
-        this.hudDuck = (PlayerListHudDuck) this.hud;
+        this.hudDuck = (PlayerTabOverlayDuck) this.hud;
     }
 
     public static TabListCache tryNew() {

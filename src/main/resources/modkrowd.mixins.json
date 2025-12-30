@@ -6,8 +6,8 @@
         "AbstractEndPortalRendererMixin",
         "HumanoidArmorLayerMixin",
         "BarrierBlockMixin",
+        "GuiMessageLineMixin",
         "GuiMessageMixin",
-        "GuiMessageMixin$LineMixin",
         "ChatComponentMixin",
         "ChatScreenMixin",
         "ClientCommonPacketListenerImplAccessor",
@@ -35,5 +35,5 @@
     ],
     "injectors": {
         "defaultRequire": 1
-  }
+    }
 }

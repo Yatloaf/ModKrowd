@@ -1,12 +1,12 @@
 package dev.yatloaf.modkrowd.mixin;
 
-import dev.yatloaf.modkrowd.mixinduck.GuiMessageDuck;
+import dev.yatloaf.modkrowd.mixinduck.GuiMessageLineDuck;
 import net.minecraft.client.GuiMessage;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 
-@Mixin(GuiMessage.class)
-public class GuiMessageMixin implements GuiMessageDuck {
+@Mixin(GuiMessage.Line.class)
+public class GuiMessageLineMixin implements GuiMessageLineDuck {
     @Unique
     private int backgroundTint = 0;
 

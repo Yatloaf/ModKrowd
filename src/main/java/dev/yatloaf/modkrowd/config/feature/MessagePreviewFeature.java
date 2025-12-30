@@ -8,7 +8,7 @@ import dev.yatloaf.modkrowd.cubekrowd.common.CKColor;
 import dev.yatloaf.modkrowd.cubekrowd.common.cache.TextCache;
 import dev.yatloaf.modkrowd.cubekrowd.message.DirectMessage;
 import dev.yatloaf.modkrowd.cubekrowd.message.cache.MessageCache;
-import dev.yatloaf.modkrowd.mixinduck.ChatHudLineDuck;
+import dev.yatloaf.modkrowd.mixinduck.GuiMessageLineDuck;
 import net.minecraft.client.GuiMessage;
 import net.minecraft.client.GuiMessageTag;
 import net.minecraft.client.Minecraft;
@@ -79,22 +79,20 @@ public class MessagePreviewFeature extends Feature {
                 this.previewMessage.text(), width, textRenderer
         );
 
-        List<GuiMessage.Line> visibleLines = new ArrayList<>(orderedTextLines.size());
+        List<GuiMessage.Line> lines = new ArrayList<>(orderedTextLines.size());
         for (int l = orderedTextLines.size() - 1; l >= 0; l--) {
             FormattedCharSequence currentLine = orderedTextLines.get(l);
             boolean endOfEntry = l == orderedTextLines.size() - 1;
 
-            GuiMessage.Line visible = new GuiMessage.Line(
-                    Integer.MIN_VALUE, currentLine, PREVIEW_INDICATOR, endOfEntry
-            );
-            ((ChatHudLineDuck)(Object) visible).modKrowd$setBackgroundTint(PREVIEW_BACKGROUND_TINT);
-            visibleLines.add(visible);
+            GuiMessage.Line line = new GuiMessage.Line(Integer.MIN_VALUE, currentLine, PREVIEW_INDICATOR, endOfEntry);
+            ((GuiMessageLineDuck)(Object) line).modKrowd$setBackgroundTint(PREVIEW_BACKGROUND_TINT);
+            lines.add(line);
         }
 
         this.linedMessage = this.previewMessage;
         this.linedWidth = width;
-        this.previewMessageLines = visibleLines;
-        return visibleLines;
+        this.previewMessageLines = lines;
+        return lines;
     }
 
     public void updatePreviewMessage(TextCache message) {
