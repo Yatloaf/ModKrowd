@@ -11,9 +11,11 @@ import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.PlayerTabOverlay;
 import net.minecraft.client.multiplayer.PlayerInfo;
+import net.minecraft.core.ClientAsset;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.FormattedText;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.CommonColors;
 import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.world.scores.Objective;
@@ -30,7 +32,9 @@ import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Mixin(PlayerTabOverlay.class)
 public abstract class PlayerTabOverlayMixin implements PlayerTabOverlayDuck {
@@ -46,6 +50,16 @@ public abstract class PlayerTabOverlayMixin implements PlayerTabOverlayDuck {
 	@Unique private TabEntryCache[] currentEntries;
 	@Unique private int currentIndex;
 	@Unique private TabEntryCache currentEntry;
+
+    @Unique private static final String OAK_PLANKS_URL = "http://textures.minecraft.net/texture/24acc0078201335366085a3a0f3c8d4fcf117ca82f1e21ceb942ca295411a5ab";
+    @Unique private static final String OAK_RIGHT_ARROW_URL = "http://textures.minecraft.net/texture/bc2a245bf8882621b9d210d2db9cb61b33782449c794d832ae27beff40b3408e";
+    @Unique private static final String OAK_EXCLAMATION_URL = "http://textures.minecraft.net/texture/6d25daa7b26ab39764920cf9117333f3984536d17e484ea4240aba6824133fad";
+    @Unique private static final Map<String, ResourceLocation> SKIN_MAP = new HashMap<>();
+    static {
+        SKIN_MAP.put(OAK_PLANKS_URL, ResourceLocation.fromNamespaceAndPath("modkrowd", "textures/theme/cherry/cherry_planks.png"));
+        SKIN_MAP.put(OAK_RIGHT_ARROW_URL, ResourceLocation.fromNamespaceAndPath("modkrowd", "textures/theme/cherry/cherry_right_arrow.png"));
+        SKIN_MAP.put(OAK_EXCLAMATION_URL, ResourceLocation.fromNamespaceAndPath("modkrowd", "textures/theme/cherry/cherry_exclamation.png"));
+    }
 
 	@Shadow protected abstract List<PlayerInfo> getPlayerInfos();
 	@Shadow protected abstract void renderPingIcon(GuiGraphics context, int width, int x, int y, PlayerInfo entry);
@@ -138,6 +152,16 @@ public abstract class PlayerTabOverlayMixin implements PlayerTabOverlayDuck {
 	private boolean upsideDownArg(boolean upsideDown) {
 		return upsideDown || ModKrowd.CONFIG.DINNERBONE_GRUMM.enabled && this.currentEntry.isPlayer();
 	}
+
+    @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/core/ClientAsset$Texture;texturePath()Lnet/minecraft/resources/ResourceLocation;"))
+    private ResourceLocation texturePathRedirect(ClientAsset.Texture instance) {
+        if (ModKrowd.CONFIG.CHERRY_LITE.enabled || ModKrowd.CONFIG.CHERRY.enabled) {
+            if (instance instanceof ClientAsset.DownloadedTexture(ResourceLocation texturePath, String url) && SKIN_MAP.get(url) != null) {
+                return SKIN_MAP.get(url);
+            }
+        }
+        return instance.texturePath();
+    }
 
 	// Draw ping instead
 	@Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/components/PlayerTabOverlay;renderPingIcon(Lnet/minecraft/client/gui/GuiGraphics;IIILnet/minecraft/client/multiplayer/PlayerInfo;)V"))
