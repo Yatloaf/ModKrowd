@@ -76,7 +76,7 @@ public abstract class ChatComponentMixin {
     @ModifyArg(method = "method_71992", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/ARGB;color(FI)I", ordinal = 0))
     private int withAlphaArg(int color, @Local(argsOnly = true) @NotNull GuiMessage.Line line) {
         GuiMessageLineDuck lineDuck = (GuiMessageLineDuck)(Object) line;
-        return color | lineDuck.modKrowd$getBackgroundTint();
+        return color | lineDuck.modKrowd$getMessageCache().backgroundTint();
     }
 
     @Inject(method = "clearMessages", cancellable = true, at = @At("HEAD"))
@@ -98,7 +98,7 @@ public abstract class ChatComponentMixin {
 
         if (!messageCache.blocked()) {
             GuiMessage displayedLine = new GuiMessage(this.minecraft.gui.getGuiTicks(), messageCache.themedOrDefault().text(), signatureData, indicator);
-            ((GuiMessageDuck)(Object) displayedLine).modKrowd$setBackgroundTint(messageCache.backgroundTint());
+            ((GuiMessageDuck)(Object) displayedLine).modKrowd$setMessageCache(messageCache);
             this.addMessageToDisplayQueue(displayedLine);
             this.addMessageToQueue(displayedLine);
         }
@@ -111,7 +111,7 @@ public abstract class ChatComponentMixin {
         GuiMessageDuck messageDuck = (GuiMessageDuck)(Object) message;
         // We would cast to GuiMessage.Line to undo type erasure, but this has to be a double cast anyway
         GuiMessageLineDuck lineDuck = (GuiMessageLineDuck) t;
-        lineDuck.modKrowd$setBackgroundTint(messageDuck.modKrowd$getBackgroundTint());
+        lineDuck.modKrowd$setMessageCache(messageDuck.modKrowd$getMessageCache());
         return lineDuck;
     }
 

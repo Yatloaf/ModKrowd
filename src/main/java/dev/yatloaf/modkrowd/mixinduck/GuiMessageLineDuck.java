@@ -1,6 +1,8 @@
 package dev.yatloaf.modkrowd.mixinduck;
 
+import dev.yatloaf.modkrowd.cubekrowd.message.cache.MessageCache;
+
 public interface GuiMessageLineDuck {
-    void modKrowd$setBackgroundTint(int color);
-    int modKrowd$getBackgroundTint();
+    void modKrowd$setMessageCache(MessageCache cache);
+    MessageCache modKrowd$getMessageCache();
 }

@@ -70,13 +70,17 @@ public class MessagePreviewFeature extends Feature {
         return this.previewMessage != TextCache.EMPTY;
     }
 
-    public List<GuiMessage.Line> getPreviewMessageLines(int width, Font textRenderer) {
+    public List<GuiMessage.Line> getPreviewMessageLines(int width, Font font) {
         if (this.linedMessage == this.previewMessage && this.linedWidth == width) {
             return this.previewMessageLines;
         }
 
+        // Assume preview messages don't stay across subserver changes, so we don't have to care about those
+        MessageCache cache = new MessageCache(this.previewMessage, ModKrowd.currentSubserver);
+        cache.setBackgroundTint(PREVIEW_BACKGROUND_TINT);
+
         List<FormattedCharSequence> orderedTextLines = ComponentRenderUtils.wrapComponents(
-                this.previewMessage.text(), width, textRenderer
+                this.previewMessage.text(), width, font
         );
 
         List<GuiMessage.Line> lines = new ArrayList<>(orderedTextLines.size());
@@ -85,7 +89,7 @@ public class MessagePreviewFeature extends Feature {
             boolean endOfEntry = l == orderedTextLines.size() - 1;
 
             GuiMessage.Line line = new GuiMessage.Line(Integer.MIN_VALUE, currentLine, PREVIEW_INDICATOR, endOfEntry);
-            ((GuiMessageLineDuck)(Object) line).modKrowd$setBackgroundTint(PREVIEW_BACKGROUND_TINT);
+            ((GuiMessageLineDuck)(Object) line).modKrowd$setMessageCache(cache);
             lines.add(line);
         }
 
