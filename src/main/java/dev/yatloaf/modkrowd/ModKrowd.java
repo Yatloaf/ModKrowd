@@ -38,12 +38,18 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
-import java.util.concurrent.ThreadLocalRandom;
+import java.util.Random;
 
 public class ModKrowd implements ClientModInitializer {
 	public static final String MODID = "modkrowd";
 	public static final Version VERSION = FabricLoader.getInstance()
 			.getModContainer(MODID).orElseThrow(AssertionError::new).getMetadata().getVersion();
+    public static final String[] HELLO = {
+            "[ModKrowd] Haiii world :3",
+            "[ModKrowd] Hewwo world ^w^",
+            "[ModKrowd] Greetings Earth!",
+            "[ModKrowd] Stay Hydrintegrated!",
+    };
     public static final Object USELESS = new Object();
 
 	// This logger is used to write text to the console and the log file.
@@ -74,12 +80,7 @@ public class ModKrowd implements ClientModInitializer {
 
 		// Thank you, mod template. I will make sure to run only the safest code in this method.
 
-		String[] hello = {
-				"[ModKrowd] Haiii world :3",
-				"[ModKrowd] Hewwo world ^w^",
-				"[ModKrowd] Greetings Earth!"
-		};
-		LOGGER.info(hello[ThreadLocalRandom.current().nextInt(hello.length)]);
+		LOGGER.info(HELLO[new Random().nextInt(HELLO.length)]);
 
 		KeyMapping.Category category = KeyMapping.Category.register(ResourceLocation.fromNamespaceAndPath("modkrowd", "modkrowd"));
 		OPTIONS_KEY = KeyBindingHelper.registerKeyBinding(new KeyMapping("key.modkrowd.options",
