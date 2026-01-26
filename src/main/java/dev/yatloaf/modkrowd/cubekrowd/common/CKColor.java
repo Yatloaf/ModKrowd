@@ -28,8 +28,13 @@ public enum CKColor {
     AZURE(TextColor.fromRgb(0x03A9F4)),
     SKY(TextColor.fromRgb(0x60C6FF)),
     CRIMSON(TextColor.fromRgb(0xFF5F79)),
-    FESTIVE_GREEN(TextColor.fromRgb(0x43C800)),
-    FESTIVE_RED(TextColor.fromRgb(0xFF4E50));
+    SILVER(TextColor.fromRgb(0xD5D5D5)),
+    SLEET(TextColor.fromRgb(0x959595)),
+    LAVENDER(TextColor.fromRgb(0xC26EFF)),
+    DEPRESSED_DARK_AQUA(TextColor.fromRgb(0x069696)),
+    DEPRESSED_GOLD(TextColor.fromRgb(0xD48F04)),
+    DEPRESSED_LAVENDER(TextColor.fromRgb(0x9F63C9)),
+    ;
 
     public final TextColor textColor;
     public final Style style;

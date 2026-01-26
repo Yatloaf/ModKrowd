@@ -2,37 +2,63 @@ package dev.yatloaf.modkrowd.cubekrowd.tablist.cache;
 
 import dev.yatloaf.modkrowd.config.DefaultTheme;
 import dev.yatloaf.modkrowd.cubekrowd.common.cache.TextCache;
-import dev.yatloaf.modkrowd.cubekrowd.common.cache.ThemedCache;
-import dev.yatloaf.modkrowd.cubekrowd.subserver.Subserver;
+import dev.yatloaf.modkrowd.cubekrowd.common.cache.TextCacheCache;
 import dev.yatloaf.modkrowd.cubekrowd.tablist.TabEntry;
+import net.minecraft.client.multiplayer.PlayerInfo;
+import net.minecraft.network.chat.MutableComponent;
 
-public abstract class TabEntryCache extends ThemedCache {
+public class TabEntryCache {
+    // Is this *really* necessary? Someone benchmark please
+    private static final TextCacheCache CACHE = new TextCacheCache();
+
+    public final int index;
+    public final PlayerInfo info;
+    public final String profileName;
     public final int latency;
 
-    private TextCache latencyDefault;
+    private final TabListCache parent;
+
+    private TextCache name;
+
+    private TextCache nameThemed;
     private TextCache latencyThemed;
 
-    public TabEntryCache(TextCache original, int latency) {
-        super(original);
-        this.latency = latency;
+    public TabEntryCache(TabListCache parent, int index, PlayerInfo info) {
+        this.parent = parent;
+        this.index = index;
+        this.info = info;
+        this.profileName = info.getProfile().name();
+        this.latency = info.getLatency();
     }
 
-    public void setLatencyThemed(TextCache value) {
-        this.latencyThemed = value;
-    }
-
-    public TextCache latencyThemedOrDefault() {
-        return this.latencyThemed != null ? this.latencyThemed : this.latencyDefault();
-    }
-
-    public TextCache latencyDefault() {
-        if (this.latencyDefault == null) {
-            this.latencyDefault = DefaultTheme.formatLatency(this.latency);
+    public TextCache name() {
+        if (this.name == null) {
+            if (this.parent.hud == null) {
+                return TextCache.EMPTY;
+            }
+            MutableComponent nameComponent = (MutableComponent) this.parent.hud.getNameForDisplay(this.info);
+            this.name = CACHE.get(nameComponent);
         }
-        return this.latencyDefault;
+        return this.name;
     }
 
-    public abstract TabEntry result();
-    public abstract boolean isPlayer();
-    public abstract Subserver subserver();
+    public TabEntry result() {
+        return this.parent.result().entries()[this.index];
+    }
+
+    public void setNameThemed(TextCache themed) {
+        this.nameThemed = themed;
+    }
+
+    public TextCache getNameThemed() {
+        return this.nameThemed != null ? this.nameThemed : this.name();
+    }
+
+    public void setLatencyThemed(TextCache themed) {
+        this.latencyThemed = themed;
+    }
+
+    public TextCache getLatencyThemed() {
+        return this.latencyThemed != null ? this.latencyThemed : DefaultTheme.formatLatency(this.latency);
+    }
 }

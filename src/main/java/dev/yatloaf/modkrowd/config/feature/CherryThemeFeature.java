@@ -11,14 +11,13 @@ import dev.yatloaf.modkrowd.cubekrowd.common.Rank;
 import dev.yatloaf.modkrowd.cubekrowd.common.RankName;
 import dev.yatloaf.modkrowd.cubekrowd.common.cache.TextCache;
 import dev.yatloaf.modkrowd.cubekrowd.message.DeathMessage;
-import dev.yatloaf.modkrowd.cubekrowd.tablist.GameTabStatus;
-import dev.yatloaf.modkrowd.cubekrowd.tablist.GameTabSubserver;
+import dev.yatloaf.modkrowd.cubekrowd.tablist.GameTabMinigame;
 import dev.yatloaf.modkrowd.cubekrowd.tablist.MainTabColumn;
 import dev.yatloaf.modkrowd.cubekrowd.tablist.MainTabName;
 import dev.yatloaf.modkrowd.cubekrowd.tablist.MinigameTabName;
-import dev.yatloaf.modkrowd.cubekrowd.tablist.TabCentered;
-import dev.yatloaf.modkrowd.cubekrowd.tablist.TabPing;
 import dev.yatloaf.modkrowd.cubekrowd.tablist.cache.TabEntryCache;
+import dev.yatloaf.modkrowd.cubekrowd.tablist.TabPing;
+import dev.yatloaf.modkrowd.cubekrowd.tablist.cache.TabListCache;
 import dev.yatloaf.modkrowd.custom.Custom;
 import dev.yatloaf.modkrowd.custom.MissileWarsTieMessage;
 import dev.yatloaf.modkrowd.custom.SelfAlohaMessage;
@@ -29,7 +28,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextColor;
-import org.jetbrains.annotations.Nullable;
 
 public class CherryThemeFeature extends CherryLiteThemeFeature {
     public CherryThemeFeature(String id, PredicateIndex allowedPredicates) {
@@ -54,46 +52,15 @@ public class CherryThemeFeature extends CherryLiteThemeFeature {
     }
 
     @Override
-    protected void onTabEntry(TabEntryCache entry) {
-        super.onTabEntry(entry);
+    protected void onTabEntry(TabListCache tabList, TabEntryCache entry) {
+        super.onTabEntry(tabList, entry);
         switch (entry.result()) {
-            case MainTabName mainTabName -> entry.setThemed(this.mainTabName(mainTabName));
-            case MinigameTabName minigameTabName -> entry.setThemed(this.minigameTabName(minigameTabName));
+            case MainTabName mainTabName -> entry.setNameThemed(this.mainTabName(mainTabName));
+            case MinigameTabName minigameTabName -> entry.setNameThemed(this.minigameTabName(minigameTabName));
+            case GameTabMinigame gameTabMinigame -> entry.setNameThemed(this.gameTabMinigame(gameTabMinigame));
             default -> {}
         }
         entry.setLatencyThemed(this.formatLatency(entry.latency));
-    }
-
-    @Override
-    protected @Nullable StyledString tabCentered(TabCentered<?> tabCentered) {
-        StyledString sup = super.tabCentered(tabCentered);
-        if (sup != null) return sup;
-
-        return switch (tabCentered.content()) {
-            case GameTabSubserver gameTabSubserver -> this.gameTabSubserver(gameTabSubserver);
-            case GameTabStatus gameTabStatus -> this.gameTabStatus(gameTabStatus);
-            default -> null;
-        };
-    }
-
-    protected @Nullable StyledString gameTabSubserver(GameTabSubserver gameTabSubserver) {
-        return gameTabSubserver.subserverName().mapStyle(style -> switch (CKColor.fromStyle(style)) {
-            case DARK_PURPLE -> style.withColor(CHERRY1);
-            case BLUE, RED, FESTIVE_RED -> style.withColor(CHERRY2);
-            case DARK_AQUA, CRIMSON -> style.withColor(CHERRY3);
-            case GOLD, FESTIVE_GREEN -> style.withColor(CHERRY4);
-            case GREEN, SKY -> style.withColor(CHERRY5);
-            case AQUA -> style.withColor(CHERRY6);
-            case null, default -> style;
-        });
-    }
-
-    protected @Nullable StyledString gameTabStatus(GameTabStatus gameTabStatus) {
-        return switch (gameTabStatus) {
-            case ONLINE -> gameTabStatus.text.fillColor(CHERRY6);
-            case OFFLINE -> gameTabStatus.text.fillColor(CHERRY3);
-            default -> gameTabStatus.text;
-        };
     }
 
     @Override
@@ -109,6 +76,11 @@ public class CherryThemeFeature extends CherryLiteThemeFeature {
         return TextCache.of(column.appearance().fillColor(column.online() ? CHERRY4 : CHERRY1));
     }
 
+    @Override
+    protected StyledString gameTabSubserverName(StyledString name) {
+        return name.mapStyle(this::styleMinigame);
+    }
+
     protected TextCache mainTabName(MainTabName mainTabName) {
         return TextCache.of(StyledString.concat(
                 this.afk(mainTabName.afk()),
@@ -121,6 +93,10 @@ public class CherryThemeFeature extends CherryLiteThemeFeature {
                 this.afk(tabName.afk()),
                 this.minigameTeamName(tabName.teamName())
         ));
+    }
+
+    protected TextCache gameTabMinigame(GameTabMinigame gameTabMinigame) {
+        return TextCache.of(gameTabMinigame.minigameName().mapStyle(this::styleMinigame));
     }
 
     protected StyledString afk(Afk afk) {
@@ -147,6 +123,19 @@ public class CherryThemeFeature extends CherryLiteThemeFeature {
     protected StyledString minigameTeamName(MinigameTeamName teamName) {
         TextColor teamColor = this.colorNameFromTeam(teamName.team());
         return teamName.name().fillColor(teamColor);
+    }
+
+    @Override
+    protected StyledString cubeKrowd(StyledString cubeKrowd) {
+        return cubeKrowd.mapStyle(style -> switch (CKColor.fromStyle(style)) {
+            case DEPRESSED_DARK_AQUA -> style.withColor(CHERRY1);
+            case DEPRESSED_LAVENDER -> style.withColor(CHERRY2);
+            case DEPRESSED_GOLD -> style.withColor(CHERRY3);
+            case DARK_AQUA -> style.withColor(CHERRY4);
+            case LAVENDER -> style.withColor(CHERRY5);
+            case GOLD -> style.withColor(CHERRY6);
+            case null, default -> style;
+        });
     }
 
     protected TextColor colorBrackets(Rank rank) {
@@ -181,6 +170,18 @@ public class CherryThemeFeature extends CherryLiteThemeFeature {
             case MW_RED, RR_BLUE, IR_RED, CC_PURPLE -> CHERRY3;
             case MW_GREEN, RR_YELLOW, IR_GREEN, CC_ORANGE -> CHERRY6;
             default -> CKColor.WHITE.textColor;
+        };
+    }
+
+    protected Style styleMinigame(Style style) {
+        return switch (CKColor.fromStyle(style)) {
+            case DARK_PURPLE -> style.withColor(CHERRY1);
+            case BLUE, RED -> style.withColor(CHERRY2);
+            case DARK_AQUA, CRIMSON -> style.withColor(CHERRY3);
+            case GOLD -> style.withColor(CHERRY4);
+            case GREEN, SKY -> style.withColor(CHERRY5);
+            case AQUA, SILVER -> style.withColor(CHERRY6);
+            case null, default -> style;
         };
     }
 

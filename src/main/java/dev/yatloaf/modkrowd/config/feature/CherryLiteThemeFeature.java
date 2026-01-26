@@ -18,25 +18,23 @@ import dev.yatloaf.modkrowd.cubekrowd.message.RankChatMessage;
 import dev.yatloaf.modkrowd.cubekrowd.message.TeamChatMessage;
 import dev.yatloaf.modkrowd.cubekrowd.message.DeathMessage;
 import dev.yatloaf.modkrowd.cubekrowd.message.cache.MessageCache;
-import dev.yatloaf.modkrowd.cubekrowd.tablist.GameTabLabel;
-import dev.yatloaf.modkrowd.cubekrowd.tablist.GameTabMode;
-import dev.yatloaf.modkrowd.cubekrowd.tablist.GameTabPlayers;
+import dev.yatloaf.modkrowd.cubekrowd.tablist.GameTabColumn;
+import dev.yatloaf.modkrowd.cubekrowd.tablist.GameTabSubserver;
+import dev.yatloaf.modkrowd.cubekrowd.tablist.MinigameMode;
+import dev.yatloaf.modkrowd.cubekrowd.tablist.cache.TabDecoCache;
+import dev.yatloaf.modkrowd.cubekrowd.tablist.cache.TabEntryCache;
+import dev.yatloaf.modkrowd.cubekrowd.tablist.TabLiteral;
 import dev.yatloaf.modkrowd.cubekrowd.tablist.MainTabColumn;
-import dev.yatloaf.modkrowd.cubekrowd.tablist.MainTabPlayers;
-import dev.yatloaf.modkrowd.cubekrowd.tablist.TabCentered;
+import dev.yatloaf.modkrowd.cubekrowd.tablist.TabPlayers;
 import dev.yatloaf.modkrowd.cubekrowd.tablist.TabFooter;
 import dev.yatloaf.modkrowd.cubekrowd.tablist.TabFooterSection;
 import dev.yatloaf.modkrowd.cubekrowd.tablist.TabHeader;
 import dev.yatloaf.modkrowd.cubekrowd.tablist.TabPing;
-import dev.yatloaf.modkrowd.cubekrowd.tablist.cache.TabEntryCache;
-import dev.yatloaf.modkrowd.cubekrowd.tablist.cache.TabFooterCache;
-import dev.yatloaf.modkrowd.cubekrowd.tablist.cache.TabHeaderCache;
 import dev.yatloaf.modkrowd.cubekrowd.tablist.cache.TabListCache;
 import dev.yatloaf.modkrowd.util.text.StyledString;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextColor;
-import org.jetbrains.annotations.Nullable;
 
 public class CherryLiteThemeFeature extends ThemeFeature {
     public static final TextColor CHERRY1 = TextColor.fromRgb(0xe986bb);
@@ -46,8 +44,12 @@ public class CherryLiteThemeFeature extends ThemeFeature {
     public static final TextColor CHERRY5 = TextColor.fromRgb(0xfccbe7);
     public static final TextColor CHERRY6 = TextColor.fromRgb(0xf5daef);
 
-    public static final int STEM_T = 0x80271620;
-    public static final int CHERRY6_T = 0x20000000 | CHERRY6.getValue();
+    public static final int STEM_T = 0x80_27_16_20;
+    public static final int CHERRY6_T = 0x20_00_00_00 | CHERRY6.getValue();
+
+    public static final int STEM_SHADOW = 0xFF_00_00_00 | STEM_T;
+
+    public static final TextCache LITERAL_SERVERS = TextCache.of(TabLiteral.SERVERS.text.fillColor(CHERRY4));
 
     public CherryLiteThemeFeature(String id, PredicateIndex allowedPredicates) {
         super(id, allowedPredicates);
@@ -120,66 +122,24 @@ public class CherryLiteThemeFeature extends ThemeFeature {
 
     @Override
     public void onTabList(TabListCache tabList, Minecraft minecraft, ActionQueue queue) {
-        for (TabEntryCache entry : tabList.result().entries()) {
-            this.onTabEntry(entry);
+        for (TabEntryCache entry : tabList.entries) {
+            this.onTabEntry(tabList, entry);
         }
-        TabHeaderCache tabHeader = tabList.tabHeaderCache();
-        TabFooterCache tabFooter = tabList.tabFooterCache();
-        tabHeader.setThemed(this.tabHeader(tabHeader.tabHeaderSoft()));
-        tabFooter.setThemed(this.tabFooter(tabFooter.tabFooterSoft()));
+
         tabList.setHudColor(STEM_T);
         tabList.setEntryColor(CHERRY6_T);
     }
 
-    protected void onTabEntry(TabEntryCache entry) {
+    protected void onTabEntry(TabListCache tabList, TabEntryCache entry) {
         switch (entry.result()) {
-            case TabCentered<?> tabCentered -> {
-                StyledString modified = this.tabCentered(tabCentered);
-                if (modified != null) {
-                    entry.setThemed(TextCache.of(StyledString.concat(tabCentered.prefix(), modified, tabCentered.suffix())));
-                }
-            }
-            case TabPing tabPing -> entry.setThemed(this.tabPing(tabPing));
-            case MainTabColumn mainTabColumn -> entry.setThemed(this.mainTabColumn(mainTabColumn));
-            case MainTabPlayers mainTabPlayers -> entry.setThemed(this.mainTabPlayers(mainTabPlayers));
+            case TabPing tabPing -> entry.setNameThemed(this.tabPing(tabPing));
+            case TabPlayers tabPlayers -> entry.setNameThemed(this.tabPlayers(tabPlayers));
+            case MainTabColumn mainTabColumn -> entry.setNameThemed(this.mainTabColumn(mainTabColumn));
+            case TabLiteral.SERVERS -> entry.setNameThemed(LITERAL_SERVERS);
+            case GameTabColumn gameTabColumn -> entry.setNameThemed(this.gameTabColumn(gameTabColumn));
+            case GameTabSubserver gameTabSubserver -> entry.setNameThemed(this.gameTabSubserver(gameTabSubserver));
             default -> {}
         }
-    }
-
-    protected @Nullable StyledString tabCentered(TabCentered<?> tabCentered) {
-        return switch (tabCentered.content()) {
-            case GameTabLabel gameTabLabel -> this.gameTabLabel(gameTabLabel);
-            case GameTabMode gameTabMode -> this.gameTabMode(gameTabMode);
-            case GameTabPlayers gameTabPlayers -> this.gameTabPlayers(gameTabPlayers);
-            default -> null;
-        };
-    }
-
-    protected @Nullable StyledString gameTabLabel(GameTabLabel gameTabLabel) {
-        return switch (gameTabLabel) {
-            case WELCOME_TO -> gameTabLabel.text.fillColor(CHERRY3);
-            case ARCKADE -> gameTabLabel.text.mapStyle(style -> {
-                TextColor styleColor = style.getColor();
-                if (CKColor.DARK_PURPLE.textColor.equals(styleColor)) return style.withColor(CHERRY2);
-                if (CKColor.GOLD.textColor.equals(styleColor)) return style.withColor(CHERRY4);
-                return style;
-            });
-            case SERVER, MODE, PLAYERS, STATUS, YOUR_GAME -> gameTabLabel.text.fillColor(CHERRY4);
-            case UNDER, MAINTENANCE -> gameTabLabel.text.fillColor(CHERRY1);
-            default -> null;
-        };
-    }
-
-    protected @Nullable StyledString gameTabMode(GameTabMode gameTabMode) {
-        return StyledString.fromString(gameTabMode.text, Style.EMPTY.withColor(CHERRY5));
-    }
-
-    protected @Nullable StyledString gameTabPlayers(GameTabPlayers gameTabPlayers) {
-        return StyledString.concat(
-                StyledString.fromString(gameTabPlayers.playerCount() + "/", Style.EMPTY.withColor(CHERRY6)),
-                StyledString.fromString(Integer.toString(gameTabPlayers.playerLimit()), Style.EMPTY.withColor(CHERRY3))
-                // Ouch. The inconsistency
-        );
     }
 
     protected TextCache tabPing(TabPing ping) {
@@ -192,16 +152,67 @@ public class CherryLiteThemeFeature extends ThemeFeature {
         ));
     }
 
+    protected TextCache tabPlayers(TabPlayers players) {
+        return TextCache.of(StyledString.concat(
+                TabPlayers.PLAYERS_.fillColor(CHERRY5),
+                StyledString.SPACE,
+                StyledString.fromString(Integer.toString(players.playerCount()), Style.EMPTY.withColor(CHERRY6))
+        ));
+    }
+
     protected TextCache mainTabColumn(MainTabColumn column) {
         return TextCache.of(column.online() ? column.appearance().fillColor(CHERRY4) : column.appearance());
     }
 
-    protected TextCache mainTabPlayers(MainTabPlayers players) {
-        return TextCache.of(StyledString.concat(
-                MainTabPlayers.PLAYERS_.fillColor(CHERRY5),
-                StyledString.SPACE,
-                StyledString.fromString(Integer.toString(players.playerCount()), Style.EMPTY.withColor(CHERRY6))
-        ));
+    protected TextCache gameTabColumn(GameTabColumn gameTabColumn) {
+        return TextCache.of(gameTabColumn.appearance().fillColor(CHERRY4));
+    }
+
+    protected TextCache gameTabSubserver(GameTabSubserver gameTabSubserver) {
+        if (gameTabSubserver.playerCount() == -1 && gameTabSubserver.playerLimit() == -1) {
+            return TextCache.of(StyledString.concat(
+                    this.gameTabSubserverName(gameTabSubserver.subserverName()),
+                    this.gameTabSubserverMode(gameTabSubserver.mode()),
+                    gameTabSubserver.spaces(),
+                    this.gameTabSubserverOffline()
+            ));
+        } else {
+            TextColor countColor = gameTabSubserver.playerCount() == 0 ? CHERRY1 : CHERRY6;
+            return TextCache.of(StyledString.concat(
+                    this.gameTabSubserverName(gameTabSubserver.subserverName()),
+                    this.gameTabSubserverMode(gameTabSubserver.mode()),
+                    gameTabSubserver.spaces(),
+                    StyledString.fromString(Integer.toString(gameTabSubserver.playerCount()), Style.EMPTY.withColor(countColor)),
+                    StyledString.fromString("/", Style.EMPTY.withColor(CHERRY4)),
+                    StyledString.fromString(Integer.toString(gameTabSubserver.playerLimit()), Style.EMPTY.withColor(CHERRY2))
+            ));
+        }
+    }
+
+    protected StyledString gameTabSubserverName(StyledString name) {
+        return name;
+    }
+
+    protected StyledString gameTabSubserverMode(MinigameMode mode) {
+        if (mode == MinigameMode.UNKNOWN) {
+            return StyledString.fromString(":", Style.EMPTY.withColor(CHERRY5));
+        } else {
+            return StyledString.fromString(" (" + mode.text + "):", Style.EMPTY.withColor(CHERRY5));
+        }
+    }
+
+    protected StyledString gameTabSubserverOffline() {
+        return GameTabSubserver.OFFLINE.mapStyle(
+                style -> style.withItalic(false)
+                        .withColor(CHERRY1)
+                        .withShadowColor(STEM_SHADOW)
+        );
+    }
+
+    @Override
+    public void onTabDeco(TabDecoCache tabDeco, Minecraft minecraft, ActionQueue queue) {
+        tabDeco.setHeaderThemed(this.tabHeader(tabDeco.tabHeaderSoft()));
+        tabDeco.setFooterThemed(this.tabFooter(tabDeco.tabFooterSoft()));
     }
 
     protected TextCache tabHeader(TabHeader tabHeader) {
@@ -211,7 +222,10 @@ public class CherryLiteThemeFeature extends ThemeFeature {
                 this.rankName(tabHeader.rankName()),
                 TabHeader.SUFFIX1.fillColor(CHERRY1),
                 StyledString.NEWLINE,
-                TabHeader.PREFIX2.fillColor(CHERRY4),
+                TabHeader.PREFIX2.fillColor(CHERRY5),
+                this.cubeKrowd(tabHeader.cubeKrowd()),
+                StyledString.NEWLINE,
+                TabHeader.PREFIX3.fillColor(CHERRY4),
                 tabHeader.time().appearance().fillColor(CHERRY6)
         ));
     }
@@ -243,6 +257,10 @@ public class CherryLiteThemeFeature extends ThemeFeature {
 
     protected StyledString minigameTeamName(MinigameTeamName teamName) {
         return teamName.appearance();
+    }
+
+    protected StyledString cubeKrowd(StyledString cubeKrowd) {
+        return cubeKrowd;
     }
 
     protected Style whiteToCherry(Style style) {

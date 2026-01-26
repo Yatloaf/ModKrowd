@@ -1,9 +1,8 @@
 package dev.yatloaf.modkrowd.cubekrowd.common;
 
 import dev.yatloaf.modkrowd.ModKrowd;
-import dev.yatloaf.modkrowd.cubekrowd.tablist.cache.TabEntryCache;
+import dev.yatloaf.modkrowd.cubekrowd.tablist.MinigameTabName;
 import dev.yatloaf.modkrowd.util.text.StyledString;
-import dev.yatloaf.modkrowd.util.text.StyledStringReader;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Style;
@@ -16,7 +15,7 @@ public class SelfPlayer {
 
     public static RankName rankNameSoft() {
         if (ModKrowd.currentSubserver.isCubeKrowd) {
-            RankName candidate = ModKrowd.currentTabListCache.tabHeaderCache().tabHeaderSoft().rankName();
+            RankName candidate = ModKrowd.TAB_DECO.tabHeaderSoft().rankName();
             if (candidate.isReal()) {
                 rankName = candidate;
             }
@@ -25,14 +24,8 @@ public class SelfPlayer {
     }
 
     public static MinigameTeamName teamNameSoft() {
-        if (ModKrowd.currentSubserver.isMinigame) {
-            TabEntryCache self = ModKrowd.currentTabListCache.result().self();
-            if (self != null) {
-                MinigameTeamName candidate = MinigameTeamName.readFast(StyledStringReader.of(self.original.styledString()), ModKrowd.currentSubserver);
-                if (candidate.isReal()) {
-                    teamName = candidate;
-                }
-            }
+        if (ModKrowd.TAB_LIST.result().self() instanceof MinigameTabName minigameTabName) {
+            teamName = minigameTabName.teamName();
         }
         return teamName;
     }

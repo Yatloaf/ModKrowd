@@ -5,44 +5,48 @@ import dev.yatloaf.modkrowd.cubekrowd.common.SelfPlayer;
 import dev.yatloaf.modkrowd.cubekrowd.common.cache.TextCache;
 import dev.yatloaf.modkrowd.cubekrowd.subserver.Subserver;
 import dev.yatloaf.modkrowd.cubekrowd.subserver.Subservers;
-import dev.yatloaf.modkrowd.cubekrowd.tablist.cache.TabEntryCache;
 import dev.yatloaf.modkrowd.cubekrowd.tablist.cache.TabListCache;
-import net.minecraft.client.multiplayer.PlayerInfo;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public record VanillaTabList(EntryCache[] entries, EntryCache[] players, EntryCache self, Subserver yourGame, boolean isReal) implements TabList {
-    private static final EntryCache[] EMPTY_ENTRIES = new EntryCache[0];
-    public static final VanillaTabList FAILURE = new VanillaTabList(EMPTY_ENTRIES, EMPTY_ENTRIES, null, Subservers.NONE, false);
+public record VanillaTabList(TabEntry[] entries, TabEntry[] players, TabEntry self, Subserver yourGame, boolean isReal) implements TabList {
+    public static final VanillaTabList FAILURE = new VanillaTabList(TabEntry.EMPTY, TabEntry.EMPTY, null, Subservers.NONE, false);
 
     public static VanillaTabList parseFast(TabListCache source) {
-        List<PlayerInfo> playerListEntries = source.playerListEntries();
-        if (playerListEntries.isEmpty()) {
-            return FAILURE;
-        }
-
-        // Fake tab list players either have an empty name or one containing "~"
-        String firstProfileName = playerListEntries.getFirst().getProfile().name();
-        if (firstProfileName.isBlank() || firstProfileName.contains("~")) {
-            return FAILURE;
-        }
-
-        boolean isLoaded = ModKrowd.currentSubserver.isReal;
-        Subserver yourGame = isLoaded ? ModKrowd.currentSubserver : Subservers.UNKNOWN;
-
-        EntryCache[] entries = new EntryCache[playerListEntries.size()];
-        String selfName = SelfPlayer.username();
-        EntryCache self = null;
-        for (int index = 0; index < playerListEntries.size(); index++) {
-            PlayerInfo playerListEntry = playerListEntries.get(index);
-            TextCache name = source.getPlayerName(index);
-            EntryCache entryCache = new EntryCache(name, playerListEntry.getLatency(), yourGame);
-            entries[index] = entryCache;
-            if (name.string().equals(selfName)) {
-                self = entryCache;
+        if (source.entries.length > 0) {
+            // Fake tab list players either have an empty name or one containing "~"
+            String firstProfileName = source.entries[0].profileName;
+            if (firstProfileName.isBlank() || firstProfileName.contains("~")) {
+                return FAILURE;
             }
         }
-        EntryCache[] players = isLoaded ? entries : EMPTY_ENTRIES;
+
+        return parseSoft(source);
+    }
+
+    public static VanillaTabList parseSoft(TabListCache source) {
+        Subserver yourGame = ModKrowd.currentSubserver;
+
+        TabEntry[] entries = new TabEntry[source.entries.length];
+        List<TabEntry> playersBuilder = new ArrayList<>();
+        String selfName = SelfPlayer.username();
+        TabEntry self = null;
+        for (int index = 0; index < entries.length; index++) {
+            TextCache name = source.entries[index].name();
+            TabEntry entry = new VanillaTabEntry(name, yourGame);
+
+            if (!entry.playerName().isEmpty()) {
+                playersBuilder.add(entry);
+                // Unlike in the other tab lists, this skips conversion via StyledString
+                if (name.string().equals(selfName)) {
+                    self = entry;
+                }
+            }
+
+            entries[index] = entry;
+        }
+        TabEntry[] players = playersBuilder.toArray(TabEntry[]::new);
 
         return new VanillaTabList(entries, players, self, yourGame, true);
     }
@@ -50,34 +54,5 @@ public record VanillaTabList(EntryCache[] entries, EntryCache[] players, EntryCa
     @Override
     public boolean listsSubserver(Subserver subserver) {
         return subserver == this.yourGame;
-    }
-
-    @Override
-    public boolean isLoaded() {
-        return this.yourGame != Subservers.UNKNOWN;
-    }
-
-    public static class EntryCache extends TabEntryCache {
-        public final Subserver subserver;
-
-        public EntryCache(TextCache name, int latency, Subserver subserver) {
-            super(name, latency);
-            this.subserver = subserver;
-        }
-
-        @Override
-        public TabEntry result() {
-            return TabEntry.FAILURE;
-        }
-
-        @Override
-        public boolean isPlayer() {
-            return true;
-        }
-
-        @Override
-        public Subserver subserver() {
-            return this.subserver;
-        }
     }
 }

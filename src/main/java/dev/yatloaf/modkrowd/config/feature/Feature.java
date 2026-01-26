@@ -10,6 +10,7 @@ import dev.yatloaf.modkrowd.config.exception.MalformedConfigException;
 import dev.yatloaf.modkrowd.config.screen.FeatureEntry;
 import dev.yatloaf.modkrowd.cubekrowd.common.cache.TextCache;
 import dev.yatloaf.modkrowd.cubekrowd.message.cache.MessageCache;
+import dev.yatloaf.modkrowd.cubekrowd.tablist.cache.TabDecoCache;
 import dev.yatloaf.modkrowd.cubekrowd.tablist.cache.TabListCache;
 import dev.yatloaf.modkrowd.custom.Custom;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;
@@ -68,7 +69,7 @@ public class Feature {
      * @see ClientLifecycleEvents#CLIENT_STARTED
      *
      * @param minecraft The {@link Minecraft} instance.
-     * @param queue  The {@link ActionQueue} that is flushed after iterating through the features.
+     * @param queue     The {@link ActionQueue} that is flushed after iterating through the features.
      */
     public void onInitEnable(Minecraft minecraft, ActionQueue queue) {
 
@@ -78,7 +79,7 @@ public class Feature {
      * Called after the feature is enabled by entering a server or changing the settings.
      *
      * @param minecraft The {@link Minecraft} instance.
-     * @param queue  The {@link ActionQueue} that is flushed after iterating through the features.
+     * @param queue     The {@link ActionQueue} that is flushed after iterating through the features.
      */
     public void onEnable(Minecraft minecraft, ActionQueue queue) {
 
@@ -88,7 +89,7 @@ public class Feature {
      * Called after the feature is disabled by leaving a server or changing the settings.
      *
      * @param minecraft The {@link Minecraft} instance.
-     * @param queue  The {@link ActionQueue} that is flushed after iterating through the features.
+     * @param queue     The {@link ActionQueue} that is flushed after iterating through the features.
      */
     public void onDisable(Minecraft minecraft, ActionQueue queue) {
 
@@ -99,9 +100,9 @@ public class Feature {
      *
      * @see ClientConfigurationConnectionEvents#COMPLETE
      *
-     * @param listener The {@link ClientPacketListener} instance.
-     * @param minecraft  The {@link Minecraft} instance.
-     * @param queue   The {@link ActionQueue} that is flushed after iterating through the features.
+     * @param listener  The {@link ClientPacketListener} instance.
+     * @param minecraft The {@link Minecraft} instance.
+     * @param queue     The {@link ActionQueue} that is flushed after iterating through the features.
      */
     public void onConfigurationComplete(ClientConfigurationPacketListenerImpl listener, Minecraft minecraft, ActionQueue queue) {
 
@@ -112,9 +113,9 @@ public class Feature {
      *
      * @see ClientPlayConnectionEvents#JOIN
      *
-     * @param listener The {@link ClientPacketListener} instance.
-     * @param minecraft  The {@link Minecraft} instance.
-     * @param queue   The {@link ActionQueue} that is flushed after iterating through the features.
+     * @param listener  The {@link ClientPacketListener} instance.
+     * @param minecraft The {@link Minecraft} instance.
+     * @param queue     The {@link ActionQueue} that is flushed after iterating through the features.
      */
     public void onJoin(ClientPacketListener listener, Minecraft minecraft, ActionQueue queue) {
 
@@ -123,9 +124,9 @@ public class Feature {
     /**
      * Called after joining a server, when the {@code /whereami} response is received, if the feature is enabled.
      *
-     * @param listener The {@link ClientPacketListener} instance.
-     * @param minecraft  The {@link Minecraft} instance.
-     * @param queue   The {@link ActionQueue} that is flushed after iterating through the features.
+     * @param listener  The {@link ClientPacketListener} instance.
+     * @param minecraft The {@link Minecraft} instance.
+     * @param queue     The {@link ActionQueue} that is flushed after iterating through the features.
      */
     public void onJoinUpdated(ClientPacketListener listener, Minecraft minecraft, ActionQueue queue) {
 
@@ -136,9 +137,9 @@ public class Feature {
      *
      * @see ClientPlayConnectionEvents#DISCONNECT
      *
-     * @param listener The {@link ClientPacketListener} instance.
-     * @param minecraft  The {@link Minecraft} instance.
-     * @param queue   The {@link ActionQueue} that is flushed after iterating through the features.
+     * @param listener  The {@link ClientPacketListener} instance.
+     * @param minecraft The {@link Minecraft} instance.
+     * @param queue     The {@link ActionQueue} that is flushed after iterating through the features.
      */
     public void onDisconnect(ClientPacketListener listener, Minecraft minecraft, ActionQueue queue) {
 
@@ -150,7 +151,7 @@ public class Feature {
      * @see ClientTickEvents#END_CLIENT_TICK
      *
      * @param minecraft The {@link Minecraft} instance.
-     * @param queue  The {@link ActionQueue} that is flushed after iterating through the features.
+     * @param queue     The {@link ActionQueue} that is flushed after iterating through the features.
      */
     public void onEndTick(Minecraft minecraft, ActionQueue queue) {
 
@@ -159,9 +160,9 @@ public class Feature {
     /**
      * Called when a game message is received if the feature is enabled.
      *
-     * @param message The message with convenient methods for parsing and modifying.
-     * @param minecraft  The {@link Minecraft} instance.
-     * @param queue   The {@link ActionQueue} that is flushed after iterating through the features.
+     * @param message   The message with convenient methods for parsing and modifying.
+     * @param minecraft The {@link Minecraft} instance.
+     * @param queue     The {@link ActionQueue} that is flushed after iterating through the features.
      */
     public void onMessage(MessageCache message, Minecraft minecraft, ActionQueue queue) {
 
@@ -179,11 +180,22 @@ public class Feature {
     }
 
     /**
+     * Called when the tab decoration (header or footer) is updated if the feature is enabled.
+     *
+     * @param tabDeco   The tab decoration with convenient methods for parsing and modifying.
+     * @param minecraft The {@link Minecraft} instance.
+     * @param queue     The {@link ActionQueue} that is flushed after iterating through the features.
+     */
+    public void onTabDeco(TabDecoCache tabDeco, Minecraft minecraft, ActionQueue queue) {
+
+    }
+
+    /**
      * Allows a feature to theme a custom message sent by the mod itself, overriding the default style.
      *
-     * @param custom The message to be themed.
+     * @param custom    The message to be themed.
      * @param minecraft The {@link Minecraft} instance.
-     * @param queue  The {@link ActionQueue} that is flushed after iterating through the features.
+     * @param queue     The {@link ActionQueue} that is flushed after iterating through the features.
      * @return The themed custom message, or {@code null} if this feature does not theme it.
      */
     public TextCache themeCustom(Custom custom, Minecraft minecraft, ActionQueue queue) {

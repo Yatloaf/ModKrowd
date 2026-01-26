@@ -332,6 +332,9 @@ public class StyledString {
     }
 
     public StyledString subView(int beginIndex, int endIndex) throws IndexOutOfBoundsException {
+        if (beginIndex == 0 && endIndex == this.length) {
+            return this;
+        }
         if (beginIndex > this.length || endIndex > this.length || beginIndex > endIndex || beginIndex < 0) {
             throw new IndexOutOfBoundsException("beginIndex: " + beginIndex + ", endIndex: " + endIndex + ", length: " + this.length);
         }

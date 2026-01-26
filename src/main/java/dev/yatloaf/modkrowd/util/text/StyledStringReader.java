@@ -62,6 +62,13 @@ public class StyledStringReader {
         return this.read(stopIndex);
     }
 
+    @SuppressWarnings("StatementWithEmptyBody")
+    public synchronized StyledString readWhile(String repeat) {
+        int start = this.cursor;
+        while (this.skipIfNext(repeat));
+        return this.source.subView(start, this.cursor);
+    }
+
     public synchronized StyledString peek(int count) {
         int actualCount = Math.min(count, this.length - this.cursor);
         return this.source.subView(this.cursor, this.cursor + actualCount);

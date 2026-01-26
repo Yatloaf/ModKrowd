@@ -12,6 +12,7 @@ import dev.yatloaf.modkrowd.cubekrowd.message.WhereamiMessage;
 import dev.yatloaf.modkrowd.cubekrowd.message.cache.MessageCache;
 import dev.yatloaf.modkrowd.cubekrowd.subserver.Subserver;
 import dev.yatloaf.modkrowd.cubekrowd.subserver.Subservers;
+import dev.yatloaf.modkrowd.cubekrowd.tablist.cache.TabDecoCache;
 import dev.yatloaf.modkrowd.cubekrowd.tablist.cache.TabListCache;
 import dev.yatloaf.modkrowd.mixin.ClientCommonPacketListenerImplAccessor;
 import dev.yatloaf.modkrowd.mixin.KeyMappingAccessor;
@@ -59,9 +60,10 @@ public class ModKrowd implements ClientModInitializer {
 
 	public static final File CONFIG_FILE = FabricLoader.getInstance().getConfigDir().resolve(MODID + ".json").toFile();
 	public static final SyncedConfig CONFIG = new SyncedConfig();
+    public static final TabListCache TAB_LIST = new TabListCache();
+    public static final TabDecoCache TAB_DECO = new TabDecoCache();
 
-	public static Subserver currentSubserver = Subservers.NONE;
-	public static TabListCache currentTabListCache = null; // Else ExceptionInInitializerError
+    public static Subserver currentSubserver = Subservers.NONE;
 	public static long tick = 0; // Chances are this won't overflow in your lifetime
 
 	public static KeyMapping OPTIONS_KEY;
@@ -69,7 +71,6 @@ public class ModKrowd implements ClientModInitializer {
 	public static KeyMapping NEXT_SUBSERVER_KEY;
 	public static boolean INIT = false; // TODO: Better, somehow
 
-	private static boolean pendingTabListCache = true;
 	private static SwitchStatus switchStatus = SwitchIdle.INSTANCE;
 
 	@Override
@@ -99,21 +100,6 @@ public class ModKrowd implements ClientModInitializer {
 
 		CONFIG.tryDeserialize(CONFIG_FILE);
 		CONFIG.onInitEnable(Minecraft.getInstance());
-	}
-
-	public static void invalidateTabListCache() {
-		pendingTabListCache = true;
-	}
-
-	public static void checkTabListCache() {
-		if (pendingTabListCache) {
-			TabListCache candidate = TabListCache.tryNew();
-			if (candidate != null) {
-				pendingTabListCache = false;
-				currentTabListCache = candidate;
-				CONFIG.onTabList(currentTabListCache);
-			}
-		}
 	}
 
 	public static ConfigScreen createConfigScreen(Screen parent) {
@@ -170,7 +156,7 @@ public class ModKrowd implements ClientModInitializer {
 	}
 
 	private static void onJoin(ClientPacketListener listener, PacketSender sender, Minecraft minecraft) {
-		invalidateTabListCache(); // *Hopefully* late enough for inGameHud to be initialized
+		TAB_LIST.invalidateAll();
 
 		switchStatus = SwitchIdle.INSTANCE;
 
@@ -191,7 +177,6 @@ public class ModKrowd implements ClientModInitializer {
 
 		tickSwitchingMissileWarsLobby();
 		tickKeys(minecraft);
-		checkTabListCache();
 
 		CONFIG.onEndTick(minecraft);
 	}

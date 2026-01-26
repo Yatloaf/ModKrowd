@@ -10,5 +10,5 @@ import java.util.List;
 public interface PlayerTabOverlayDuck {
     @Nullable MutableComponent modKrowd$getHeader();
     @Nullable MutableComponent modKrowd$getFooter();
-    @NotNull List<PlayerInfo> modKrowd$collectEntries();
+    @NotNull List<PlayerInfo> modKrowd$getPlayerInfos();
 }

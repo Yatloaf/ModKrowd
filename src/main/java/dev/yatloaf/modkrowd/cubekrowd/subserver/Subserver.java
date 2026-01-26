@@ -19,7 +19,7 @@ public class Subserver {
     public final String listName;
     public final String[] tabNames;
 
-    public final TeamSet teams;
+    public final Minigame minigame;
     private final FormatChat formatChat;
 
     public final boolean allowCheats;
@@ -34,7 +34,7 @@ public class Subserver {
             String id,
             String listName,
             String[] tabNames,
-            TeamSet teams,
+            Minigame minigame,
             FormatChat formatChat,
             boolean allowCheats,
             boolean hasChattymotes,
@@ -45,7 +45,7 @@ public class Subserver {
         this.id = id;
         this.listName = listName;
         this.tabNames = tabNames;
-        this.teams = teams;
+        this.minigame = minigame;
         this.formatChat = formatChat;
         this.allowCheats = allowCheats;
         this.hasChattymotes = hasChattymotes;
@@ -63,7 +63,7 @@ public class Subserver {
     }
 
     public MinigameTeam teamFromColor(CKColor color) {
-        return this.teams.teamFromColor(color);
+        return this.minigame.teamFromColor(color);
     }
 
     public void connect(ClientPacketListener listener) {

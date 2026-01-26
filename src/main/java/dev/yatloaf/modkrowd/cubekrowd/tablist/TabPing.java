@@ -17,7 +17,7 @@ public record TabPing(int latency, boolean isReal) implements TabEntry {
         int latency = Util.parseIntOr(source.readUntil("ms").toUnstyledString(), -1);
         if (latency < 0) return FAILURE;
 
-        source.skipUntilAfter("ms");
+        if (!source.skipIfNext("ms")) return FAILURE;
 
         return new TabPing(latency, true);
     }

@@ -6,40 +6,62 @@ import dev.yatloaf.modkrowd.util.Util;
 
 import java.util.Map;
 
-public class TeamSet {
-    public static final TeamSet NONE = new TeamSet();
-    public static final TeamSet MISSILEWARS = new TeamSet(
+public enum Minigame {
+    MISSILEWARS("MissileWars",
             MinigameTeam.MW_LOBBY,
             MinigameTeam.MW_SPECTATOR,
             MinigameTeam.MW_RED,
             MinigameTeam.MW_GREEN
-    );
-    public static final TeamSet ROCKETRIDERS = new TeamSet(
+    ),
+    ROCKETRIDERS("RocketRiders",
             MinigameTeam.RR_LOBBY,
             MinigameTeam.RR_SPECTATOR,
             MinigameTeam.RR_BLUE,
             MinigameTeam.RR_YELLOW
-    );
-    public static final TeamSet CRAFTYCANNONEERS = new TeamSet(
+    ),
+    CRAFTYCANNONEERS("CraftyCannoneers",
             MinigameTeam.CC_LOBBY,
             MinigameTeam.CC_SPECTATOR,
             MinigameTeam.CC_PURPLE,
             MinigameTeam.CC_ORANGE
-    );
-    public static final TeamSet ICERUNNER = new TeamSet(
+    ),
+    BACKSTABBED("BackStabbed!"),
+    SNOWYSKIRMISH("SnowySkirmish",
+            MinigameTeam.SS_LOBBY,
+            MinigameTeam.SS_SPECTATOR,
+            MinigameTeam.SS_GREEN,
+            MinigameTeam.SS_RED
+    ),
+    ICERUNNER("IceRunner",
             MinigameTeam.IR_SPECTATOR,
             MinigameTeam.IR_RED,
             MinigameTeam.IR_GREEN
-    );
-    public static final TeamSet FISHSLAP = new TeamSet(MinigameTeam.FS);
+    ),
+    FISHSLAP("FishSlap",
+            MinigameTeam.FS
+    ),
+    UNKNOWN(null),
+    ;
 
+    private static final Map<String, Minigame> FROM_TAB_NAME = Util.arrayToMap(values(), key -> key.tabName, value -> value);
+
+    public final String tabName;
     private final Map<CKColor, MinigameTeam> colorToTeam;
 
-    public TeamSet(MinigameTeam... teams) {
+    Minigame(String tabName, MinigameTeam... teams) {
+        this.tabName = tabName;
         this.colorToTeam = Util.arrayToMap(teams, team -> team.color, team -> team);
+    }
+
+    public static Minigame fromTabName(String tabName) {
+        return FROM_TAB_NAME.getOrDefault(tabName, UNKNOWN);
     }
 
     public MinigameTeam teamFromColor(CKColor color) {
         return this.colorToTeam.getOrDefault(color, MinigameTeam.UNKNOWN);
+    }
+
+    public boolean isReal() {
+        return this != UNKNOWN;
     }
 }

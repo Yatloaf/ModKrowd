@@ -6,7 +6,7 @@ public class SubserverBuilder {
     private String[] tabNames = {};
 
     private FormatChat formatChat = FormatChat::empty;
-    private TeamSet teams = TeamSet.NONE;
+    private Minigame minigame = Minigame.UNKNOWN;
 
     private boolean allowCheats = false;
     private boolean hasChattymotes = false;
@@ -58,8 +58,8 @@ public class SubserverBuilder {
         return this;
     }
 
-    public SubserverBuilder teams(TeamSet teams) {
-        this.teams = teams;
+    public SubserverBuilder minigame(Minigame minigame) {
+        this.minigame = minigame;
         this.isMinigame = true;
         return this;
     }
@@ -79,7 +79,7 @@ public class SubserverBuilder {
                 this.id,
                 this.listName,
                 this.tabNames,
-                this.teams,
+                this.minigame,
                 this.formatChat,
                 this.allowCheats,
                 this.hasChattymotes,

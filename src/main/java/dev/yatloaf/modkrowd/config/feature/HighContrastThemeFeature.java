@@ -15,23 +15,27 @@ import dev.yatloaf.modkrowd.cubekrowd.message.MixedChatMessage;
 import dev.yatloaf.modkrowd.cubekrowd.message.RankChatMessage;
 import dev.yatloaf.modkrowd.cubekrowd.message.DeathMessage;
 import dev.yatloaf.modkrowd.cubekrowd.message.cache.MessageCache;
+import dev.yatloaf.modkrowd.cubekrowd.tablist.GameTabSubserver;
 import dev.yatloaf.modkrowd.cubekrowd.tablist.MainTabName;
+import dev.yatloaf.modkrowd.cubekrowd.tablist.MinigameMode;
 import dev.yatloaf.modkrowd.cubekrowd.tablist.MinigameTabName;
+import dev.yatloaf.modkrowd.cubekrowd.tablist.cache.TabDecoCache;
+import dev.yatloaf.modkrowd.cubekrowd.tablist.cache.TabEntryCache;
 import dev.yatloaf.modkrowd.cubekrowd.tablist.TabHeader;
 import dev.yatloaf.modkrowd.cubekrowd.tablist.TabPing;
-import dev.yatloaf.modkrowd.cubekrowd.tablist.cache.TabEntryCache;
-import dev.yatloaf.modkrowd.cubekrowd.tablist.cache.TabHeaderCache;
 import dev.yatloaf.modkrowd.cubekrowd.tablist.cache.TabListCache;
 import dev.yatloaf.modkrowd.util.text.StyledString;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextColor;
+import net.minecraft.util.ARGB;
 
 public class HighContrastThemeFeature extends ThemeFeature {
     public static final TextColor PINK = TextColor.fromRgb(0xFF9FCF);
-    public static final TextColor LAVENDER = TextColor.fromRgb(0xBF7FFF);
     public static final TextColor CORNFLOWER = TextColor.fromRgb(0x5F7FFF);
+
+    public static final int OFFLINE_SHADOW = 0xFF_00_00_00 | ARGB.scaleRGB(CKColor.RED.textColor.getValue(), 0.25F);
 
     public HighContrastThemeFeature(String id, PredicateIndex allowedPredicates) {
         super(id, allowedPredicates);
@@ -106,18 +110,15 @@ public class HighContrastThemeFeature extends ThemeFeature {
 
     @Override
     public void onTabList(TabListCache tabList, Minecraft minecraft, ActionQueue queue) {
-        for (TabEntryCache entry : tabList.result().entries()) {
+        for (TabEntryCache entry : tabList.entries) {
             switch (entry.result()) {
-                case TabPing tabPing -> entry.setThemed(this.tabPing(tabPing));
-                case MainTabName mainTabName -> entry.setThemed(this.mainTabName(mainTabName));
+                case TabPing tabPing -> entry.setNameThemed(this.tabPing(tabPing));
+                case MainTabName mainTabName -> entry.setNameThemed(this.mainTabName(mainTabName));
+                case GameTabSubserver gameTabSubserver -> entry.setNameThemed(this.gameTabSubserver(gameTabSubserver));
                 case MinigameTabName minigameTabName
-                        when minigameTabName.afk() == Afk.TRUE -> entry.setThemed(this.minigameTabName(minigameTabName));
+                        when minigameTabName.afk() == Afk.TRUE -> entry.setNameThemed(this.minigameTabName(minigameTabName));
                 default -> {}
             }
-        }
-        TabHeaderCache tabHeader = tabList.tabHeaderCache();
-        switch (tabHeader.tabHeaderSoft().rankName().rank().letters()) {
-            case RESPECTED, VETERAN -> tabHeader.setThemed(this.tabHeader(tabHeader.tabHeaderSoft()));
         }
     }
 
@@ -138,11 +139,55 @@ public class HighContrastThemeFeature extends ThemeFeature {
         ));
     }
 
+    protected TextCache gameTabSubserver(GameTabSubserver gameTabSubserver) {
+        if (gameTabSubserver.playerCount() == -1 && gameTabSubserver.playerLimit() == -1) {
+            return TextCache.of(StyledString.concat(
+                    gameTabSubserver.subserverName(),
+                    this.gameTabSubserverMode(gameTabSubserver.mode()),
+                    gameTabSubserver.spaces(),
+                    this.gameTabSubserverOffline()
+            ));
+        } else {
+            CKColor countColor = gameTabSubserver.playerCount() == 0 ? CKColor.SLEET : CKColor.WHITE;
+            return TextCache.of(StyledString.concat(
+                    gameTabSubserver.subserverName(),
+                    this.gameTabSubserverMode(gameTabSubserver.mode()),
+                    gameTabSubserver.spaces(),
+                    StyledString.fromString(Integer.toString(gameTabSubserver.playerCount()), countColor.style),
+                    StyledString.fromString("/", CKColor.GRAY.style),
+                    StyledString.fromString(Integer.toString(gameTabSubserver.playerLimit()), CKColor.RED.style)
+            ));
+        }
+    }
+
+    protected StyledString gameTabSubserverMode(MinigameMode mode) {
+        if (mode == MinigameMode.UNKNOWN) {
+            return StyledString.fromString(":", CKColor.GRAY.style);
+        } else {
+            return StyledString.fromString(" (" + mode.text + "):", CKColor.GRAY.style);
+        }
+    }
+
+    protected StyledString gameTabSubserverOffline() {
+        return GameTabSubserver.OFFLINE.mapStyle(
+                style -> style.withItalic(false)
+                        .withShadowColor(OFFLINE_SHADOW)
+        );
+    }
+
     protected TextCache minigameTabName(MinigameTabName minigameTabName) {
         return TextCache.of(StyledString.concat(
                 this.afkStar(minigameTabName.afk()),
                 minigameTabName.teamName().appearance()
         ));
+    }
+
+    @Override
+    public void onTabDeco(TabDecoCache tabDeco, Minecraft minecraft, ActionQueue queue) {
+        TabHeader tabHeader = tabDeco.tabHeaderSoft();
+        switch (tabHeader.rankName().rank().letters()) {
+            case RESPECTED, VETERAN -> tabDeco.setHeaderThemed(this.tabHeader(tabHeader));
+        }
     }
 
     protected TextCache tabHeader(TabHeader tabHeader) {
@@ -152,7 +197,7 @@ public class HighContrastThemeFeature extends ThemeFeature {
                 this.modifyRankName(tabHeader.rankName()).appearance(),
                 TabHeader.SUFFIX1,
                 StyledString.NEWLINE,
-                TabHeader.PREFIX2,
+                TabHeader.PREFIX3,
                 tabHeader.time().appearance()
         ));
     }
@@ -164,7 +209,7 @@ public class HighContrastThemeFeature extends ThemeFeature {
     protected RankName modifyRankName(RankName rankName) {
         return switch (rankName.rank().letters()) {
             case RESPECTED -> rankName.mapName(name -> name.fillColor(PINK));
-            case VETERAN -> rankName.mapName(name -> name.fillColor(LAVENDER));
+            case VETERAN -> rankName.mapName(name -> name.fillColor(CKColor.LAVENDER.textColor));
             case DEVELOPER -> rankName.mapName(name -> name.fillColor(CORNFLOWER));
             default -> rankName;
         };

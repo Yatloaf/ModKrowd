@@ -1,5 +1,6 @@
 package dev.yatloaf.modkrowd.cubekrowd.tablist;
 
+import dev.yatloaf.modkrowd.ModKrowd;
 import dev.yatloaf.modkrowd.cubekrowd.common.SelfPlayer;
 import dev.yatloaf.modkrowd.cubekrowd.subserver.Subserver;
 import dev.yatloaf.modkrowd.cubekrowd.subserver.Subservers;
@@ -9,18 +10,16 @@ import dev.yatloaf.modkrowd.util.text.StyledString;
 import dev.yatloaf.modkrowd.util.text.StyledStringReader;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
-public record MainTabList(TabEntry[] entries, TabEntry[] players, TabEntry self, Set<Subserver> listedSubservers, boolean isReal) implements TabList {
-    public static final MainTabList FAILURE = new MainTabList(TabEntry.EMPTY, TabEntry.EMPTY, null, Set.of(), false);
+public record GameTabList(TabEntry[] entries, TabEntry[] players, TabEntry self, Subserver yourGame, boolean isReal) implements TabList {
+    public static final GameTabList FAILURE = new GameTabList(TabEntry.EMPTY, TabEntry.EMPTY, null, Subservers.NONE, false);
 
-    public static MainTabList parseFast(TabListCache source) {
+    public static GameTabList parseFast(TabListCache source) {
         if (source.entries.length < 80) return FAILURE;
 
-        Subserver currentSubserver = Subservers.UNKNOWN;
-        Set<Subserver> listedSubservers = new HashSet<>(4);
+        // TODO: Parse arrows for non-GameLobby
+        Subserver yourGame = ModKrowd.currentSubserver;
 
         TabEntry[] entries = new TabEntry[80];
         List<TabEntry> playersBuilder = new ArrayList<>();
@@ -28,17 +27,14 @@ public record MainTabList(TabEntry[] entries, TabEntry[] players, TabEntry self,
         TabEntry self = null;
         for (int index = 0; index < entries.length; index++) {
             TabEntryCache entryCache = source.entries[index];
-            TabEntry entry = parseEntry(index, entryCache.name().styledString(), currentSubserver);
+            TabEntry entry = parseEntry(index, entryCache.name().styledString(), yourGame);
 
-            if (entry instanceof MainTabColumn mainTabColumn) {
-                if (!mainTabColumn.isReal()) return FAILURE;
+            if (entry instanceof GameTabColumn gameTabColumn) {
+                if (!gameTabColumn.isReal()) return FAILURE;
 
-                currentSubserver = mainTabColumn.subserver();
-                listedSubservers.add(currentSubserver);
-                if (currentSubserver == Subservers.SURVIVAL_AMBIGUOUS) {
-                    listedSubservers.add(Subservers.SURVIVAL);
-                    listedSubservers.add(Subservers.SURVIVAL2);
-                }
+                yourGame = gameTabColumn.subserver();
+            } else if (entry instanceof TabLiteral tabLiteral && !tabLiteral.isReal()) {
+                return FAILURE;
             }
             if (!entry.playerName().isEmpty()) {
                 playersBuilder.add(entry);
@@ -51,13 +47,16 @@ public record MainTabList(TabEntry[] entries, TabEntry[] players, TabEntry self,
         }
         TabEntry[] players = playersBuilder.toArray(TabEntry[]::new);
 
-        return new MainTabList(entries, players, self, listedSubservers, true);
+        return new GameTabList(entries, players, self, yourGame, true);
     }
 
     private static TabEntry parseEntry(int index, StyledString name, Subserver subserver) {
-        if (index % 20 == 0) {
+        if (index == 60) {
             // Criterion for successful parsing
-            return MainTabColumn.readFast(StyledStringReader.of(name));
+            return GameTabColumn.parseFast(name, subserver);
+        } else if (index % 20 == 0) {
+            // Criterion for successful parsing
+            return TabLiteral.SERVERS.parseSpecific(name);
         } else if (index == 18) {
             TabPlayers tabPlayers = TabPlayers.readFast(StyledStringReader.of(name));
             if (tabPlayers.isReal()) return tabPlayers;
@@ -69,14 +68,23 @@ public record MainTabList(TabEntry[] entries, TabEntry[] players, TabEntry self,
         TabLiteral empty = TabLiteral.EMPTY.parseSpecific(name);
         if (empty.isReal()) return empty;
 
+        GameTabMinigame gameTabMinigame = GameTabMinigame.parseFast(name);
+        if (gameTabMinigame.isReal()) return gameTabMinigame;
+
+        GameTabSubserver gameTabSubserver = GameTabSubserver.readFast(StyledStringReader.of(name));
+        if (gameTabSubserver.isReal()) return gameTabSubserver;
+
         MainTabName mainTabName = MainTabName.readFast(StyledStringReader.of(name), subserver);
         if (mainTabName.isReal()) return mainTabName;
+
+        MinigameTabName minigameTabName = MinigameTabName.readFast(StyledStringReader.of(name), subserver);
+        if (minigameTabName.isReal()) return minigameTabName;
 
         return TabEntry.FAILURE;
     }
 
     @Override
     public boolean listsSubserver(Subserver subserver) {
-        return this.listedSubservers.contains(subserver);
+        return subserver == this.yourGame;
     }
 }

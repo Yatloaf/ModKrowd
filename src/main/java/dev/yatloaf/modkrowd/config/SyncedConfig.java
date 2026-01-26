@@ -7,6 +7,7 @@ import dev.yatloaf.modkrowd.cubekrowd.common.cache.TextCache;
 import dev.yatloaf.modkrowd.cubekrowd.message.cache.MessageCache;
 import dev.yatloaf.modkrowd.cubekrowd.subserver.Subserver;
 import dev.yatloaf.modkrowd.cubekrowd.subserver.Subservers;
+import dev.yatloaf.modkrowd.cubekrowd.tablist.cache.TabDecoCache;
 import dev.yatloaf.modkrowd.cubekrowd.tablist.cache.TabListCache;
 import dev.yatloaf.modkrowd.custom.Custom;
 import net.minecraft.client.Minecraft;
@@ -157,6 +158,15 @@ public class SyncedConfig extends Config {
         Minecraft minecraft = Minecraft.getInstance();
         for (Feature f : this.enabledFeatures) {
             f.onTabList(tabList, minecraft, queue);
+        }
+        queue.flush(minecraft);
+    }
+
+    public synchronized void onTabDeco(TabDecoCache tabDeco) {
+        ActionQueue queue = new ActionQueue();
+        Minecraft minecraft = Minecraft.getInstance();
+        for (Feature f : this.enabledFeatures) {
+            f.onTabDeco(tabDeco, minecraft, queue);
         }
         queue.flush(minecraft);
     }

@@ -12,11 +12,13 @@ public class ThemeFeature extends Feature {
 
     @Override
     public void onEnable(Minecraft minecraft, ActionQueue queue) {
-        ModKrowd.invalidateTabListCache();
+        ModKrowd.TAB_LIST.invalidateThemed();
+        ModKrowd.TAB_DECO.invalidateThemed();
     }
 
     @Override
     public void onDisable(Minecraft minecraft, ActionQueue queue) {
-        ModKrowd.invalidateTabListCache();
+        ModKrowd.TAB_LIST.invalidateThemed();
+        ModKrowd.TAB_DECO.invalidateThemed();
     }
 }

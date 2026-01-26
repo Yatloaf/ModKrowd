@@ -2,7 +2,7 @@ package dev.yatloaf.modkrowd.config;
 
 import dev.yatloaf.modkrowd.cubekrowd.common.CKColor;
 import dev.yatloaf.modkrowd.cubekrowd.subserver.Subserver;
-import dev.yatloaf.modkrowd.cubekrowd.subserver.TeamSet;
+import dev.yatloaf.modkrowd.cubekrowd.subserver.Minigame;
 import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
@@ -58,7 +58,7 @@ public class Predicate {
             }
         }
         static boolean missileWars(Subserver subserver, int permissionLevel) {
-            return subserver.teams == TeamSet.MISSILEWARS;
+            return subserver.minigame == Minigame.MISSILEWARS;
         }
         static boolean always(Subserver subserver, int permissionLevel) {
             return true;

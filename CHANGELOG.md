@@ -14,6 +14,7 @@ New contributor: Hydrintegral!
 - Migrated to mojmap.
 - Rewrote lots of code to be more maintainable.
 - Updated parsing in line with CubeKrowd.
+- High Contrast Theme now uses the `ARCKADE` color for Veteran.
 
 ### Fixed
 
