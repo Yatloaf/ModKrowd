@@ -36,7 +36,7 @@ public record VanillaTabList(TabEntry[] entries, TabEntry[] players, TabEntry se
             TextCache name = source.entries[index].name();
             TabEntry entry = new VanillaTabEntry(name, yourGame);
 
-            if (!entry.playerName().isEmpty()) {
+            if (entry.isPlayer()) {
                 playersBuilder.add(entry);
                 // Unlike in the other tab lists, this skips conversion via StyledString
                 if (name.string().equals(selfName)) {

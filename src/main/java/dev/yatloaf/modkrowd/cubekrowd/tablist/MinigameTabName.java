@@ -2,6 +2,7 @@ package dev.yatloaf.modkrowd.cubekrowd.tablist;
 
 import dev.yatloaf.modkrowd.cubekrowd.common.Afk;
 import dev.yatloaf.modkrowd.cubekrowd.common.MinigameTeamName;
+import dev.yatloaf.modkrowd.cubekrowd.common.RankLetters;
 import dev.yatloaf.modkrowd.cubekrowd.subserver.Subserver;
 import dev.yatloaf.modkrowd.cubekrowd.subserver.Subservers;
 import dev.yatloaf.modkrowd.util.text.StyledString;
@@ -16,8 +17,18 @@ public record MinigameTabName(Afk afk, MinigameTeamName teamName, Subserver subs
         Afk afk = Afk.read(source);
         if (!afk.isReal()) return FAILURE;
 
-        MinigameTeamName minigameTeamName = MinigameTeamName.readFast(source, subserver);
-        if (!minigameTeamName.isReal()) return FAILURE;
+        // *Sometimes*, this uses legacy formatting codes
+        // Hopefully it will be possible to remove this workaround someday
+        MinigameTeamName minigameTeamName;
+        StyledString remaining = source.peekAll();
+        if (remaining.startsWith("§")) {
+            source.skipAll();
+            StyledString remainingFixed = StyledString.fromFormattedString(remaining.toUnstyledString(), '§', RankLetters.PF_ALMOST_ALL);
+            minigameTeamName = MinigameTeamName.readFast(StyledStringReader.of(remainingFixed), subserver);
+        } else {
+            minigameTeamName = MinigameTeamName.readFast(source, subserver);
+        }
+        if (!minigameTeamName.isReal() || !source.isAtEnd()) return FAILURE;
 
         return new MinigameTabName(afk, minigameTeamName, subserver, true);
     }

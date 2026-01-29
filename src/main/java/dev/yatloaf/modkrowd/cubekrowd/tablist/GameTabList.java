@@ -1,6 +1,5 @@
 package dev.yatloaf.modkrowd.cubekrowd.tablist;
 
-import dev.yatloaf.modkrowd.ModKrowd;
 import dev.yatloaf.modkrowd.cubekrowd.common.SelfPlayer;
 import dev.yatloaf.modkrowd.cubekrowd.subserver.Subserver;
 import dev.yatloaf.modkrowd.cubekrowd.subserver.Subservers;
@@ -18,8 +17,7 @@ public record GameTabList(TabEntry[] entries, TabEntry[] players, TabEntry self,
     public static GameTabList parseFast(TabListCache source) {
         if (source.entries.length < 80) return FAILURE;
 
-        // TODO: Parse arrows for non-GameLobby
-        Subserver yourGame = ModKrowd.currentSubserver;
+        Subserver yourGame = Subservers.UNKNOWN;
 
         TabEntry[] entries = new TabEntry[80];
         List<TabEntry> playersBuilder = new ArrayList<>();
@@ -29,14 +27,20 @@ public record GameTabList(TabEntry[] entries, TabEntry[] players, TabEntry self,
             TabEntryCache entryCache = source.entries[index];
             TabEntry entry = parseEntry(index, entryCache.name().styledString(), yourGame);
 
-            if (entry instanceof GameTabColumn gameTabColumn) {
-                if (!gameTabColumn.isReal()) return FAILURE;
+            switch (entry) {
+                case GameTabColumn gameTabColumn -> {
+                    if (!gameTabColumn.isReal()) return FAILURE;
 
-                yourGame = gameTabColumn.subserver();
-            } else if (entry instanceof TabLiteral tabLiteral && !tabLiteral.isReal()) {
-                return FAILURE;
+                    yourGame = gameTabColumn.subserver();
+                }
+                case GameTabSubserver gameTabSubserver
+                        when entryCache.icon == TabIcon.STONE_RIGHT_ARROW -> yourGame = gameTabSubserver.subserver();
+                case TabLiteral tabLiteral
+                        when !tabLiteral.isReal() -> { return FAILURE; }
+                default -> {}
             }
-            if (!entry.playerName().isEmpty()) {
+
+            if (entry.isPlayer()) {
                 playersBuilder.add(entry);
                 if (entry.playerName().toUnstyledString().equals(selfName)) {
                     self = entry;

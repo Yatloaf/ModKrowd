@@ -74,6 +74,10 @@ public class StyledStringReader {
         return this.source.subView(this.cursor, this.cursor + actualCount);
     }
 
+    public synchronized StyledString peekAll() {
+        return this.source.subView(this.cursor);
+    }
+
     public synchronized void skip(int count) {
         this.cursor += Math.min(count, this.length - this.cursor);
     }

@@ -40,7 +40,7 @@ public record MainTabList(TabEntry[] entries, TabEntry[] players, TabEntry self,
                     listedSubservers.add(Subservers.SURVIVAL2);
                 }
             }
-            if (!entry.playerName().isEmpty()) {
+            if (entry.isPlayer()) {
                 playersBuilder.add(entry);
                 if (entry.playerName().toUnstyledString().equals(selfName)) {
                     self = entry;

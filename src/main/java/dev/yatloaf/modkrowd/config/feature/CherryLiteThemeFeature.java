@@ -35,6 +35,7 @@ import dev.yatloaf.modkrowd.util.text.StyledString;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextColor;
+import net.minecraft.resources.ResourceLocation;
 
 public class CherryLiteThemeFeature extends ThemeFeature {
     public static final TextColor CHERRY1 = TextColor.fromRgb(0xe986bb);
@@ -50,6 +51,10 @@ public class CherryLiteThemeFeature extends ThemeFeature {
     public static final int STEM_SHADOW = 0xFF_00_00_00 | STEM_T;
 
     public static final TextCache LITERAL_SERVERS = TextCache.of(TabLiteral.SERVERS.text.fillColor(CHERRY4));
+
+    public static final ResourceLocation CHERRY_PLANKS = ResourceLocation.fromNamespaceAndPath("modkrowd", "textures/theme/cherry/cherry_planks.png");
+    public static final ResourceLocation CHERRY_RIGHT_ARROW = ResourceLocation.fromNamespaceAndPath("modkrowd", "textures/theme/cherry/cherry_right_arrow.png");
+    public static final ResourceLocation CHERRY_EXCLAMATION = ResourceLocation.fromNamespaceAndPath("modkrowd", "textures/theme/cherry/cherry_exclamation.png");
 
     public CherryLiteThemeFeature(String id, PredicateIndex allowedPredicates) {
         super(id, allowedPredicates);
@@ -139,6 +144,11 @@ public class CherryLiteThemeFeature extends ThemeFeature {
             case GameTabColumn gameTabColumn -> entry.setNameThemed(this.gameTabColumn(gameTabColumn));
             case GameTabSubserver gameTabSubserver -> entry.setNameThemed(this.gameTabSubserver(gameTabSubserver));
             default -> {}
+        }
+        switch (entry.icon) {
+            case OAK_PLANKS -> entry.setSkinThemed(CHERRY_PLANKS);
+            case OAK_RIGHT_ARROW -> entry.setSkinThemed(CHERRY_RIGHT_ARROW);
+            case OAK_EXCLAMATION -> entry.setSkinThemed(CHERRY_EXCLAMATION);
         }
     }
 
