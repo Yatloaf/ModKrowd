@@ -53,6 +53,7 @@ CubeKrowd has strict rules regarding allowed mods, which means some aren’t all
 ### Theme
 
 - Shaded Tab
+- Blank Tab Icons
 - High Contrast
 - Cherry Lite
 - Cherry

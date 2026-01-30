@@ -63,6 +63,8 @@
     "modkrowd.config.feature.respectate.tooltip": "Schaut Spielern weiter zu, wenn sie sterben",
     "modkrowd.config.feature.theme_shaded_tab_list_background": "Dunkle Tabliste",
     "modkrowd.config.feature.theme_shaded_tab_list_background.tooltip": "Verdunkelt den Hintergrund der Tabliste",
+    "modkrowd.config.feature.theme_blank_tab_list_icon": "Leere Tablistenicons",
+    "modkrowd.config.feature.theme_blank_tab_list_icon.tooltip": "Macht die grauen Icons in der Tabliste vollständig durchsichtig",
     "modkrowd.config.feature.theme_high_contrast": "Hoher Kontrast",
     "modkrowd.config.feature.theme_high_contrast.tooltip": "Ändert Textformatierung für Barrierefreiheit",
     "modkrowd.config.feature.theme_cherry_lite": "Kirschgetönt",

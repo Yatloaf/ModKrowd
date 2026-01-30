@@ -2,6 +2,7 @@ package dev.yatloaf.modkrowd.config;
 
 import dev.yatloaf.modkrowd.config.api.FeatureExtender;
 import dev.yatloaf.modkrowd.config.feature.AutoswitchFeature;
+import dev.yatloaf.modkrowd.config.feature.BlankTabIconsThemeFeature;
 import dev.yatloaf.modkrowd.config.feature.BlockCutoutFeature;
 import dev.yatloaf.modkrowd.config.feature.CherryLiteThemeFeature;
 import dev.yatloaf.modkrowd.config.feature.CherryThemeFeature;
@@ -137,6 +138,9 @@ public class FeatureTree {
 
     public final ShadedTabThemeFeature SHADED_TAB = this.THEME.feature(new ShadedTabThemeFeature(
             "theme_shaded_tab_list_background", PredicateIndex.TERNARY_CK
+    ));
+    public final BlankTabIconsThemeFeature BLANK_TAB_ICONS = this.THEME.feature(new BlankTabIconsThemeFeature(
+            "theme_blank_tab_list_icon", PredicateIndex.TERNARY_CK
     ));
     public final HighContrastThemeFeature HIGH_CONTRAST = this.THEME.feature(new HighContrastThemeFeature(
             "theme_high_contrast", PredicateIndex.TERNARY_CK
