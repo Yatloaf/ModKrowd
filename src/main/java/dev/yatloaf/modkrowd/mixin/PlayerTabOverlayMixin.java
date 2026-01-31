@@ -3,6 +3,7 @@ package dev.yatloaf.modkrowd.mixin;
 import dev.yatloaf.modkrowd.ModKrowd;
 import dev.yatloaf.modkrowd.cubekrowd.tablist.cache.TabEntryCache;
 import dev.yatloaf.modkrowd.mixinduck.PlayerTabOverlayDuck;
+import dev.yatloaf.modkrowd.util.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.Font;
@@ -35,10 +36,14 @@ public abstract class PlayerTabOverlayMixin implements PlayerTabOverlayDuck {
 
 	// Caution: May trigger severe headaches in functional programmers
 
+    // At least the width of this string is reserved for the latency to avoid jittering
+    @Unique private static final String MIN_RESERVED_LATENCY = Util.superscript(999);
+
 	@Shadow @Final private Minecraft minecraft;
 	@Shadow private @Nullable Component header;
 	@Shadow private @Nullable Component footer;
 
+    @Unique private int minReservedLatencyWidth;
 	@Unique private TabEntryCache[] currentEntries;
 	@Unique private int currentIndex;
 	@Unique private TabEntryCache currentEntry;
@@ -70,10 +75,11 @@ public abstract class PlayerTabOverlayMixin implements PlayerTabOverlayDuck {
 	// ----------------------------
 
     // Send this through TabListCache to avoid re-sorting every frame
-    // Also reset custom counter (incremented at the start of the loop)
+    // Also reset custom counter (incremented at the start of the loop) and cache reserved ping width
     // ClientPacketListener#handlePlayerInfo* should be on the same thread as this, so no synchronization needed
     @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/components/PlayerTabOverlay;getPlayerInfos()Ljava/util/List;"))
     private List<PlayerInfo> getPlayerInfosRedirect(PlayerTabOverlay instance) {
+        this.minReservedLatencyWidth = this.minecraft.font.width(MIN_RESERVED_LATENCY);
         this.currentIndex = -1;
         this.currentEntries = ModKrowd.TAB_LIST.entries;
         return ModKrowd.TAB_LIST.playerInfos;
@@ -94,8 +100,9 @@ public abstract class PlayerTabOverlayMixin implements PlayerTabOverlayDuck {
 			// Hardcoded width of the Vanilla ping bars: 10
 			// Hardcoded space between name and ping bars: 2
 			int nameWidth = this.minecraft.font.width(this.currentEntry.getNameThemed().text());
+            int latencyWidth = this.minecraft.font.width(this.currentEntry.getLatencyThemed().text());
 			if (this.currentEntry.result().isPlayer()) {
-				return Math.max(a, nameWidth + this.minecraft.font.width(this.currentEntry.getLatencyThemed().text()) - 10);
+				return Math.max(a, nameWidth + Math.max(this.minReservedLatencyWidth, latencyWidth) - 10);
 			} else {
 				return Math.max(a, nameWidth - 12);
 			}

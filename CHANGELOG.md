@@ -15,6 +15,7 @@ New contributor: Hydrintegral!
 - Migrated to mojmap.
 - Rewrote lots of code to be more maintainable.
 - Updated parsing in line with CubeKrowd.
+- Ping Display now reserves a minimum space to reduce changing the width of the tab list.
 - High Contrast Theme now uses the `ARCKADE` color for Veteran.
 
 ### Fixed
