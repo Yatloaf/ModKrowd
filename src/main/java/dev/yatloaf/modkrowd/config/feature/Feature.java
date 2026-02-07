@@ -1,13 +1,8 @@
 package dev.yatloaf.modkrowd.config.feature;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonPrimitive;
-import com.google.gson.JsonSyntaxException;
 import dev.yatloaf.modkrowd.config.ActionQueue;
-import dev.yatloaf.modkrowd.config.Predicate;
-import dev.yatloaf.modkrowd.config.PredicateIndex;
-import dev.yatloaf.modkrowd.config.exception.MalformedConfigException;
-import dev.yatloaf.modkrowd.config.screen.FeatureEntry;
+import dev.yatloaf.modkrowd.config.FeatureState;
+import dev.yatloaf.modkrowd.config.Restriction;
 import dev.yatloaf.modkrowd.cubekrowd.common.cache.TextCache;
 import dev.yatloaf.modkrowd.cubekrowd.message.cache.MessageCache;
 import dev.yatloaf.modkrowd.cubekrowd.tablist.cache.TabDecoCache;
@@ -23,44 +18,29 @@ import net.minecraft.client.multiplayer.ClientConfigurationPacketListenerImpl;
 import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.util.GsonHelper;
 
 public class Feature {
     public final String id;
     public final MutableComponent name;
     public final Tooltip tooltip;
-    public final PredicateIndex allowedPredicates;
+    public final Restriction restriction;
 
-    // Only used in SyncedConfig
-    public Predicate predicate = Predicate.NEVER;
-    public boolean enabled = false;
+    /// Should really be in a map inside `SyncedConfig`, but this is more convenient
+    public boolean active = false;
 
-    public Feature(String id, PredicateIndex allowedPredicates) {
+    public Feature(String id, Restriction restriction) {
         this.id = id;
         this.name = Component.translatable("modkrowd.config.feature." + id);
-        this.tooltip = Tooltip.create(Component.translatable("modkrowd.config.feature." + id + ".tooltip"));
-        this.allowedPredicates = allowedPredicates;
-    }
-
-    public void mergeState(Feature source) {
-        this.predicate = source.predicate;
-        this.enabled = source.enabled;
-    }
-
-    public void addOptions(FeatureEntry featureEntry) {
-
-    }
-
-    public JsonElement serialize() {
-        return new JsonPrimitive(this.predicate.id);
-    }
-
-    public void deserialize(JsonElement source) throws MalformedConfigException {
-        try {
-            this.predicate = Predicate.FROM_ID.getOrDefault(GsonHelper.convertToString(source, this.id), Predicate.NEVER);
-        } catch (JsonSyntaxException e) {
-            throw new MalformedConfigException(e);
+        MutableComponent tooltip = Component.translatable("modkrowd.config.feature." + id + ".tooltip");
+        if (restriction.suffix != null) {
+            tooltip.append("\n").append(restriction.suffix);
         }
+        this.tooltip = Tooltip.create(tooltip);
+        this.restriction = restriction;
+    }
+
+    public FeatureState makeState() {
+        return new FeatureState(this);
     }
 
     /**

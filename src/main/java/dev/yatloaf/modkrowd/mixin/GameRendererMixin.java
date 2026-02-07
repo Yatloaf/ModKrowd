@@ -1,6 +1,6 @@
 package dev.yatloaf.modkrowd.mixin;
 
-import dev.yatloaf.modkrowd.ModKrowd;
+import dev.yatloaf.modkrowd.config.Features;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.world.entity.Entity;
@@ -20,7 +20,7 @@ public class GameRendererMixin {
     // If the camera entity is removed, start spectating the entity with the same network ID again
     @Inject(method = "tick", at = @At("HEAD"))
     public void tickInject(CallbackInfo ci) {
-        if (ModKrowd.CONFIG.RESPECTATE.enabled) {
+        if (Features.RESPECTATE.active) {
             Entity cameraEntity = this.minecraft.getCameraEntity();
             if (this.minecraft.level != null && cameraEntity != null && cameraEntity.isRemoved()) {
                 Entity respawned = this.minecraft.level.getEntity(cameraEntity.getId());

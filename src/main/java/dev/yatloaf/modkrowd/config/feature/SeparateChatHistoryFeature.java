@@ -2,7 +2,7 @@ package dev.yatloaf.modkrowd.config.feature;
 
 import dev.yatloaf.modkrowd.ModKrowd;
 import dev.yatloaf.modkrowd.config.ActionQueue;
-import dev.yatloaf.modkrowd.config.PredicateIndex;
+import dev.yatloaf.modkrowd.config.Restriction;
 import dev.yatloaf.modkrowd.cubekrowd.message.Aloha;
 import dev.yatloaf.modkrowd.custom.Custom;
 import dev.yatloaf.modkrowd.custom.SelfAlohaMessage;
@@ -23,8 +23,8 @@ public class SeparateChatHistoryFeature extends Feature {
     private final Map<Location, ChatComponent.State> chatStates = new HashMap<>();
     private Location currentLocation = null;
 
-    public SeparateChatHistoryFeature(String id, PredicateIndex allowedPredicates) {
-        super(id, allowedPredicates);
+    public SeparateChatHistoryFeature(String id, Restriction restriction) {
+        super(id, restriction);
     }
 
     @Override

@@ -67,7 +67,6 @@ public class ModKrowd implements ClientModInitializer {
 	public static long tick = 0; // Chances are this won't overflow in your lifetime
 
 	public static KeyMapping OPTIONS_KEY;
-	public static KeyMapping TOGGLE_MESSAGE_PREVIEW_KEY;
 	public static KeyMapping NEXT_SUBSERVER_KEY;
 	public static boolean INIT = false; // TODO: Better, somehow
 
@@ -85,8 +84,6 @@ public class ModKrowd implements ClientModInitializer {
 
 		KeyMapping.Category category = KeyMapping.Category.register(ResourceLocation.fromNamespaceAndPath("modkrowd", "modkrowd"));
 		OPTIONS_KEY = KeyBindingHelper.registerKeyBinding(new KeyMapping("key.modkrowd.options",
-				InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_UNKNOWN, category));
-		TOGGLE_MESSAGE_PREVIEW_KEY = KeyBindingHelper.registerKeyBinding(new KeyMapping("key.modkrowd.toggle_message_preview",
 				InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_UNKNOWN, category));
 		NEXT_SUBSERVER_KEY = KeyBindingHelper.registerKeyBinding(new KeyMapping("key.modkrowd.next_subserver",
 				InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_UNKNOWN, category));
@@ -107,7 +104,7 @@ public class ModKrowd implements ClientModInitializer {
 	}
 
 	private static void saveConfig(Config config) {
-		CONFIG.copyFromConfig(config);
+		CONFIG.imitate(config);
 		CONFIG.trySerialize(CONFIG_FILE);
 	}
 

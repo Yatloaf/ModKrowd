@@ -1,7 +1,7 @@
 package dev.yatloaf.modkrowd.config.api;
 
 import dev.yatloaf.modkrowd.config.FeatureTab;
-import dev.yatloaf.modkrowd.config.FeatureTree;
+import dev.yatloaf.modkrowd.config.Features;
 import dev.yatloaf.modkrowd.config.feature.Feature;
 
 /**
@@ -11,9 +11,8 @@ import dev.yatloaf.modkrowd.config.feature.Feature;
 @FunctionalInterface
 public interface FeatureExtender {
     /**
-     * Extend the {@link FeatureTree}, probably using {@link FeatureTree#tab(String)} and {@link FeatureTab#feature(Feature)}.
-     *
-     * @param source The {@link FeatureTree} to be extended
+     * Extend {@link Features}, probably using {@link Features#tab(String)} and {@link FeatureTab#feature(Feature)}.
+     * This is called right after all built-in tabs and features have been initialized.
      */
-    void extend(FeatureTree source);
+    void extend();
 }

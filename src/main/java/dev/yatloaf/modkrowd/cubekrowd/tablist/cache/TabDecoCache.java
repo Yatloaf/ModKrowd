@@ -27,7 +27,7 @@ public class TabDecoCache {
     public void invalidateAll() {
         Minecraft minecraft = Minecraft.getInstance();
         // This can happen due to circular class loading
-        if (minecraft == null) {
+        if (minecraft == null || minecraft.gui == null) {
             this.header = TextCache.EMPTY;
             this.footer = TextCache.EMPTY;
         } else {

@@ -1,6 +1,6 @@
 package dev.yatloaf.modkrowd.mixin;
 
-import dev.yatloaf.modkrowd.ModKrowd;
+import dev.yatloaf.modkrowd.config.Features;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.world.level.LevelHeightAccessor;
 import org.spongepowered.asm.mixin.Mixin;
@@ -15,7 +15,7 @@ public class ClientLevelDataMixin {
 	// Dark horizon only below the world
 	@Inject(at = @At("HEAD"), method = "getHorizonHeight", cancellable = true)
 	private void getHorizonHeightInject(LevelHeightAccessor world, CallbackInfoReturnable<Double> cir) {
-		if (ModKrowd.CONFIG.DEVOID.enabled) {
+		if (Features.DEVOID.active) {
 			cir.setReturnValue((double) world.getMinY());
 		}
 	}

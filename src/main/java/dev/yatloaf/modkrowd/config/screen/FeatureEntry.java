@@ -1,6 +1,6 @@
 package dev.yatloaf.modkrowd.config.screen;
 
-import dev.yatloaf.modkrowd.config.feature.Feature;
+import dev.yatloaf.modkrowd.config.FeatureState;
 import dev.yatloaf.modkrowd.cubekrowd.common.CKColor;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.ContainerObjectSelectionList;
@@ -41,10 +41,10 @@ public class FeatureEntry extends ContainerObjectSelectionList.Entry<FeatureEntr
     private final List<NarratableEntry> narratables = new ArrayList<>();
     private final List<GuiEventListener> listeners = new ArrayList<>();
 
-    public FeatureEntry(Feature feature) {
+    public FeatureEntry(ConfigScreen screen, FeatureState featureState) {
         this.vertical = LinearLayout.vertical();
-        this.addLine(new HeaderLine(feature));
-        feature.addOptions(this);
+        this.addLine(new HeaderLine(screen, featureState));
+        featureState.addOptions(this);
     }
 
     public void addInt(Component label, Tooltip tooltip, int startValue, int minValue, int maxValue, IntSupplier getter, IntConsumer setter) {

@@ -1,6 +1,7 @@
 package dev.yatloaf.modkrowd.mixin;
 
 import dev.yatloaf.modkrowd.ModKrowd;
+import dev.yatloaf.modkrowd.config.Features;
 import dev.yatloaf.modkrowd.custom.Custom;
 import dev.yatloaf.modkrowd.custom.MissileWarsTieMessage;
 import net.minecraft.client.Minecraft;
@@ -39,7 +40,7 @@ public abstract class ClientLevelMixin extends Level {
     public void updatePOIOnBlockStateChange(BlockPos pos, BlockState oldBlock, BlockState newBlock) {
         super.updatePOIOnBlockStateChange(pos, oldBlock, newBlock);
 
-        if (ModKrowd.CONFIG.TIE_DETECTOR.enabled && oldBlock.is(Blocks.NETHER_PORTAL)) {
+        if (Features.TIE_DETECTOR.active && oldBlock.is(Blocks.NETHER_PORTAL)) {
 
             switch (pos.getZ()) {
                 case 72 -> {

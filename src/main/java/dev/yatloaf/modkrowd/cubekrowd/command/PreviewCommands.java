@@ -7,6 +7,7 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.tree.CommandNode;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import dev.yatloaf.modkrowd.ModKrowd;
+import dev.yatloaf.modkrowd.config.Features;
 import dev.yatloaf.modkrowd.cubekrowd.common.CKColor;
 import dev.yatloaf.modkrowd.cubekrowd.common.CubeKrowd;
 import dev.yatloaf.modkrowd.cubekrowd.common.RankBrackets;
@@ -71,10 +72,10 @@ public final class PreviewCommands {
                 literal("reply")
                         .then(argument("message", StringArgumentType.greedyString())
                                 .executes(context -> {
-                                    if (ModKrowd.CONFIG.MESSAGE_PREVIEW.replyTarget == null) {
+                                    if (Features.MESSAGE_PREVIEW.replyTarget == null) {
                                         throw result(Component.literal("No reply target").withStyle(ChatFormatting.RED));
                                     }
-                                    String target = ModKrowd.CONFIG.MESSAGE_PREVIEW.replyTarget;
+                                    String target = Features.MESSAGE_PREVIEW.replyTarget;
                                     String message = StringArgumentType.getString(context, "message");
 
                                     // &r also resets the gold color

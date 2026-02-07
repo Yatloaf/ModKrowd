@@ -1,7 +1,7 @@
 package dev.yatloaf.modkrowd.config.feature;
 
 import dev.yatloaf.modkrowd.config.ActionQueue;
-import dev.yatloaf.modkrowd.config.PredicateIndex;
+import dev.yatloaf.modkrowd.config.Restriction;
 import dev.yatloaf.modkrowd.cubekrowd.common.Afk;
 import dev.yatloaf.modkrowd.cubekrowd.common.CKColor;
 import dev.yatloaf.modkrowd.cubekrowd.common.LatencyLevel;
@@ -30,8 +30,8 @@ import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextColor;
 
 public class CherryThemeFeature extends CherryLiteThemeFeature {
-    public CherryThemeFeature(String id, PredicateIndex allowedPredicates) {
-        super(id, allowedPredicates);
+    public CherryThemeFeature(String id, Restriction restriction) {
+        super(id, restriction);
     }
 
     @Override

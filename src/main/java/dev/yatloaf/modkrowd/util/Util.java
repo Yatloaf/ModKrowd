@@ -55,6 +55,7 @@ public final class Util {
         }
     }
 
+    @Deprecated(forRemoval = true, since = "0.3.0")
     public static <T, R> R[] listToArray(List<T> list, Function<T, R> mapper, IntFunction<R[]> generator) {
         return list.stream().map(mapper).toArray(generator);
     }

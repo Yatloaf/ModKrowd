@@ -1,14 +1,13 @@
 package dev.yatloaf.modkrowd.config.feature;
 
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
-import com.google.gson.JsonSyntaxException;
 import dev.yatloaf.modkrowd.ModKrowd;
 import dev.yatloaf.modkrowd.config.ActionQueue;
-import dev.yatloaf.modkrowd.config.PredicateIndex;
+import dev.yatloaf.modkrowd.config.Restriction;
 import dev.yatloaf.modkrowd.config.exception.MalformedConfigException;
 import dev.yatloaf.modkrowd.config.screen.FeatureEntry;
+import dev.yatloaf.modkrowd.config.FeatureState;
 import dev.yatloaf.modkrowd.cubekrowd.common.CKColor;
 import dev.yatloaf.modkrowd.cubekrowd.message.MissileWarsGameEndMessage;
 import dev.yatloaf.modkrowd.cubekrowd.message.cache.MessageCache;
@@ -18,69 +17,70 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.util.GsonHelper;
 
 public class AutoswitchFeature extends Feature {
-    public static final int MIN_DELAY = 0;
-    public static final int MAX_DELAY = 280; // 14 seconds
-
     public final Component delayName;
     public final Tooltip delayTooltip;
 
-    public int delay = 0;
-
-    public AutoswitchFeature(String id, PredicateIndex allowedPredicates) {
-        super(id, allowedPredicates);
+    public AutoswitchFeature(String id, Restriction restriction) {
+        super(id, restriction);
         this.delayName = Component.translatable("modkrowd.config.feature." + id + ".delay").withStyle(CKColor.GRAY.style);
         this.delayTooltip = Tooltip.create(Component.translatable("modkrowd.config.feature." + id + ".delay.tooltip"));
     }
 
     @Override
-    public void mergeState(Feature source) {
-        super.mergeState(source);
-        if (source instanceof AutoswitchFeature cast) {
-            this.delay = cast.delay;
-        }
-    }
-
-    @Override
-    public void addOptions(FeatureEntry featureEntry) {
-        featureEntry.addInt(this.delayName, this.delayTooltip, this.delay, MIN_DELAY, MAX_DELAY, this::getDelay, this::setDelay);
-    }
-
-    private int getDelay() {
-        return this.delay;
-    }
-
-    private void setDelay(int delay) {
-        this.delay = delay;
-    }
-
-    @Override
-    public JsonElement serialize() {
-        JsonObject result = new JsonObject();
-        result.add("predicate", super.serialize());
-        result.add("delay", new JsonPrimitive(this.delay));
-        return result;
-    }
-
-    @Override
-    public void deserialize(JsonElement source) throws MalformedConfigException {
-        if (source.isJsonPrimitive()) {
-            super.deserialize(source);
-        } else {
-            try {
-                JsonObject object = GsonHelper.convertToJsonObject(source, this.id);
-                super.deserialize(GsonHelper.getNonNull(object, "predicate"));
-                int value = GsonHelper.getAsInt(object, "delay", 0);
-                this.delay = Math.max(value, 0);
-            } catch (JsonSyntaxException e) {
-                throw new MalformedConfigException(e);
-            }
-        }
+    public FeatureState makeState() {
+        return this.new State();
     }
 
     @Override
     public void onMessage(MessageCache message, Minecraft minecraft, ActionQueue queue) {
-        if (message.result() instanceof MissileWarsGameEndMessage) {
-            ModKrowd.startSwitchingMissileWarsLobby(this.delay);
+        if (message.result() instanceof MissileWarsGameEndMessage && ModKrowd.CONFIG.getState(this) instanceof State state) {
+            ModKrowd.startSwitchingMissileWarsLobby(state.delay);
+        }
+    }
+
+    public class State extends FeatureState {
+        public static final String DELAY = "delay";
+        public static final int MIN_DELAY = 0;
+        public static final int MAX_DELAY = 280; // 14 seconds
+
+        public int delay;
+
+        public State() {
+            super(AutoswitchFeature.this);
+        }
+
+        private int getDelay() {
+            return this.delay;
+        }
+
+        private void setDelay(int delay) {
+            this.delay = delay;
+        }
+
+        @Override
+        public void addOptions(FeatureEntry featureEntry) {
+            featureEntry.addInt(AutoswitchFeature.this.delayName, AutoswitchFeature.this.delayTooltip,
+                    this.delay, MIN_DELAY, MAX_DELAY, this::getDelay, this::setDelay);
+        }
+
+        @Override
+        public void serialize(JsonObject dest) {
+            super.serialize(dest);
+            dest.add(DELAY, new JsonPrimitive(this.delay));
+        }
+
+        @Override
+        public void deserialize(JsonObject source) throws MalformedConfigException {
+            super.deserialize(source);
+            this.delay = Math.max(GsonHelper.getAsInt(source, "delay", 0), 0);
+        }
+
+        @Override
+        public void imitate(FeatureState source) {
+            super.imitate(source);
+            if (source instanceof State state) {
+                this.delay = state.delay;
+            }
         }
     }
 }

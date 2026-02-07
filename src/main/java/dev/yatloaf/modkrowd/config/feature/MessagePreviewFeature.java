@@ -2,7 +2,7 @@ package dev.yatloaf.modkrowd.config.feature;
 
 import dev.yatloaf.modkrowd.ModKrowd;
 import dev.yatloaf.modkrowd.config.ActionQueue;
-import dev.yatloaf.modkrowd.config.PredicateIndex;
+import dev.yatloaf.modkrowd.config.Restriction;
 import dev.yatloaf.modkrowd.cubekrowd.command.PreviewCommands;
 import dev.yatloaf.modkrowd.cubekrowd.common.CKColor;
 import dev.yatloaf.modkrowd.cubekrowd.common.cache.TextCache;
@@ -39,8 +39,8 @@ public class MessagePreviewFeature extends Feature {
     private int linedWidth = 0;
     private List<GuiMessage.Line> previewMessageLines = List.of();
 
-    public MessagePreviewFeature(String id, PredicateIndex allowedPredicates) {
-        super(id, allowedPredicates);
+    public MessagePreviewFeature(String id, Restriction restriction) {
+        super(id, restriction);
     }
 
     @Override

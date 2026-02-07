@@ -10,6 +10,7 @@ import java.util.AbstractList;
  *
  * @param <E> the type of elements in this list
  */
+@Deprecated(forRemoval = true, since = "0.3.0")
 public class ImmutableIndex<E> extends AbstractList<E> {
     // Aren't these performance improvements negligible? (Optimization nihilism)
 

@@ -2,8 +2,7 @@ package dev.yatloaf.modkrowd.mixin;
 
 import com.llamalad7.mixinextras.sugar.Local;
 import com.mojang.blaze3d.vertex.PoseStack;
-import dev.yatloaf.modkrowd.ModKrowd;
-import net.minecraft.client.model.HumanoidModel;
+import dev.yatloaf.modkrowd.config.Features;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.entity.layers.HumanoidArmorLayer;
 import net.minecraft.client.renderer.entity.state.AvatarRenderState;
@@ -26,7 +25,7 @@ import java.util.Optional;
 import java.util.Set;
 
 @Mixin(HumanoidArmorLayer.class)
-public abstract class HumanoidArmorLayerMixin<S extends HumanoidRenderState, M extends HumanoidModel<S>, A extends HumanoidModel<S>> {
+public abstract class HumanoidArmorLayerMixin<S extends HumanoidRenderState> {
 	// SLIM_ARMOR
 
     @Unique
@@ -47,7 +46,7 @@ public abstract class HumanoidArmorLayerMixin<S extends HumanoidRenderState, M e
 	// Save whether it's slim
 	@Inject(method = "submit(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;ILnet/minecraft/client/renderer/entity/state/HumanoidRenderState;FF)V", at = @At("HEAD"))
 	private void submitInject(PoseStack matrixStack, SubmitNodeCollector orderedRenderCommandQueue, int i, S bipedEntityRenderState, float f, float g, CallbackInfo ci) {
-		this.slim = ModKrowd.CONFIG.SLIM_ARMOR.enabled
+		this.slim = Features.SLIM_ARMOR.active
 				&& bipedEntityRenderState instanceof AvatarRenderState playerEntityRenderState
 				&& playerEntityRenderState.skin.model() == PlayerModelType.SLIM;
 	}

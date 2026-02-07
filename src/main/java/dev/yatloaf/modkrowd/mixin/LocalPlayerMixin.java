@@ -1,7 +1,7 @@
 package dev.yatloaf.modkrowd.mixin;
 
 import com.mojang.authlib.GameProfile;
-import dev.yatloaf.modkrowd.ModKrowd;
+import dev.yatloaf.modkrowd.config.Features;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.player.LocalPlayer;
@@ -17,6 +17,6 @@ public class LocalPlayerMixin extends AbstractClientPlayer {
 
     @Override
     public boolean shouldRenderAtSqrDistance(double distance) {
-        return super.shouldRenderAtSqrDistance(distance) && !ModKrowd.CONFIG.HIDE_SELF.enabled;
+        return super.shouldRenderAtSqrDistance(distance) && !Features.HIDE_SELF.active;
     }
 }

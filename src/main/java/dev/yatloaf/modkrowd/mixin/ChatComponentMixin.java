@@ -2,6 +2,7 @@ package dev.yatloaf.modkrowd.mixin;
 
 import com.llamalad7.mixinextras.sugar.Local;
 import dev.yatloaf.modkrowd.ModKrowd;
+import dev.yatloaf.modkrowd.config.Features;
 import dev.yatloaf.modkrowd.cubekrowd.common.cache.TextCache;
 import dev.yatloaf.modkrowd.cubekrowd.message.cache.MessageCache;
 import dev.yatloaf.modkrowd.mixinduck.GuiMessageDuck;
@@ -51,9 +52,9 @@ public abstract class ChatComponentMixin {
     // Insert preview message efficiently
     @Inject(method = "render", at = @At("HEAD"))
     private void renderInject(GuiGraphics context, int currentTick, int mouseX, int mouseY, boolean focused, CallbackInfo ci) {
-        if (ModKrowd.CONFIG.MESSAGE_PREVIEW.enabled && ModKrowd.CONFIG.MESSAGE_PREVIEW.hasPreviewMessage()) {
+        if (Features.MESSAGE_PREVIEW.active && Features.MESSAGE_PREVIEW.hasPreviewMessage()) {
             int width = Mth.floor((double) this.getWidth() / this.getScale());
-            List<GuiMessage.Line> previewMessageLines = ModKrowd.CONFIG.MESSAGE_PREVIEW.getPreviewMessageLines(width, this.minecraft.font);
+            List<GuiMessage.Line> previewMessageLines = Features.MESSAGE_PREVIEW.getPreviewMessageLines(width, this.minecraft.font);
             this.extendedMessages = new ChainedListView<>(previewMessageLines, this.trimmedMessages);
         } else {
             this.extendedMessages = this.trimmedMessages;
@@ -81,7 +82,7 @@ public abstract class ChatComponentMixin {
 
     @Inject(method = "clearMessages", cancellable = true, at = @At("HEAD"))
     private void clearMessagesInject(CallbackInfo ci) {
-        if (ModKrowd.CONFIG.DEJOIN.enabled || ModKrowd.CONFIG.SEPARATE_CHAT_HISTORY.enabled) {
+        if (Features.DEJOIN.active || Features.SEPARATE_CHAT_HISTORY.active) {
             ci.cancel();
         }
     }

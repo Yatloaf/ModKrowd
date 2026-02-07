@@ -1,6 +1,6 @@
 package dev.yatloaf.modkrowd.mixin;
 
-import dev.yatloaf.modkrowd.ModKrowd;
+import dev.yatloaf.modkrowd.config.Features;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.EndPortalBlock;
@@ -20,7 +20,7 @@ public class EndPortalBlockMixin extends Block {
 	// Actually render the model
 	@Override
 	public @NotNull RenderShape getRenderShape(BlockState state) {
-        return ModKrowd.CONFIG.TANGIBLE_END_PORTALS.enabled ? RenderShape.MODEL : RenderShape.INVISIBLE;
+        return Features.TANGIBLE_END_PORTALS.active ? RenderShape.MODEL : RenderShape.INVISIBLE;
 	}
 
 	// Glass-like rendering behavior

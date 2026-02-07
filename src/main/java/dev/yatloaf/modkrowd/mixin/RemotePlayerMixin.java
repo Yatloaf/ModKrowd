@@ -1,7 +1,7 @@
 package dev.yatloaf.modkrowd.mixin;
 
 import com.mojang.authlib.GameProfile;
-import dev.yatloaf.modkrowd.ModKrowd;
+import dev.yatloaf.modkrowd.config.Features;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.player.RemotePlayer;
@@ -21,7 +21,7 @@ public class RemotePlayerMixin extends AbstractClientPlayer {
 	// Unlike isInvisible[To], this also controls armor rendering, perfect for hiding players
 	@Inject(at = @At("HEAD"), method = "shouldRenderAtSqrDistance", cancellable = true)
 	private void shouldRenderAtSqrDistanceInject(double distance, CallbackInfoReturnable<Boolean> cir) {
-		if (ModKrowd.CONFIG.HIDE_PLAYERS.enabled) {
+		if (Features.HIDE_PLAYERS.active) {
 			cir.setReturnValue(false);
 		}
 	}

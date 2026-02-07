@@ -1,6 +1,6 @@
 package dev.yatloaf.modkrowd.mixin;
 
-import dev.yatloaf.modkrowd.ModKrowd;
+import dev.yatloaf.modkrowd.config.Features;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import org.spongepowered.asm.mixin.Mixin;
@@ -15,7 +15,7 @@ public abstract class EntityMixin {
 	// See invisible entities
 	@Inject(at = @At("HEAD"), method = "isInvisibleTo", cancellable = true)
 	private void isInvisibleToInject(Player player, CallbackInfoReturnable<Boolean> cir) {
-		if (ModKrowd.CONFIG.UNINVISIBILITY.enabled) {
+		if (Features.UNINVISIBILITY.active) {
 			cir.setReturnValue(false);
 		}
 	}

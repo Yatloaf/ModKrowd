@@ -1,6 +1,6 @@
 package dev.yatloaf.modkrowd.mixin;
 
-import dev.yatloaf.modkrowd.ModKrowd;
+import dev.yatloaf.modkrowd.config.Features;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.ItemInHandRenderer;
 import org.spongepowered.asm.mixin.Mixin;
@@ -14,6 +14,6 @@ public class ItemInHandRendererMixin {
     // Hide first person arm
     @Redirect(method = "renderArmWithItem", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/AbstractClientPlayer;isInvisible()Z"))
     private boolean isInvisibleRedirect(AbstractClientPlayer instance) {
-        return instance.isInvisible() || ModKrowd.CONFIG.HIDE_SELF.enabled;
+        return instance.isInvisible() || Features.HIDE_SELF.active;
     }
 }

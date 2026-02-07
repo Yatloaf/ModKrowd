@@ -1,6 +1,6 @@
 package dev.yatloaf.modkrowd.mixin;
 
-import dev.yatloaf.modkrowd.ModKrowd;
+import dev.yatloaf.modkrowd.config.Features;
 import net.minecraft.client.renderer.entity.layers.EquipmentLayerRenderer;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceKey;
@@ -23,7 +23,7 @@ public class EquipmentLayerRendererMixin {
     @ModifyArgs(method = "renderLayers(Lnet/minecraft/client/resources/model/EquipmentClientInfo$LayerType;Lnet/minecraft/resources/ResourceKey;Lnet/minecraft/client/model/Model;Ljava/lang/Object;Lnet/minecraft/world/item/ItemStack;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;ILnet/minecraft/resources/ResourceLocation;II)V",
             at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/entity/layers/EquipmentLayerRenderer$TrimSpriteKey;<init>(Lnet/minecraft/world/item/equipment/trim/ArmorTrim;Lnet/minecraft/client/resources/model/EquipmentClientInfo$LayerType;Lnet/minecraft/resources/ResourceKey;)V"))
     private void TrimSpriteKeyArgs(Args args) {
-        if (!ModKrowd.CONFIG.SLIM_ARMOR.enabled) return;
+        if (!Features.SLIM_ARMOR.active) return;
 
         ResourceKey<EquipmentAsset> assetKey = args.get(2);
         ResourceLocation assetKeyId = assetKey.location();

@@ -1,6 +1,6 @@
 package dev.yatloaf.modkrowd.mixin;
 
-import dev.yatloaf.modkrowd.ModKrowd;
+import dev.yatloaf.modkrowd.config.Features;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.RenderShape;
@@ -24,7 +24,7 @@ public class StructureVoidBlockMixin extends Block {
 	// Actually render the model
 	@Inject(at = @At("HEAD"), method = "getRenderShape", cancellable = true)
 	private void getRenderShapeInject(CallbackInfoReturnable<RenderShape> cir) {
-		if (ModKrowd.CONFIG.TANGIBLE_STRUCTURE_VOIDS.enabled) {
+		if (Features.TANGIBLE_STRUCTURE_VOIDS.active) {
 			cir.setReturnValue(RenderShape.MODEL);
 		}
 	}
@@ -32,7 +32,7 @@ public class StructureVoidBlockMixin extends Block {
 	// Full cube focus outline
 	@Inject(at = @At("HEAD"), method = "getShape", cancellable = true)
 	private void getShapeInject(CallbackInfoReturnable<VoxelShape> cir) {
-		if (ModKrowd.CONFIG.TANGIBLE_STRUCTURE_VOIDS.enabled) {
+		if (Features.TANGIBLE_STRUCTURE_VOIDS.active) {
 			cir.setReturnValue(Shapes.block());
 		}
 	}

@@ -2,7 +2,7 @@ package dev.yatloaf.modkrowd.config.feature;
 
 import dev.yatloaf.modkrowd.config.ActionQueue;
 import dev.yatloaf.modkrowd.config.DefaultTheme;
-import dev.yatloaf.modkrowd.config.PredicateIndex;
+import dev.yatloaf.modkrowd.config.Restriction;
 import dev.yatloaf.modkrowd.cubekrowd.common.Afk;
 import dev.yatloaf.modkrowd.cubekrowd.common.CKColor;
 import dev.yatloaf.modkrowd.cubekrowd.common.LatencyLevel;
@@ -37,8 +37,8 @@ public class HighContrastThemeFeature extends ThemeFeature {
 
     public static final int OFFLINE_SHADOW = 0xFF_00_00_00 | ARGB.scaleRGB(CKColor.RED.textColor.getValue(), 0.25F);
 
-    public HighContrastThemeFeature(String id, PredicateIndex allowedPredicates) {
-        super(id, allowedPredicates);
+    public HighContrastThemeFeature(String id, Restriction restriction) {
+        super(id, restriction);
     }
 
     @Override

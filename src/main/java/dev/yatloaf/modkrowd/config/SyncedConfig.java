@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SyncedConfig extends Config {
-    public final List<Feature> enabledFeatures = new ArrayList<>(FEATURE_ESTIMATION);
+    public final List<Feature> enabledFeatures = new ArrayList<>();
 
     private boolean dirty = true;
 
@@ -43,8 +43,10 @@ public class SyncedConfig extends Config {
         }
     }
 
-    public void copyFromConfig(Config source) {
-        this.mergeState(source);
+    public void imitate(Config source) {
+        for (FeatureState state : this.states()) {
+            state.imitate(source.getState(state.feature));
+        }
 
         this.selectedTab = source.selectedTab;
 
@@ -67,18 +69,22 @@ public class SyncedConfig extends Config {
 
         List<Feature> eventEnable = new ArrayList<>();
         List<Feature> eventDisable = new ArrayList<>();
-        for (Feature f : this.features) {
-            if (f.predicate.enabled(subserver, permissionLevel)) {
-                if (!f.enabled) {
-                    f.enabled = true;
-                    this.enabledFeatures.add(f);
-                    eventEnable.add(f);
+        for (Feature feature : Features.FEATURES) {
+            // Theoretically this should use a local map for whether the feature is active, and this solution assumes
+            // there are no two conflicting SyncedConfig instances
+
+            FeatureState featureState = this.getState(feature);
+            if (featureState.enabled && feature.restriction.test.test(subserver, permissionLevel)) {
+                if (!feature.active) {
+                    feature.active = true;
+                    this.enabledFeatures.add(feature);
+                    eventEnable.add(feature);
                 }
             } else {
-                if (f.enabled && disable) {
-                    f.enabled = false;
-                    this.enabledFeatures.remove(f);
-                    eventDisable.add(f);
+                if (feature.active && disable) {
+                    feature.active = false;
+                    this.enabledFeatures.remove(feature);
+                    eventDisable.add(feature);
                 }
             }
         }
@@ -95,11 +101,12 @@ public class SyncedConfig extends Config {
     public synchronized void onInitEnable(Minecraft minecraft) {
         this.enabledFeatures.clear();
         ActionQueue queue = new ActionQueue();
-        for (Feature f : this.features) {
-            if (f.predicate.enabled(Subservers.NONE, 0)) {
-                f.enabled = true;
-                this.enabledFeatures.add(f);
-                f.onInitEnable(minecraft, queue);
+        for (Feature feature : Features.FEATURES) {
+            FeatureState featureState = this.getState(feature);
+            if (featureState.enabled && feature.restriction.test.test(Subservers.NONE, 0)) {
+                feature.active = true;
+                this.enabledFeatures.add(feature);
+                feature.onInitEnable(minecraft, queue);
             }
         }
         queue.flush(minecraft);

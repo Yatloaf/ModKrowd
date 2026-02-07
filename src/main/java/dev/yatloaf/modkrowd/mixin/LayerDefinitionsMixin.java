@@ -1,7 +1,7 @@
 package dev.yatloaf.modkrowd.mixin;
 
 import com.google.common.collect.ImmutableMap;
-import dev.yatloaf.modkrowd.ModKrowd;
+import dev.yatloaf.modkrowd.config.Features;
 import net.minecraft.client.model.geom.LayerDefinitions;
 import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.model.geom.PartNames;
@@ -35,7 +35,7 @@ public class LayerDefinitionsMixin {
     // Even better would be reassigning the keys at the end, but then build() would have to be replaced by buildKeepingLast()
     @Redirect(method = "createRoots", at = @At(value = "INVOKE", remap = false, target = "Lnet/minecraft/client/renderer/entity/ArmorModelSet;putFrom(Lnet/minecraft/client/renderer/entity/ArmorModelSet;Lcom/google/common/collect/ImmutableMap$Builder;)V"))
     private static <T> void putFromRedirect(ArmorModelSet<T> instance, ArmorModelSet<LayerDefinition> texturedModelData, ImmutableMap.Builder<T, LayerDefinition> builder) {
-        if (ModKrowd.CONFIG.SLIM_ARMOR.enabled && instance == ModelLayers.PLAYER_SLIM_ARMOR) {
+        if (Features.SLIM_ARMOR.active && instance == ModelLayers.PLAYER_SLIM_ARMOR) {
             // .map() would modify every part, we only want to modify the chest
             ArmorModelSet<LayerDefinition> slimData = new ArmorModelSet<>(
                     texturedModelData.head(),

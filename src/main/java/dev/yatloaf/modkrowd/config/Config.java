@@ -23,26 +23,32 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map;
 
-public class Config extends FeatureTree {
+public class Config {
+    private final Map<Feature, FeatureState> states = new HashMap<>();
+
     public FeatureTab selectedTab;
 
     public Config() {
-        this.selectedTab = this.APPEARANCE;
+        for (Feature feature : Features.FEATURES) {
+            this.states.put(feature, feature.makeState());
+        }
+        this.selectedTab = Features.APPEARANCE;
     }
 
-    protected Config(Config source) {
-        this.mergeState(source);
-        this.selectedTab = this.tabs.get(source.selectedTab.index);
-    }
-
-    public Config copyConfig() {
-        return new Config(this);
+    public Config(Config source) {
+        for (Feature feature : Features.FEATURES) {
+            FeatureState featureState = feature.makeState();
+            featureState.imitate(source.getState(feature));
+            this.states.put(feature, featureState);
+        }
+        this.selectedTab = source.selectedTab;
     }
 
     public void deserialize(File file) throws ReadConfigException {
-        this.initExtenders();
         try (JsonReader jsonReader = new JsonReader(new BufferedReader(new FileReader(file)))) {
 
             JsonObject root = JsonParser.parseReader(jsonReader).getAsJsonObject();
@@ -54,14 +60,24 @@ public class Config extends FeatureTree {
                 );
             }
 
-            this.selectedTab = this.idToTab.getOrDefault(GsonHelper.getAsString(root, "selected_tab", ""), this.APPEARANCE);
+            this.selectedTab = Features.ID_TO_TAB.getOrDefault(GsonHelper.getAsString(root, "selected_tab", ""), Features.APPEARANCE);
 
             if (GsonHelper.isObjectNode(root, "features")) {
                 JsonObject features = GsonHelper.getAsJsonObject(root, "features");
                 for (Map.Entry<String, JsonElement> featureEntry : features.entrySet()) {
-                    String featureKey = featureEntry.getKey();
-                    if (this.idToFeature.containsKey(featureKey)) {
-                        this.idToFeature.get(featureKey).deserialize(featureEntry.getValue());
+                    String key = featureEntry.getKey();
+                    JsonElement value = featureEntry.getValue();
+
+                    Feature feature = Features.ID_TO_FEATURE.get(key);
+                    if (feature != null) {
+                        FeatureState state = this.states.get(feature);
+
+                        if (GsonHelper.isStringValue(value)) {
+                            // TODO: Remove pre-0.3.0 handling
+                            state.enabled = !"never".equals(GsonHelper.convertToString(value, key));
+                        } else {
+                            state.deserialize(GsonHelper.convertToJsonObject(value, key));
+                        }
                     }
                 }
             }
@@ -83,9 +99,11 @@ public class Config extends FeatureTree {
                 jsonWriter.name("version").value(ModKrowd.VERSION.getFriendlyString());
                 jsonWriter.name("selected_tab").value(this.selectedTab.id);
                 jsonWriter.name("features").beginObject();
-                    for (Feature f : this.features) {
-                        jsonWriter.name(f.id);
-                        jsonWriter.jsonValue(f.serialize().toString());
+                    for (Feature feature : Features.FEATURES) {
+                        jsonWriter.name(feature.id);
+                        JsonObject dest = new JsonObject();
+                        this.getState(feature).serialize(dest);
+                        jsonWriter.jsonValue(dest.toString());
                     }
                 jsonWriter.endObject();
             jsonWriter.endObject();
@@ -96,9 +114,17 @@ public class Config extends FeatureTree {
     }
 
     public void reset() {
-        for (Feature f : this.features) {
-            f.predicate = Predicate.NEVER;
+        for (FeatureState featureState : this.states()) {
+            featureState.enabled = false;
         }
+    }
+
+    public FeatureState getState(Feature feature) {
+        return this.states.get(feature);
+    }
+
+    public Collection<FeatureState> states() {
+        return this.states.values();
     }
 
     private static SemanticVersion getSemanticVersion(JsonObject object, String element) throws JsonParseException {

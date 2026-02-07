@@ -1,7 +1,7 @@
 package dev.yatloaf.modkrowd.config.feature;
 
 import dev.yatloaf.modkrowd.config.ActionQueue;
-import dev.yatloaf.modkrowd.config.PredicateIndex;
+import dev.yatloaf.modkrowd.config.Restriction;
 import net.fabricmc.fabric.api.client.rendering.v1.BlockRenderLayerMap;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.chunk.ChunkSectionLayer;
@@ -10,8 +10,8 @@ import net.minecraft.world.level.block.Block;
 public class BlockCutoutFeature extends Feature {
     private final Block[] blocks;
 
-    public BlockCutoutFeature(String id, PredicateIndex allowedPredicates, Block... blocks) {
-        super(id, allowedPredicates);
+    public BlockCutoutFeature(String id, Restriction restriction, Block... blocks) {
+        super(id, restriction);
         this.blocks = blocks;
     }
 

@@ -1,6 +1,7 @@
 package dev.yatloaf.modkrowd.mixin;
 
 import dev.yatloaf.modkrowd.ModKrowd;
+import dev.yatloaf.modkrowd.config.Features;
 import dev.yatloaf.modkrowd.cubekrowd.tablist.cache.TabEntryCache;
 import dev.yatloaf.modkrowd.mixinduck.PlayerTabOverlayDuck;
 import dev.yatloaf.modkrowd.util.Util;
@@ -96,7 +97,7 @@ public abstract class PlayerTabOverlayMixin implements PlayerTabOverlayDuck {
 	// Adjust width
 	@Redirect(method = "render", at = @At(value = "INVOKE", ordinal = 0, target = "Ljava/lang/Math;max(II)I"))
 	private int maxRedirect(int a, int b) {
-		if (ModKrowd.CONFIG.PING_DISPLAY.enabled) {
+		if (Features.PING_DISPLAY.active) {
 			// Hardcoded width of the Vanilla ping bars: 10
 			// Hardcoded space between name and ping bars: 2
 			int nameWidth = this.minecraft.font.width(this.currentEntry.getNameThemed().text());
@@ -144,7 +145,7 @@ public abstract class PlayerTabOverlayMixin implements PlayerTabOverlayDuck {
 	// Assume the face is upside-down
 	@ModifyArg(method = "render", index = 6, at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/components/PlayerFaceRenderer;draw(Lnet/minecraft/client/gui/GuiGraphics;Lnet/minecraft/resources/ResourceLocation;IIIZZI)V"))
 	private boolean upsideDownArg(boolean upsideDown) {
-		return upsideDown || ModKrowd.CONFIG.DINNERBONE_GRUMM.enabled && this.currentEntry.result().isPlayer();
+		return upsideDown || Features.DINNERBONE_GRUMM.active && this.currentEntry.result().isPlayer();
 	}
 
     @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/core/ClientAsset$Texture;texturePath()Lnet/minecraft/resources/ResourceLocation;"))
@@ -155,7 +156,7 @@ public abstract class PlayerTabOverlayMixin implements PlayerTabOverlayDuck {
 	// Draw ping instead
 	@Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/components/PlayerTabOverlay;renderPingIcon(Lnet/minecraft/client/gui/GuiGraphics;IIILnet/minecraft/client/multiplayer/PlayerInfo;)V"))
 	private void renderPingIconRedirect(PlayerTabOverlay instance, GuiGraphics context, int width, int x, int y, PlayerInfo entry) {
-		if (ModKrowd.CONFIG.PING_DISPLAY.enabled) {
+		if (Features.PING_DISPLAY.active) {
 			if (this.currentEntry.result().isPlayer()) {
 				MutableComponent text = this.currentEntry.getLatencyThemed().text();
 				// color gets overridden by the text style anyway, but we need the opacity

@@ -1,6 +1,6 @@
 package dev.yatloaf.modkrowd.mixin;
 
-import dev.yatloaf.modkrowd.ModKrowd;
+import dev.yatloaf.modkrowd.config.Features;
 import net.minecraft.client.renderer.entity.layers.Deadmau5EarsLayer;
 import net.minecraft.core.ClientAsset;
 import net.minecraft.resources.ResourceLocation;
@@ -19,6 +19,6 @@ public class Deadmau5EarsLayerMixin {
 	// Return deadmau5' skin instead
 	@Redirect(at = @At(value = "INVOKE", target = "Lnet/minecraft/core/ClientAsset$Texture;texturePath()Lnet/minecraft/resources/ResourceLocation;"), method = "submit(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;ILnet/minecraft/client/renderer/entity/state/AvatarRenderState;FF)V")
 	private ResourceLocation texturePathRedirect(ClientAsset.Texture instance) {
-		return ModKrowd.CONFIG.DEADMAU5.enabled ? DEADMAU5_SKIN : instance.texturePath();
+		return Features.DEADMAU5.active ? DEADMAU5_SKIN : instance.texturePath();
 	}
 }

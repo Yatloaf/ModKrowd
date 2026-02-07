@@ -1,6 +1,6 @@
 package dev.yatloaf.modkrowd.mixin;
 
-import dev.yatloaf.modkrowd.ModKrowd;
+import dev.yatloaf.modkrowd.config.Features;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.BlockGetter;
@@ -28,7 +28,7 @@ public class LightBlockMixin extends Block {
 	// Actually render the model
 	@Inject(at = @At("HEAD"), method = "getRenderShape", cancellable = true)
 	private void getRenderShapeInject(CallbackInfoReturnable<RenderShape> cir) {
-		if (ModKrowd.CONFIG.TANGIBLE_LIGHTS.enabled) {
+		if (Features.TANGIBLE_LIGHTS.active) {
 			cir.setReturnValue(RenderShape.MODEL);
 		}
 	}
@@ -36,7 +36,7 @@ public class LightBlockMixin extends Block {
 	// Full cube focus outline
 	@Inject(at = @At("HEAD"), method = "getShape", cancellable = true)
 	private void getShapeInject(CallbackInfoReturnable<VoxelShape> cir) {
-		if (ModKrowd.CONFIG.TANGIBLE_LIGHTS.enabled) {
+		if (Features.TANGIBLE_LIGHTS.active) {
 			cir.setReturnValue(Shapes.block());
 		}
 	}

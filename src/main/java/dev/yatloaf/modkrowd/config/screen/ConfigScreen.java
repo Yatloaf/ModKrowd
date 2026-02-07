@@ -1,10 +1,14 @@
 package dev.yatloaf.modkrowd.config.screen;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import dev.yatloaf.modkrowd.ModKrowd;
 import dev.yatloaf.modkrowd.config.Config;
+import dev.yatloaf.modkrowd.config.FeatureState;
+import dev.yatloaf.modkrowd.config.FeatureTab;
+import dev.yatloaf.modkrowd.config.Features;
 import dev.yatloaf.modkrowd.config.SyncedConfig;
 import dev.yatloaf.modkrowd.config.exception.ConfigException;
-import dev.yatloaf.modkrowd.util.Util;
+import dev.yatloaf.modkrowd.config.feature.Feature;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.tabs.Tab;
 import net.minecraft.client.gui.components.tabs.TabManager;
@@ -31,18 +35,28 @@ public class ConfigScreen extends Screen {
     public final Button cancelButton;
     public final Button doneButton;
 
+    private Feature awaitingKeyBind = null;
+
     public ConfigScreen(Screen parent, SyncedConfig config, Save save, Cancel cancel) {
         super(Component.translatable("modkrowd.config.title"));
         this.parent = parent;
-        this.config = config.copyConfig(); // Local unsynced copy
+        this.config = new Config(config); // Local unsynced copy
         this.save = save;
         this.cancel = cancel;
-        this.tabs = Util.listToArray(this.config.tabs, ConfigTab::new, ConfigTab[]::new);
+        this.tabs = new ConfigTab[Features.TABS.size()];
+        for (int i = 0; i < this.tabs.length; i++) {
+            FeatureTab tab = Features.TABS.get(i);
+            this.tabs[i] = new ConfigTab(this, tab);
+        }
         this.tabManager = new TabManager(this::addRenderableWidget, this::removeWidget);
         this.tabNavigation = TabNavigationBar.builder(this.tabManager, this.width).addTabs(this.tabs).build();
         this.reloadButton = Button.builder(Component.literal("Reload"), this::onReloadButton).build();
         this.cancelButton = Button.builder(Component.literal("Cancel"), this::onCancelButton).build();
         this.doneButton = Button.builder(Component.literal("Done"), this::onDoneButton).build();
+    }
+
+    public void awaitKeyBindFor(Feature feature) {
+        this.awaitingKeyBind = feature;
     }
 
     private void onReloadButton(Button button) {
@@ -111,8 +125,21 @@ public class ConfigScreen extends Screen {
 
     @Override
     public boolean keyPressed(KeyEvent input) {
-        // Save even when pressing Esc
-        if (input.isEscape()) {
+        if (this.awaitingKeyBind != null) {
+            // Set keybind
+            FeatureState featureState = this.config.getState(this.awaitingKeyBind);
+            if (input.isEscape()) {
+                featureState.toggleKey = InputConstants.UNKNOWN;
+            } else {
+                featureState.toggleKey = InputConstants.getKey(input);
+            }
+            this.awaitingKeyBind = null;
+            if (this.tabManager.getCurrentTab() instanceof ConfigTab tab) {
+                tab.refreshState();
+            }
+            return true;
+        } else if (input.isEscape()) {
+            // Save even when pressing Esc
             this.saveAndClose();
             return true;
         } else {

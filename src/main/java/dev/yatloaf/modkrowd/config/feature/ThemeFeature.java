@@ -2,12 +2,12 @@ package dev.yatloaf.modkrowd.config.feature;
 
 import dev.yatloaf.modkrowd.ModKrowd;
 import dev.yatloaf.modkrowd.config.ActionQueue;
-import dev.yatloaf.modkrowd.config.PredicateIndex;
+import dev.yatloaf.modkrowd.config.Restriction;
 import net.minecraft.client.Minecraft;
 
 public class ThemeFeature extends Feature {
-    public ThemeFeature(String id, PredicateIndex allowedPredicates) {
-        super(id, allowedPredicates);
+    public ThemeFeature(String id, Restriction restriction) {
+        super(id, restriction);
     }
 
     @Override

@@ -2,7 +2,7 @@ package dev.yatloaf.modkrowd.config.feature;
 
 import dev.yatloaf.modkrowd.config.ActionQueue;
 import dev.yatloaf.modkrowd.config.DefaultTheme;
-import dev.yatloaf.modkrowd.config.PredicateIndex;
+import dev.yatloaf.modkrowd.config.Restriction;
 import dev.yatloaf.modkrowd.cubekrowd.common.CKColor;
 import dev.yatloaf.modkrowd.cubekrowd.common.CubeKrowd;
 import dev.yatloaf.modkrowd.cubekrowd.common.LatencyLevel;
@@ -56,8 +56,8 @@ public class CherryLiteThemeFeature extends ThemeFeature {
     public static final ResourceLocation CHERRY_RIGHT_ARROW = ResourceLocation.fromNamespaceAndPath("modkrowd", "textures/theme/cherry/cherry_right_arrow.png");
     public static final ResourceLocation CHERRY_EXCLAMATION = ResourceLocation.fromNamespaceAndPath("modkrowd", "textures/theme/cherry/cherry_exclamation.png");
 
-    public CherryLiteThemeFeature(String id, PredicateIndex allowedPredicates) {
-        super(id, allowedPredicates);
+    public CherryLiteThemeFeature(String id, Restriction restriction) {
+        super(id, restriction);
     }
 
     @Override

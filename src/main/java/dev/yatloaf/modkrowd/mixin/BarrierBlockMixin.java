@@ -1,6 +1,6 @@
 package dev.yatloaf.modkrowd.mixin;
 
-import dev.yatloaf.modkrowd.ModKrowd;
+import dev.yatloaf.modkrowd.config.Features;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.BarrierBlock;
 import net.minecraft.world.level.block.Block;
@@ -24,7 +24,7 @@ public class BarrierBlockMixin extends Block {
 	// Actually render the model
 	@Inject(method = "getRenderShape", cancellable = true, at = @At("HEAD"))
 	private void getRenderShapeInject(CallbackInfoReturnable<RenderShape> cir) {
-		if (ModKrowd.CONFIG.TANGIBLE_BARRIERS.enabled) {
+		if (Features.TANGIBLE_BARRIERS.active) {
 			cir.setReturnValue(RenderShape.MODEL);
 		}
 	}

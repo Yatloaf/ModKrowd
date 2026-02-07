@@ -34,7 +34,7 @@ public class TabListCache {
     public void invalidateAll() {
         Minecraft minecraft = Minecraft.getInstance();
         // This can happen due to circular class loading
-        if (minecraft == null) {
+        if (minecraft == null || minecraft.gui == null) {
             this.hud = null;
             this.playerInfos = List.of();
         } else {

@@ -1,6 +1,6 @@
 package dev.yatloaf.modkrowd.mixin;
 
-import dev.yatloaf.modkrowd.ModKrowd;
+import dev.yatloaf.modkrowd.config.Features;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.RenderShape;
@@ -25,7 +25,7 @@ public class MovingPistonBlockMixin extends Block {
 	// Actually render the model
 	@Override
 	public @NotNull RenderShape getRenderShape(BlockState state) {
-		if (ModKrowd.CONFIG.TANGIBLE_MOVING_PISTONS.enabled) {
+		if (Features.TANGIBLE_MOVING_PISTONS.active) {
 			return RenderShape.MODEL;
 		} else {
 			return RenderShape.INVISIBLE;
@@ -35,7 +35,7 @@ public class MovingPistonBlockMixin extends Block {
 	// Full cube focus outline
 	@Inject(at = @At("HEAD"), method = "getShape", cancellable = true)
 	private void getShapeInject(CallbackInfoReturnable<VoxelShape> cir) {
-		if (ModKrowd.CONFIG.TANGIBLE_MOVING_PISTONS.enabled) {
+		if (Features.TANGIBLE_MOVING_PISTONS.active) {
 			cir.setReturnValue(Shapes.block());
 		}
 	}
