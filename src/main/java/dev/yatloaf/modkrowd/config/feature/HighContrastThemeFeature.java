@@ -73,19 +73,15 @@ public class HighContrastThemeFeature extends ThemeFeature {
     protected void onAfkMessage(MessageCache message, AfkMessage afkMessage) {
         switch (afkMessage.afk()) {
             case FALSE -> message.setThemed(TextCache.of(StyledString.concat(
-                    StyledString.concat(
-                            StyledString.fromString("→ "),
-                            afkMessage.name(),
-                            StyledString.SPACE
-                    ).fillColor(PINK),
+                    StyledString.fromString("→ ", CKColor.GREEN.style),
+                    afkMessage.name().fillColor(PINK),
+                    StyledString.SPACE,
                     Afk.FALSE.messageSuffix.fillColor(CKColor.GRAY.textColor)
             )));
             case TRUE -> message.setThemed(TextCache.of(StyledString.concat(
-                    StyledString.concat(
-                            StyledString.fromString("← "),
-                            afkMessage.name(),
-                            StyledString.SPACE
-                    ).fillColor(PINK),
+                    StyledString.fromString("← ", CKColor.RED.style),
+                    afkMessage.name().fillColor(PINK),
+                    StyledString.SPACE,
                     Afk.TRUE.messageSuffix.fillColor(CKColor.GRAY.textColor)
             )));
         }

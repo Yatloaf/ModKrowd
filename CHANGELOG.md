@@ -18,6 +18,7 @@ New contributor: Hydrintegral!
 - Replaced confusing feature predicates with a simple on/off switch and quick toggle keybinds unbound by default.
 - Ping Display now reserves a minimum space to reduce changing the width of the tab list.
 - High Contrast Theme now uses the `ARCKADE` color for Veteran.
+- High Contrast Theme now colors the arrow for AFK messages red or green.
 
 ### Fixed
 
