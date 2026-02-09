@@ -22,6 +22,7 @@ New contributor: Hydrintegral!
 
 ### Fixed
 
+- Some buttons in the config screen not being translatable.
 - Message Preview showing chattymotes on BuildTeam.
 - Messages not being themed when received while switching servers.
 

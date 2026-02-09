@@ -50,9 +50,9 @@ public class ConfigScreen extends Screen {
         }
         this.tabManager = new TabManager(this::addRenderableWidget, this::removeWidget);
         this.tabNavigation = TabNavigationBar.builder(this.tabManager, this.width).addTabs(this.tabs).build();
-        this.reloadButton = Button.builder(Component.literal("Reload"), this::onReloadButton).build();
-        this.cancelButton = Button.builder(Component.literal("Cancel"), this::onCancelButton).build();
-        this.doneButton = Button.builder(Component.literal("Done"), this::onDoneButton).build();
+        this.reloadButton = Button.builder(Component.translatable("modkrowd.config.reload"), this::onReloadButton).build();
+        this.cancelButton = Button.builder(Component.translatable("modkrowd.config.cancel"), this::onCancelButton).build();
+        this.doneButton = Button.builder(Component.translatable("modkrowd.config.done"), this::onDoneButton).build();
     }
 
     public void awaitKeyBindFor(Feature feature) {
