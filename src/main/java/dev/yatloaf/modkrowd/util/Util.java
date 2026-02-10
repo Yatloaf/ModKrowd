@@ -29,10 +29,13 @@ public final class Util {
         NUMERAL_TO_SUPERSCRIPT.put('8', '⁸');
         NUMERAL_TO_SUPERSCRIPT.put('9', '⁹');
         NUMERAL_TO_SUPERSCRIPT.put('-', '\u207B');
+        NUMERAL_TO_SUPERSCRIPT.put('k', '\u1d4f');
     }
 
-    public static String superscript(int n) {
-        char[] chars = String.valueOf(n).toCharArray();
+    public static String superscript(int n, boolean abbreviate) {
+        char[] chars = abbreviate && n >= 1000
+                ? String.valueOf(n / 1000).concat("k").toCharArray()
+                : String.valueOf(n).toCharArray();
         for (int i = 0; i < chars.length; i++) {
             chars[i] = NUMERAL_TO_SUPERSCRIPT.get(chars[i]);
         }

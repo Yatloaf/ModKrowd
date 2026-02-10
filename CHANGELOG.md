@@ -7,6 +7,7 @@ New contributor: Hydrintegral!
 ### Added
 
 - Themes can now replace the player heads in the tab list. (Hydrintegral)
+- Abbreviate and Narrow Font options for Ping Display.
 - Blank Tab Icons theme.
 
 ### Changed

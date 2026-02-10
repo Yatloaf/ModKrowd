@@ -2,6 +2,7 @@ package dev.yatloaf.modkrowd.config.screen;
 
 import dev.yatloaf.modkrowd.config.FeatureState;
 import dev.yatloaf.modkrowd.cubekrowd.common.CKColor;
+import it.unimi.dsi.fastutil.booleans.BooleanConsumer;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.ContainerObjectSelectionList;
 import net.minecraft.client.gui.components.Renderable;
@@ -18,6 +19,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.BooleanSupplier;
 import java.util.function.Consumer;
 import java.util.function.DoubleConsumer;
 import java.util.function.DoubleSupplier;
@@ -45,6 +47,10 @@ public class FeatureEntry extends ContainerObjectSelectionList.Entry<FeatureEntr
         this.vertical = LinearLayout.vertical();
         this.addLine(new HeaderLine(screen, featureState));
         featureState.addOptions(this);
+    }
+
+    public void addBoolean(Component label, Tooltip tooltip, boolean startValue, BooleanSupplier getter, BooleanConsumer setter) {
+        this.addLine(new BooleanLine(label, tooltip, startValue, getter, setter));
     }
 
     public void addInt(Component label, Tooltip tooltip, int startValue, int minValue, int maxValue, IntSupplier getter, IntConsumer setter) {

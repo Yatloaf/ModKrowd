@@ -2,6 +2,7 @@ package dev.yatloaf.modkrowd.mixin;
 
 import dev.yatloaf.modkrowd.ModKrowd;
 import dev.yatloaf.modkrowd.config.Features;
+import dev.yatloaf.modkrowd.config.feature.PingDisplayFeature;
 import dev.yatloaf.modkrowd.cubekrowd.tablist.cache.TabEntryCache;
 import dev.yatloaf.modkrowd.mixinduck.PlayerTabOverlayDuck;
 import dev.yatloaf.modkrowd.util.Util;
@@ -38,7 +39,7 @@ public abstract class PlayerTabOverlayMixin implements PlayerTabOverlayDuck {
 	// Caution: May trigger severe headaches in functional programmers
 
     // At least the width of this string is reserved for the latency to avoid jittering
-    @Unique private static final String MIN_RESERVED_LATENCY = Util.superscript(999);
+    @Unique private static final String MIN_RESERVED_LATENCY = Util.superscript(999, false);
 
 	@Shadow @Final private Minecraft minecraft;
 	@Shadow private @Nullable Component header;
@@ -80,7 +81,9 @@ public abstract class PlayerTabOverlayMixin implements PlayerTabOverlayDuck {
     // ClientPacketListener#handlePlayerInfo* should be on the same thread as this, so no synchronization needed
     @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/components/PlayerTabOverlay;getPlayerInfos()Ljava/util/List;"))
     private List<PlayerInfo> getPlayerInfosRedirect(PlayerTabOverlay instance) {
-        this.minReservedLatencyWidth = this.minecraft.font.width(MIN_RESERVED_LATENCY);
+        PingDisplayFeature.State state = (PingDisplayFeature.State) ModKrowd.CONFIG.getState(Features.PING_DISPLAY);
+        Component minReservedLatency = Component.literal(MIN_RESERVED_LATENCY).withStyle(state.style());
+        this.minReservedLatencyWidth = this.minecraft.font.width(minReservedLatency);
         this.currentIndex = -1;
         this.currentEntries = ModKrowd.TAB_LIST.entries;
         return ModKrowd.TAB_LIST.playerInfos;

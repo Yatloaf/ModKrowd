@@ -1,0 +1,12 @@
+{
+    "providers": [
+        {
+            "type": "bitmap",
+            "file": "modkrowd:font/default.png",
+            "ascent": 7,
+            "chars": [
+                "\u1d4f"
+            ]
+        }
+    ]
+}

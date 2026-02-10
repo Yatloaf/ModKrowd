@@ -10,6 +10,7 @@ import dev.yatloaf.modkrowd.config.feature.DirectMessageSoundFeature;
 import dev.yatloaf.modkrowd.config.feature.Feature;
 import dev.yatloaf.modkrowd.config.feature.HighContrastThemeFeature;
 import dev.yatloaf.modkrowd.config.feature.MessagePreviewFeature;
+import dev.yatloaf.modkrowd.config.feature.PingDisplayFeature;
 import dev.yatloaf.modkrowd.config.feature.ReloadResourcesFeature;
 import dev.yatloaf.modkrowd.config.feature.SeparateChatHistoryFeature;
 import dev.yatloaf.modkrowd.config.feature.ShadedTabThemeFeature;
@@ -41,7 +42,7 @@ public final class Features {
     public static final Feature DEVOID = APPEARANCE.feature(new Feature(
             "devoid", Restriction.ALWAYS
     ));
-    public static final Feature PING_DISPLAY = APPEARANCE.feature(new Feature(
+    public static final PingDisplayFeature PING_DISPLAY = APPEARANCE.feature(new PingDisplayFeature(
             "ping_display", Restriction.ALWAYS
     ));
     public static final ReloadResourcesFeature SLIM_ARMOR = APPEARANCE.feature(new ReloadResourcesFeature(

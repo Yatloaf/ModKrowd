@@ -33,6 +33,8 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.multiplayer.ClientConfigurationPacketListenerImpl;
 import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.client.multiplayer.ServerData;
+import net.minecraft.network.chat.FontDescription;
+import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
 import org.lwjgl.glfw.GLFW;
 import org.slf4j.Logger;
@@ -52,6 +54,8 @@ public class ModKrowd implements ClientModInitializer {
             "[ModKrowd] Stay Hydrintegrated!",
     };
     public static final Object USELESS = new Object();
+    public static final FontDescription NARROW_FONT = new FontDescription.Resource(ResourceLocation.fromNamespaceAndPath("modkrowd", "narrow"));
+    public static final Style NARROW_FONT_STYLE = Style.EMPTY.withFont(NARROW_FONT);
 
 	// This logger is used to write text to the console and the log file.
 	// It is considered best practice to use your mod id as the logger's name.

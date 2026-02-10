@@ -1,6 +1,8 @@
 package dev.yatloaf.modkrowd.config.feature;
 
+import dev.yatloaf.modkrowd.ModKrowd;
 import dev.yatloaf.modkrowd.config.ActionQueue;
+import dev.yatloaf.modkrowd.config.Features;
 import dev.yatloaf.modkrowd.config.Restriction;
 import dev.yatloaf.modkrowd.cubekrowd.common.Afk;
 import dev.yatloaf.modkrowd.cubekrowd.common.CKColor;
@@ -186,8 +188,9 @@ public class CherryThemeFeature extends CherryLiteThemeFeature {
     }
 
     protected TextCache formatLatency(int latency) {
+        PingDisplayFeature.State state = (PingDisplayFeature.State) ModKrowd.CONFIG.getState(Features.PING_DISPLAY);
         TextColor color = this.colorLatencyLevel(LatencyLevel.fromLatency(latency));
-        return TextCache.of(Component.literal(Util.superscript(latency)).setStyle(Style.EMPTY.withColor(color)));
+        return TextCache.of(Component.literal(Util.superscript(latency, state.abbreviate)).setStyle(state.style().withColor(color)));
     }
 
     protected TextColor colorLatencyLevel(LatencyLevel level) {

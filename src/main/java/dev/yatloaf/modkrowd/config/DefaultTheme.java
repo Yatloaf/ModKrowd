@@ -1,5 +1,7 @@
 package dev.yatloaf.modkrowd.config;
 
+import dev.yatloaf.modkrowd.ModKrowd;
+import dev.yatloaf.modkrowd.config.feature.PingDisplayFeature;
 import dev.yatloaf.modkrowd.cubekrowd.common.LatencyLevel;
 import dev.yatloaf.modkrowd.cubekrowd.common.cache.TextCache;
 import dev.yatloaf.modkrowd.util.Util;
@@ -7,8 +9,9 @@ import net.minecraft.network.chat.Component;
 
 public class DefaultTheme {
     public static TextCache formatLatency(int latency) {
+        PingDisplayFeature.State state = (PingDisplayFeature.State) ModKrowd.CONFIG.getState(Features.PING_DISPLAY);
         int color = colorLatencyLevel(LatencyLevel.fromLatency(latency));
-        return TextCache.of(Component.literal(Util.superscript(latency)).withColor(color));
+        return TextCache.of(Component.literal(Util.superscript(latency, state.abbreviate)).withStyle(state.style().withColor(color)));
     }
 
     public static int colorLatencyLevel(LatencyLevel level) {
