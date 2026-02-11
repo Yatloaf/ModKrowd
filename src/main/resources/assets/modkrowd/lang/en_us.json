@@ -63,6 +63,8 @@
     "modkrowd.config.feature.auto_missilewars_lobby_switch.tooltip": "Automatically switch to the next MissileWars lobby after a game",
     "modkrowd.config.feature.auto_missilewars_lobby_switch.delay": "Delay (ticks)",
     "modkrowd.config.feature.auto_missilewars_lobby_switch.delay.tooltip": "Maximum value: 280 (14 seconds)",
+    "modkrowd.config.feature.auto_missilewars_lobby_switch.await_message": "Await Message",
+    "modkrowd.config.feature.auto_missilewars_lobby_switch.await_message.tooltip": "Only start the delay once you have sent a chat message",
     "modkrowd.config.feature.tie_detector": "Tie Detector",
     "modkrowd.config.feature.tie_detector.tooltip": "Measure ties in MissileWars",
     "modkrowd.config.feature.respectate": "Respectate",

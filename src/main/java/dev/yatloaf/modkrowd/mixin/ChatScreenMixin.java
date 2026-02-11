@@ -30,6 +30,9 @@ public class ChatScreenMixin extends Screen {
     @Inject(method = "handleChatInput", at = @At("HEAD"))
     private void handleChatInputInject(String chatText, boolean addToHistory, CallbackInfo ci) {
         Features.MESSAGE_PREVIEW.queueClearPreviewMessage();
+        if (Features.AUTOSWITCH.active) {
+            Features.AUTOSWITCH.onSendMessage();
+        }
     }
 
     @Inject(method = "onEdited", at = @At("TAIL"))

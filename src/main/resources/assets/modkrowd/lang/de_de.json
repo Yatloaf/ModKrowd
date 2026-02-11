@@ -63,6 +63,8 @@
     "modkrowd.config.feature.auto_missilewars_lobby_switch.tooltip": "Wechselt nach einem Spiel automatisch zur nächsten MissileWars-Lobby",
     "modkrowd.config.feature.auto_missilewars_lobby_switch.delay": "Verzögerung (Ticks)",
     "modkrowd.config.feature.auto_missilewars_lobby_switch.delay.tooltip": "Maximalwert: 280 (14 Sekunden)",
+    "modkrowd.config.feature.auto_missilewars_lobby_switch.await_message": "Erwarte Nachricht",
+    "modkrowd.config.feature.auto_missilewars_lobby_switch.await_message.tooltip": "Startet die Verzögerung erst, sobald du eine Chatnachricht geschrieben hast",
     "modkrowd.config.feature.tie_detector": "Unentschieden",
     "modkrowd.config.feature.tie_detector.tooltip": "Misst Unentschieden in MissileWars",
     "modkrowd.config.feature.respectate": "Weiterzuschauen",

@@ -24,6 +24,7 @@ import net.minecraft.util.GsonHelper;
 public class DirectMessageSoundFeature extends Feature {
     public final Component soundName;
     public final Tooltip soundTooltip;
+
     public final Component volumeName;
     public final Tooltip volumeTooltip;
 
@@ -50,8 +51,9 @@ public class DirectMessageSoundFeature extends Feature {
     public class State extends FeatureState {
         public static final String SOUND = "sound";
         public static final ResourceLocation DEFAULT_SOUND = SoundEvents.ARROW_HIT_PLAYER.location();
-        public static final double DEFAULT_VOLUME = 0.5;
+
         public static final String VOLUME = "volume";
+        public static final double DEFAULT_VOLUME = 0.5;
         public static final double MIN_VOLUME = 0;
         public static final double MAX_VOLUME = 1;
 
