@@ -169,7 +169,7 @@ public class CherryThemeFeature extends CherryLiteThemeFeature {
         return switch (team) {
             case MW_LOBBY, RR_LOBBY, CC_LOBBY -> CHERRY1;
             case MW_SPECTATOR, RR_SPECTATOR, IR_SPECTATOR, FS, CC_SPECTATOR -> CHERRY4;
-            case MW_RED, RR_BLUE, IR_RED, CC_PURPLE -> CHERRY3;
+            case MW_RED, RR_BLUE, RR_CHASE, IR_RED, CC_PURPLE -> CHERRY3;
             case MW_GREEN, RR_YELLOW, IR_GREEN, CC_ORANGE -> CHERRY6;
             default -> CKColor.WHITE.textColor;
         };

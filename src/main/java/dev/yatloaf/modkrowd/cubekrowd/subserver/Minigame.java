@@ -17,7 +17,8 @@ public enum Minigame {
             MinigameTeam.RR_LOBBY,
             MinigameTeam.RR_SPECTATOR,
             MinigameTeam.RR_BLUE,
-            MinigameTeam.RR_YELLOW
+            MinigameTeam.RR_YELLOW,
+            MinigameTeam.RR_CHASE
     ),
     CRAFTYCANNONEERS("CraftyCannoneers",
             MinigameTeam.CC_LOBBY,
