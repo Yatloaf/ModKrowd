@@ -5,7 +5,6 @@ import dev.yatloaf.modkrowd.config.Config;
 import dev.yatloaf.modkrowd.config.SyncedConfig;
 import dev.yatloaf.modkrowd.config.screen.ConfigScreen;
 import dev.yatloaf.modkrowd.cubekrowd.common.CubeKrowd;
-import dev.yatloaf.modkrowd.cubekrowd.message.KickedMessage;
 import dev.yatloaf.modkrowd.cubekrowd.message.Message;
 import dev.yatloaf.modkrowd.cubekrowd.message.UnavailableMessage;
 import dev.yatloaf.modkrowd.cubekrowd.message.WhereamiMessage;
@@ -212,9 +211,7 @@ public class ModKrowd implements ClientModInitializer {
 
         if (switchStatus instanceof SwitchConnecting(int index, Subserver sender, Subserver destination) && sender == currentSubserver) {
             Message result = message.result();
-            if (result instanceof UnavailableMessage unavailableMessage && unavailableMessage.subserver() == destination
-                    || result instanceof KickedMessage kickedMessage && kickedMessage.subserver() == destination) {
-
+            if (result instanceof UnavailableMessage unavailableMessage && unavailableMessage.subserver() == destination) {
                 int nextIndex = index + 1;
                 Subserver nextDestination = currentSubserver.tryConnectNext(minecraft.getConnection(), nextIndex);
                 if (nextDestination != null) {

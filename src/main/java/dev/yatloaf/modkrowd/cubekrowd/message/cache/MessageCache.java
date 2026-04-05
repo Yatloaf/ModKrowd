@@ -7,13 +7,13 @@ import dev.yatloaf.modkrowd.cubekrowd.message.AlohaMessage;
 import dev.yatloaf.modkrowd.cubekrowd.message.ConnectingMessage;
 import dev.yatloaf.modkrowd.cubekrowd.message.DirectMessage;
 import dev.yatloaf.modkrowd.cubekrowd.message.MixedChatMessage;
-import dev.yatloaf.modkrowd.cubekrowd.message.KickedMessage;
+import dev.yatloaf.modkrowd.cubekrowd.message.UnavailableReasonMessage;
 import dev.yatloaf.modkrowd.cubekrowd.message.RankChatMessage;
 import dev.yatloaf.modkrowd.cubekrowd.message.Message;
 import dev.yatloaf.modkrowd.cubekrowd.message.TeamChatMessage;
 import dev.yatloaf.modkrowd.cubekrowd.message.DeathMessage;
 import dev.yatloaf.modkrowd.cubekrowd.message.MissileWarsGameEndMessage;
-import dev.yatloaf.modkrowd.cubekrowd.message.UnavailableMessage;
+import dev.yatloaf.modkrowd.cubekrowd.message.UnavailableGenericMessage;
 import dev.yatloaf.modkrowd.cubekrowd.message.WhereamiMessage;
 import dev.yatloaf.modkrowd.cubekrowd.subserver.Subserver;
 import dev.yatloaf.modkrowd.util.text.StyledStringReader;
@@ -91,11 +91,11 @@ public class MessageCache extends ThemedCache {
             MissileWarsGameEndMessage missileWarsGameEndMessage = MissileWarsGameEndMessage.readFast(StyledStringReader.of(this.original.styledString()));
             if (missileWarsGameEndMessage.isReal()) return missileWarsGameEndMessage;
 
-            UnavailableMessage unavailableMessage = UnavailableMessage.readFast(StyledStringReader.of(this.original.styledString()));
-            if (unavailableMessage.isReal()) return unavailableMessage;
+            UnavailableGenericMessage unavailableGenericMessage = UnavailableGenericMessage.readFast(StyledStringReader.of(this.original.styledString()));
+            if (unavailableGenericMessage.isReal()) return unavailableGenericMessage;
 
-            KickedMessage kickedMessage = KickedMessage.readFast(StyledStringReader.of(this.original.styledString()));
-            if (kickedMessage.isReal()) return kickedMessage;
+            UnavailableReasonMessage unavailableReasonMessage = UnavailableReasonMessage.readFast(StyledStringReader.of(this.original.styledString()));
+            if (unavailableReasonMessage.isReal()) return unavailableReasonMessage;
         }
 
         return Message.FAILURE;
