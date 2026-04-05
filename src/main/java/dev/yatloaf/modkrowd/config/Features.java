@@ -74,7 +74,7 @@ public final class Features {
     //  CHAT
     // ----------------
 
-    public static final Feature DEJOIN = CHAT.feature(new Feature(
+    public static final Feature PERSISTENT_CHAT_HISTORY = CHAT.feature(new Feature(
             "no_chat_clear_on_rejoin", Restriction.ALWAYS
     ));
     public static final SeparateChatHistoryFeature SEPARATE_CHAT_HISTORY = CHAT.feature(new SeparateChatHistoryFeature(

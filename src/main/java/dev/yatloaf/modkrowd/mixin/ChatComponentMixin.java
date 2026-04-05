@@ -82,7 +82,7 @@ public abstract class ChatComponentMixin {
 
     @Inject(method = "clearMessages", cancellable = true, at = @At("HEAD"))
     private void clearMessagesInject(CallbackInfo ci) {
-        if (Features.DEJOIN.active || Features.SEPARATE_CHAT_HISTORY.active) {
+        if (Features.PERSISTENT_CHAT_HISTORY.active || Features.SEPARATE_CHAT_HISTORY.active) {
             ci.cancel();
         }
     }
