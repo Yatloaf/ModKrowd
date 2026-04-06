@@ -80,4 +80,16 @@ public final class Util {
         // Fabric API mixes in listener.sendCommand() in a way that throws sometimes, so this is used instead
         listener.send(new ServerboundChatCommandPacket(command));
     }
+
+    public static <T> T assertSuccess(FallibleSupplier<T> supplier) {
+        try {
+            return supplier.get();
+        } catch (Throwable e) {
+            throw new AssertionError(e);
+        }
+    }
+
+    public interface FallibleSupplier<T> {
+        T get() throws Throwable;
+    }
 }

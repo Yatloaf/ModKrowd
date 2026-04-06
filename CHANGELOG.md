@@ -10,6 +10,7 @@ New contributor: Hydrintegral!
 - Abbreviate and Narrow Font options for Ping Display.
 - Await Message option for Autoswitch.
 - Blank Tab Icons theme.
+- Compatibility mode when the config file is from a future version.
 
 ### Changed
 

@@ -47,7 +47,10 @@ public class SyncedConfig extends Config {
         for (FeatureState state : this.states()) {
             state.imitate(source.getState(state.feature));
         }
-
+        this.unknownStates.clear();
+        this.unknownStates.putAll(source.unknownStates);
+        this.version = source.version;
+        this.compatibilityVersion = source.compatibilityVersion;
         this.selectedTab = source.selectedTab;
 
         this.dirty = true;
