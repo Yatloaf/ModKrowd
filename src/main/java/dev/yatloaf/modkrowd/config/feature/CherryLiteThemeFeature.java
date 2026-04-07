@@ -55,6 +55,9 @@ public class CherryLiteThemeFeature extends ThemeFeature {
     public static final ResourceLocation CHERRY_PLANKS = ResourceLocation.fromNamespaceAndPath("modkrowd", "textures/theme/cherry/cherry_planks.png");
     public static final ResourceLocation CHERRY_RIGHT_ARROW = ResourceLocation.fromNamespaceAndPath("modkrowd", "textures/theme/cherry/cherry_right_arrow.png");
     public static final ResourceLocation CHERRY_EXCLAMATION = ResourceLocation.fromNamespaceAndPath("modkrowd", "textures/theme/cherry/cherry_exclamation.png");
+    public static final ResourceLocation CHERRY_STONE_RIGHT_ARROW = ResourceLocation.fromNamespaceAndPath("modkrowd", "textures/theme/cherry/cherry_stone_right_arrow.png");
+    public static final ResourceLocation CHERRY_STONE_PLAYERS = ResourceLocation.fromNamespaceAndPath("modkrowd", "textures/theme/cherry/cherry_stone_players.png");
+    public static final ResourceLocation CHERRY_STONE_PING = ResourceLocation.fromNamespaceAndPath("modkrowd", "textures/theme/cherry/cherry_stone_ping.png");
 
     public CherryLiteThemeFeature(String id, Restriction restriction) {
         super(id, restriction);
@@ -149,6 +152,9 @@ public class CherryLiteThemeFeature extends ThemeFeature {
             case OAK_PLANKS -> entry.setSkinThemed(CHERRY_PLANKS);
             case OAK_RIGHT_ARROW -> entry.setSkinThemed(CHERRY_RIGHT_ARROW);
             case OAK_EXCLAMATION -> entry.setSkinThemed(CHERRY_EXCLAMATION);
+            case STONE_RIGHT_ARROW -> entry.setSkinThemed(CHERRY_STONE_RIGHT_ARROW);
+            case STONE_PLAYERS -> entry.setSkinThemed(CHERRY_STONE_PLAYERS);
+            case STONE_PING -> entry.setSkinThemed(CHERRY_STONE_PING);
         }
     }
 
