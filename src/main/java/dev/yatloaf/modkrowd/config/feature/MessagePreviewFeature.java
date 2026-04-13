@@ -91,6 +91,7 @@ public class MessagePreviewFeature extends Feature {
             GuiMessage.Line line = new GuiMessage.Line(Integer.MIN_VALUE, currentLine, PREVIEW_INDICATOR, endOfEntry);
             ((GuiMessageLineDuck)(Object) line).modKrowd$setMessageCache(cache);
             lines.add(line);
+            cache.lines.add(line);
         }
 
         this.linedMessage = this.previewMessage;

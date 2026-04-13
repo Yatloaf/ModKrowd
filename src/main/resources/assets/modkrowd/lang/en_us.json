@@ -45,6 +45,8 @@
     "modkrowd.config.feature.direct_message_sound.sound.tooltip": "",
     "modkrowd.config.feature.direct_message_sound.volume": "Volume (decimal)",
     "modkrowd.config.feature.direct_message_sound.volume.tooltip": "Minimum value: 0\nMaximum value: 1",
+    "modkrowd.config.feature.message_copy": "Message Copy",
+    "modkrowd.config.feature.message_copy.tooltip": "Right click a chat message to copy it in various formats",
     "modkrowd.config.feature.message_preview": "Message Preview",
     "modkrowd.config.feature.message_preview.tooltip": "Display a preview of the typed message",
     "modkrowd.config.feature.anti_invisibility": "Uninvisibility",
@@ -86,5 +88,15 @@
     "modkrowd.message.missilewars_tie.red": "Red",
     "modkrowd.message.missilewars_tie.green": "Green",
     "modkrowd.message.self_joined": "Joined %s",
-    "modkrowd.message.self_left": "Left %s"
+    "modkrowd.message.self_left": "Left %s",
+    "modkrowd.message_copy.title": "Message Copy",
+    "modkrowd.message_copy.copy": "Copy",
+    "modkrowd.message_copy.conversion_error": "Conversion failed: %s",
+    "modkrowd.message_copy.format.unformatted": "Unformatted",
+    "modkrowd.message_copy.format.legacy": "Legacy",
+    "modkrowd.message_copy.format.legacy_ampersand": "Legacy (Ampersand)",
+    "modkrowd.message_copy.format.discord_markdown": "Markdown (Discord)",
+    "modkrowd.message_copy.format.minimessage": "MiniMessage",
+    "modkrowd.message_copy.format.json": "JSON",
+    "modkrowd.message_copy.format.nbt": "NBT"
 }
