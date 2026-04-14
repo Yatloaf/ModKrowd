@@ -17,9 +17,14 @@ import dev.yatloaf.modkrowd.cubekrowd.message.UnavailableGenericMessage;
 import dev.yatloaf.modkrowd.cubekrowd.message.WhereamiMessage;
 import dev.yatloaf.modkrowd.cubekrowd.subserver.Subserver;
 import dev.yatloaf.modkrowd.util.text.StyledStringReader;
+import net.minecraft.client.GuiMessage;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MessageCache extends ThemedCache {
     public final Subserver subserver;
+    public final List<GuiMessage.Line> lines = new ArrayList<>();
 
     private boolean blocked = false;
     private int backgroundTint = 0;

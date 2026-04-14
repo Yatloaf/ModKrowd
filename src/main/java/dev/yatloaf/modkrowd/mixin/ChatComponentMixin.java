@@ -4,7 +4,9 @@ import com.llamalad7.mixinextras.sugar.Local;
 import dev.yatloaf.modkrowd.ModKrowd;
 import dev.yatloaf.modkrowd.config.Features;
 import dev.yatloaf.modkrowd.cubekrowd.common.cache.TextCache;
+import dev.yatloaf.modkrowd.cubekrowd.message.Message;
 import dev.yatloaf.modkrowd.cubekrowd.message.cache.MessageCache;
+import dev.yatloaf.modkrowd.mixinduck.ChatComponentDuck;
 import dev.yatloaf.modkrowd.mixinduck.GuiMessageDuck;
 import dev.yatloaf.modkrowd.mixinduck.GuiMessageLineDuck;
 import dev.yatloaf.modkrowd.util.ChainedListView;
@@ -31,9 +33,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.util.List;
 
 @Mixin(ChatComponent.class)
-public abstract class ChatComponentMixin {
+public abstract class ChatComponentMixin implements ChatComponentDuck {
     // DEJOIN
     // SEPARATE_CHAT_HISTORY
+    // MESSAGE_COPY
     // MESSAGE_PREVIEW
     // Also: any message modification
 
@@ -45,6 +48,32 @@ public abstract class ChatComponentMixin {
     @Shadow protected abstract void addMessageToDisplayQueue(GuiMessage message);
     @Shadow protected abstract void addMessageToQueue(GuiMessage message);
     @Shadow public abstract void scrollChat(int scroll);
+
+    @Shadow
+    protected abstract int getMessageEndIndexAt(double d, double e);
+
+    @Shadow
+    protected abstract int getMessageLineIndexAt(double d, double e);
+
+    @Shadow
+    protected abstract double screenToChatX(double d);
+
+    @Shadow
+    protected abstract double screenToChatY(double d);
+
+    @Override
+    public MessageCache modKrowd$getMessageAt(double x, double y) {
+        double f = this.screenToChatX(x);
+        double g = this.screenToChatY(y);
+        int i = this.getMessageLineIndexAt(f, g);
+
+        if (i >= 0 && i < this.extendedMessages.size()) {
+            GuiMessage.Line line = this.extendedMessages.get(i);
+            return ((GuiMessageLineDuck)(Object) line).modKrowd$getMessageCache();
+        } else {
+            return null;
+        }
+    }
 
     // Redirected visibleMessages
     @Unique private List<GuiMessage.Line> extendedMessages = this.trimmedMessages;
@@ -107,12 +136,24 @@ public abstract class ChatComponentMixin {
         ci.cancel();
     }
 
+    @Inject(method = "addMessageToDisplayQueue", at = @At("HEAD"))
+    private void addMessageToDisplayQueueInject(GuiMessage message, CallbackInfo ci) {
+        GuiMessageDuck messageDuck = (GuiMessageDuck)(Object) message;
+        MessageCache cache = messageDuck.modKrowd$getMessageCache();
+        cache.lines.clear();
+    }
+
     @ModifyArg(method = "addMessageToDisplayQueue", at = @At(value = "INVOKE", target = "Ljava/util/List;add(ILjava/lang/Object;)V"))
     private Object addArg(Object t, @Local(argsOnly = true) @NotNull GuiMessage message) {
         GuiMessageDuck messageDuck = (GuiMessageDuck)(Object) message;
         // We would cast to GuiMessage.Line to undo type erasure, but this has to be a double cast anyway
         GuiMessageLineDuck lineDuck = (GuiMessageLineDuck) t;
-        lineDuck.modKrowd$setMessageCache(messageDuck.modKrowd$getMessageCache());
+        MessageCache cache = messageDuck.modKrowd$getMessageCache();
+        GuiMessage.Line line = (GuiMessage.Line) t;
+
+        lineDuck.modKrowd$setMessageCache(cache);
+        cache.lines.add(line);
+
         return lineDuck;
     }
 

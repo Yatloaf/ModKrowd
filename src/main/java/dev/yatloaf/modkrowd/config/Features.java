@@ -83,6 +83,9 @@ public final class Features {
     public static final DirectMessageSoundFeature DIRECT_MESSAGE_SOUND = CHAT.feature(new DirectMessageSoundFeature(
             "direct_message_sound", Restriction.ALWAYS
     ));
+    public static final Feature MESSAGE_COPY = CHAT.feature(new Feature(
+            "message_copy", Restriction.ALWAYS
+    ));
     public static final MessagePreviewFeature MESSAGE_PREVIEW = CHAT.feature(new MessagePreviewFeature(
             "message_preview", Restriction.ALWAYS
     ));
