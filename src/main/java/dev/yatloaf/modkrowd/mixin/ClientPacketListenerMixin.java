@@ -1,6 +1,8 @@
 package dev.yatloaf.modkrowd.mixin;
 
 import dev.yatloaf.modkrowd.ModKrowd;
+import dev.yatloaf.modkrowd.cubekrowd.common.RankName;
+import dev.yatloaf.modkrowd.cubekrowd.common.SelfPlayer;
 import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.network.protocol.game.ClientboundEntityEventPacket;
 import net.minecraft.network.protocol.game.ClientboundPlayerInfoRemovePacket;
@@ -27,6 +29,12 @@ public class ClientPacketListenerMixin {
 	@Inject(method = "handlePlayerInfoUpdate", at = @At("RETURN"))
 	public void handlePlayerInfoUpdateInject(ClientboundPlayerInfoUpdatePacket packet, CallbackInfo ci) {
 		ModKrowd.TAB_LIST.invalidateAll();
+
+        // Try to initialize rankName with a non-FAILURE value as early as possible
+        // Displaying an outdated rank after a promotion is forgivable, but <[?] > is not
+        if (ModKrowd.currentSubserver.isCubeKrowd && SelfPlayer.rankName == RankName.FAILURE) {
+            SelfPlayer.rankNameSoft();
+        }
 	}
 
 	@Inject(method = "handleEntityEvent", at = @At("RETURN"))

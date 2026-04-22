@@ -21,6 +21,7 @@ New contributor: Hydrintegral!
 - Updated parsing in line with CubeKrowd.
 - Replaced confusing feature predicates with a simple on/off switch and quick toggle keybinds unbound by default.
 - Ping Display now reserves a minimum space to reduce changing the width of the tab list.
+- Message Preview now tries to fetch the player’s rank and name as early as possible.
 - High Contrast Theme now uses the `ARCKADE` color for Veteran.
 - High Contrast Theme now colors the arrow for AFK messages red or green.
 
