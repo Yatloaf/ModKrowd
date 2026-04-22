@@ -54,7 +54,7 @@ public final class Subservers {
     public static final Subserver ICERUNNER = Subserver.builder().id("icerunner").name("IceRunner").minigame(Minigame.ICERUNNER).minigameChat().build();
     // TODO: Fishslap Teams...?
     public static final Subserver FISHSLAP = Subserver.builder().id("fishslap").name("FishSlap").minigame(Minigame.FISHSLAP).mixedChat().build();
-    public static final Subserver SLAPFISH = Subserver.builder().id("pvp").name("PVP").minigame(Minigame.FISHSLAP).mixedChat().build(); // Might change if PVP ever comes back for real
+    public static final Subserver SLAPFISH = Subserver.builder().id("pvp").name("PVP").minigame(Minigame.FISHSLAP).mainChat().build(); // Might change if PVP ever comes back for real
     // TODO: UHC Teams!
     public static final Subserver UHC = Subserver.builder().id("uhc").listName("UHC").build();
 
