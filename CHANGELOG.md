@@ -6,6 +6,7 @@ New contributor: Hydrintegral!
 
 ### Added
 
+- Message Copy feature. (Hydrintegral)
 - Themes can now replace the player heads in the tab list. (Hydrintegral)
 - Abbreviate and Narrow Font options for Ping Display.
 - Await Message option for Autoswitch.

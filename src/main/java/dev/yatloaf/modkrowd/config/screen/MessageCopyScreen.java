@@ -1,10 +1,6 @@
 package dev.yatloaf.modkrowd.config.screen;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonElement;
 import com.mojang.serialization.JsonOps;
-import dev.yatloaf.modkrowd.ModKrowd;
 import dev.yatloaf.modkrowd.cubekrowd.common.CKColor;
 import dev.yatloaf.modkrowd.cubekrowd.message.cache.MessageCache;
 import dev.yatloaf.modkrowd.util.text.StyledString;
@@ -24,18 +20,47 @@ import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.ComponentContents;
 import net.minecraft.network.chat.ComponentSerialization;
-import net.minecraft.network.chat.FormattedText;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
-import net.minecraft.network.chat.TextColor;
 import net.minecraft.network.chat.contents.TranslatableContents;
 import net.minecraft.util.Mth;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
 public class MessageCopyScreen extends Screen {
+    private static final Format[] FORMATS = {
+            new Format(
+                    Component.translatable("modkrowd.message_copy.format.unformatted"),
+                    Component::getString),
+            new Format(
+                    Component.translatable("modkrowd.message_copy.format.legacy"),
+                    component -> StyledString.fromText(component).toFormattedString("§")
+            ),
+            new Format(
+                    Component.translatable("modkrowd.message_copy.format.legacy_ampersand"),
+                    component -> StyledString.fromText(component).toFormattedString("&")
+            ),
+            new Format(
+                    Component.translatable("modkrowd.message_copy.format.minimessage"),
+                    MessageCopyScreen::vanillaToMiniMessage
+            ),
+            new Format(
+                    Component.translatable("modkrowd.message_copy.format.json"),
+                    component -> ComponentSerialization.CODEC
+                            .encodeStart(JsonOps.INSTANCE, component)
+                            .getOrThrow()
+                            .toString()
+            ),
+            new Format(
+                    Component.translatable("modkrowd.message_copy.format.nbt"),
+                    component -> ComponentSerialization.CODEC
+                            .encodeStart(NbtOps.INSTANCE, component)
+                            .getOrThrow()
+                            .toString()
+            )
+    };
+
     private final MessageCache cache;
     public final Component component;
     public final List<GuiMessage.Line> lines;
@@ -62,11 +87,19 @@ public class MessageCopyScreen extends Screen {
     }
 
     private void createElementsFromFormats(Format[] formats) {
+        // First figure out the maximum name length
+        int maxFormatWidth = 0;
+        for (Format format : formats) {
+            int formatWidth = this.minecraft.font.width(format.name);
+            if (formatWidth > maxFormatWidth) {
+                maxFormatWidth = formatWidth;
+            }
+        }
         // Kind of messy
         for (Format format : formats) {
             String encoded;
 
-            StringWidget title = new StringWidget(102, 20, format.name, this.minecraft.font);
+            StringWidget title = new StringWidget(maxFormatWidth, 20, format.name, this.minecraft.font);
             EditBox preview = new EditBox(this.minecraft.font, 256, 20, Component.empty());
             Button copyButton;
 
@@ -148,38 +181,6 @@ public class MessageCopyScreen extends Screen {
             textY += lineHeight;
         }
     }
-
-    private static final Format[] FORMATS = {
-            new Format(
-                    Component.translatable("modkrowd.message_copy.format.unformatted"),
-                    Component::getString),
-            new Format(
-                    Component.translatable("modkrowd.message_copy.format.legacy"),
-                    component -> StyledString.fromText(component).toFormattedString("§")
-            ),
-            new Format(
-                    Component.translatable("modkrowd.message_copy.format.legacy_ampersand"),
-                    component -> StyledString.fromText(component).toFormattedString("&")
-            ),
-            new Format(
-                    Component.translatable("modkrowd.message_copy.format.minimessage"),
-                    MessageCopyScreen::vanillaToMiniMessage
-            ),
-            new Format(
-                    Component.translatable("modkrowd.message_copy.format.json"),
-                    component -> ComponentSerialization.CODEC
-                            .encodeStart(JsonOps.INSTANCE, component)
-                            .getOrThrow()
-                            .toString()
-            ),
-            new Format(
-                    Component.translatable("modkrowd.message_copy.format.nbt"),
-                    component -> ComponentSerialization.CODEC
-                            .encodeStart(NbtOps.INSTANCE, component)
-                            .getOrThrow()
-                            .toString()
-            )
-    };
 
     public record Format(Component name, Function<Component, String> formatter) {}
 
