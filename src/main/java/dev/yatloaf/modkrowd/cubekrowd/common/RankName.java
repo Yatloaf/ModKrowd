@@ -33,10 +33,14 @@ public record RankName(Rank rank, StyledString name, boolean isReal) {
     }
 
     public StyledString appearance() {
-        return StyledString.concat(
-                this.rank.appearance(),
-                StyledString.SPACE,
-                this.name
-        );
+        if (this == FAILURE) {
+            return StyledString.fromString("unknown");
+        } else {
+            return StyledString.concat(
+                    this.rank.appearance(),
+                    StyledString.SPACE,
+                    this.name
+            );
+        }
     }
 }

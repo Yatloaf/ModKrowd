@@ -22,6 +22,7 @@ New contributor: Hydrintegral!
 - Replaced confusing feature predicates with a simple on/off switch and quick toggle keybinds unbound by default.
 - Ping Display now reserves a minimum space to reduce changing the width of the tab list.
 - Message Preview now tries to fetch the player’s rank and name as early as possible.
+  - The fallback is also clearer now, although it should rarely be observed.
 - High Contrast Theme now uses the `ARCKADE` color for Veteran.
 - High Contrast Theme now colors the arrow for AFK messages red or green.
 

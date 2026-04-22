@@ -24,6 +24,10 @@ public record MinigameTeamName(MinigameTeam team, StyledString name, boolean isR
     }
 
     public StyledString appearance() {
-        return this.name;
+        if (this == FAILURE) {
+            return StyledString.fromString("unknown");
+        } else {
+            return this.name;
+        }
     }
 }
