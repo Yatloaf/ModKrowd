@@ -241,6 +241,8 @@ public class MessageCopyScreen extends Screen {
         // Java is silly and gets confused if there are conflicting class names, hence the long-winded variable type
         net.kyori.adventure.text.Component adventureComponent = GsonComponentSerializer.gson().deserialize(json);
 
-        return MiniMessage.miniMessage().serialize(adventureComponent);
+        String serialized = MiniMessage.miniMessage().serialize(adventureComponent);
+        // MiniMessage doesn't do this part on its own
+        return serialized.replace("\n", "<br>");
     }
 }
