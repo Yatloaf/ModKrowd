@@ -8,7 +8,7 @@ import dev.yatloaf.modkrowd.cubekrowd.tablist.TabIcon;
 import net.minecraft.client.multiplayer.PlayerInfo;
 import net.minecraft.core.ClientAsset;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 public class TabEntryCache {
     // Is this *really* necessary? Someone benchmark please
@@ -18,7 +18,7 @@ public class TabEntryCache {
     public final PlayerInfo info;
     public final String profileName;
     public final int latency;
-    public final ResourceLocation skin;
+    public final Identifier skin;
     public final TabIcon icon;
 
     private final TabListCache parent;
@@ -27,7 +27,7 @@ public class TabEntryCache {
 
     private TextCache nameThemed;
     private TextCache latencyThemed;
-    private ResourceLocation skinThemed;
+    private Identifier skinThemed;
 
     public TabEntryCache(TabListCache parent, int index, PlayerInfo info) {
         this.parent = parent;
@@ -76,11 +76,11 @@ public class TabEntryCache {
         return this.latencyThemed != null ? this.latencyThemed : DefaultTheme.formatLatency(this.latency);
     }
 
-    public void setSkinThemed(ResourceLocation themed) {
+    public void setSkinThemed(Identifier themed) {
         this.skinThemed = themed;
     }
 
-    public ResourceLocation getSkinThemed() {
+    public Identifier getSkinThemed() {
         return this.skinThemed != null ? this.skinThemed : this.skin;
     }
 }

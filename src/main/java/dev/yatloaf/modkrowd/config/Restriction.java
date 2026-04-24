@@ -4,6 +4,8 @@ import dev.yatloaf.modkrowd.cubekrowd.common.CKColor;
 import dev.yatloaf.modkrowd.cubekrowd.subserver.Subserver;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
+import net.minecraft.server.permissions.PermissionSet;
+import net.minecraft.server.permissions.Permissions;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -25,19 +27,19 @@ public class Restriction {
 
     @FunctionalInterface
     public interface Test {
-        boolean test(Subserver subserver, int permissionLevel);
+        boolean test(Subserver subserver, PermissionSet permissions);
 
-        static boolean always(Subserver subserver, int permissionLevel) {
+        static boolean always(Subserver subserver, PermissionSet permissions) {
             return true;
         }
 
-        static boolean creative(Subserver subserver, int permissionLevel) {
+        static boolean creative(Subserver subserver, PermissionSet permissions) {
             if (subserver.allowCheats) {
                 return true;
             } else if (subserver.isCubeKrowd) {
                 return false;
             } else {
-                return permissionLevel >= 2;
+                return permissions.hasPermission(Permissions.COMMANDS_GAMEMASTER);
             }
         }
     }

@@ -16,7 +16,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.GsonHelper;
@@ -50,25 +50,25 @@ public class DirectMessageSoundFeature extends Feature {
 
     public class State extends FeatureState {
         public static final String SOUND = "sound";
-        public static final ResourceLocation DEFAULT_SOUND = SoundEvents.ARROW_HIT_PLAYER.location();
+        public static final Identifier DEFAULT_SOUND = SoundEvents.ARROW_HIT_PLAYER.location();
 
         public static final String VOLUME = "volume";
         public static final double DEFAULT_VOLUME = 0.5;
         public static final double MIN_VOLUME = 0;
         public static final double MAX_VOLUME = 1;
 
-        public ResourceLocation sound = DEFAULT_SOUND;
+        public Identifier sound = DEFAULT_SOUND;
         public double volume = DEFAULT_VOLUME;
 
         public State() {
             super(DirectMessageSoundFeature.this);
         }
 
-        private ResourceLocation getSound() {
+        private Identifier getSound() {
             return this.sound;
         }
 
-        private void setSound(ResourceLocation value) {
+        private void setSound(Identifier value) {
             if (value.getPath().isBlank()) {
                 this.sound = DEFAULT_SOUND;
             } else {
@@ -102,7 +102,7 @@ public class DirectMessageSoundFeature extends Feature {
         @Override
         public void deserialize(JsonObject source) throws MalformedConfigException {
             super.deserialize(source);
-            this.sound = ResourceLocation.parse(GsonHelper.getAsString(source, SOUND, DEFAULT_SOUND.toString()));
+            this.sound = Identifier.parse(GsonHelper.getAsString(source, SOUND, DEFAULT_SOUND.toString()));
             this.volume = Math.clamp(GsonHelper.getAsDouble(source, VOLUME, DEFAULT_VOLUME), MIN_VOLUME, MAX_VOLUME);
         }
 

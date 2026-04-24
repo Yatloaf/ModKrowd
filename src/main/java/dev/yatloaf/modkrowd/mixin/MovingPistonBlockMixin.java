@@ -24,7 +24,7 @@ public class MovingPistonBlockMixin extends Block {
 
 	// Actually render the model
 	@Override
-	public @NotNull RenderShape getRenderShape(BlockState state) {
+	public @NotNull RenderShape getRenderShape(@NotNull BlockState state) {
 		if (Features.TANGIBLE_MOVING_PISTONS.active) {
 			return RenderShape.MODEL;
 		} else {
@@ -42,7 +42,7 @@ public class MovingPistonBlockMixin extends Block {
 
 	// Glass-like rendering behavior
 	@Override
-	public boolean skipRendering(BlockState state, BlockState stateFrom, Direction direction) {
+	public boolean skipRendering(@NotNull BlockState state, BlockState stateFrom, @NotNull Direction direction) {
         return stateFrom.is(this) || super.skipRendering(state, stateFrom, direction);
     }
 }

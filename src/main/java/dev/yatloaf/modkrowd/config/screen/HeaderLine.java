@@ -9,6 +9,7 @@ import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Supplier;
 
@@ -19,7 +20,7 @@ public class HeaderLine extends AbstractLine {
 
     private final ConfigScreen screen;
     private final FeatureState state;
-    private final CycleButton<Boolean> toggleButton;
+    private final CycleButton<@NotNull Boolean> toggleButton;
     private final Button keyBindButton;
 
     public HeaderLine(ConfigScreen screen, FeatureState state) {
@@ -27,9 +28,8 @@ public class HeaderLine extends AbstractLine {
         this.screen = screen;
         this.state = state;
         // X and Y are set by the parent layout
-        this.toggleButton = CycleButton.builder(this::displayBool)
+        this.toggleButton = CycleButton.builder(this::displayBool, this.state.enabled)
                 .withValues(false, true)
-                .withInitialValue(this.state.enabled)
                 .displayOnlyValue()
                 .create(0, 0, FeatureEntry.INPUT_WIDTH * 3 / 8, FeatureEntry.LINE_HEIGHT, this.state.feature.name, this::onToggle);
         this.keyBindButton = Button.builder(this.state.toggleKey.getDisplayName(), this::onKeyBind)
@@ -52,7 +52,7 @@ public class HeaderLine extends AbstractLine {
                 : Component.translatable("narrator.controls.bound", this.state.feature.name, message.get());
     }
 
-    private void onToggle(CycleButton<Boolean> button, boolean value) {
+    private void onToggle(CycleButton<@NotNull Boolean> button, boolean value) {
         this.state.enabled = value;
     }
 

@@ -14,7 +14,7 @@ import net.minecraft.client.gui.layouts.LayoutElement;
 import net.minecraft.client.gui.layouts.LinearLayout;
 import net.minecraft.client.gui.narration.NarratableEntry;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -27,7 +27,7 @@ import java.util.function.IntConsumer;
 import java.util.function.IntSupplier;
 import java.util.function.Supplier;
 
-public class FeatureEntry extends ContainerObjectSelectionList.Entry<FeatureEntry> implements Layout {
+public class FeatureEntry extends ContainerObjectSelectionList.Entry<@NotNull FeatureEntry> implements Layout {
     public static final int TREE_COLOR = CKColor.GRAY.textColor.getValue() | 0xFF_00_00_00;
     public static final int HOVER_COLOR = 0x3F_9F_9F_9F;
 
@@ -61,7 +61,7 @@ public class FeatureEntry extends ContainerObjectSelectionList.Entry<FeatureEntr
         this.addLine(new DoubleLine(label, tooltip, startValue, minValue, maxValue, getter, setter));
     }
 
-    public void addIdentifier(Component label, Tooltip tooltip, ResourceLocation startValue, Supplier<ResourceLocation> getter, Consumer<ResourceLocation> setter) {
+    public void addIdentifier(Component label, Tooltip tooltip, Identifier startValue, Supplier<Identifier> getter, Consumer<Identifier> setter) {
         this.addLine(new IdentifierLine(label, tooltip, startValue, getter, setter));
     }
 
@@ -88,7 +88,7 @@ public class FeatureEntry extends ContainerObjectSelectionList.Entry<FeatureEntr
     }
 
     @Override
-    public void visitChildren(Consumer<LayoutElement> consumer) {
+    public void visitChildren(@NotNull Consumer<LayoutElement> consumer) {
         this.vertical.visitChildren(consumer);
     }
 
@@ -102,7 +102,7 @@ public class FeatureEntry extends ContainerObjectSelectionList.Entry<FeatureEntr
     }
 
     @Override
-    public void renderContent(GuiGraphics guiGraphics, int mouseX, int mouseY, boolean hovered, float deltaTicks) {
+    public void renderContent(@NotNull GuiGraphics guiGraphics, int mouseX, int mouseY, boolean hovered, float deltaTicks) {
         this.arrangeElements();
 
         if (this.lines.size() > 1) {

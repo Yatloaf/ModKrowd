@@ -4,7 +4,6 @@ import com.llamalad7.mixinextras.sugar.Local;
 import dev.yatloaf.modkrowd.ModKrowd;
 import dev.yatloaf.modkrowd.config.Features;
 import dev.yatloaf.modkrowd.cubekrowd.common.cache.TextCache;
-import dev.yatloaf.modkrowd.cubekrowd.message.Message;
 import dev.yatloaf.modkrowd.cubekrowd.message.cache.MessageCache;
 import dev.yatloaf.modkrowd.mixinduck.ChatComponentDuck;
 import dev.yatloaf.modkrowd.mixinduck.GuiMessageDuck;
@@ -13,13 +12,14 @@ import dev.yatloaf.modkrowd.util.ChainedListView;
 import net.minecraft.client.GuiMessage;
 import net.minecraft.client.GuiMessageTag;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.ChatComponent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MessageSignature;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.util.ARGB;
 import net.minecraft.util.Mth;
 import org.jetbrains.annotations.NotNull;
+import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -40,47 +40,47 @@ public abstract class ChatComponentMixin implements ChatComponentDuck {
     // MESSAGE_PREVIEW
     // Also: any message modification
 
-    @Shadow @Final private Minecraft minecraft;
+    @Shadow @Final Minecraft minecraft;
     @Shadow @Final private List<GuiMessage.Line> trimmedMessages;
-    @Shadow public abstract int getWidth();
-    @Shadow public abstract double getScale();
+    @Shadow protected abstract int getWidth();
+    @Shadow protected abstract double getScale();
     @Shadow protected abstract void logChatMessage(GuiMessage message);
     @Shadow protected abstract void addMessageToDisplayQueue(GuiMessage message);
     @Shadow protected abstract void addMessageToQueue(GuiMessage message);
     @Shadow public abstract void scrollChat(int scroll);
+    @Shadow protected abstract int getLineHeight();
 
     @Shadow
-    protected abstract int getMessageEndIndexAt(double d, double e);
-
-    @Shadow
-    protected abstract int getMessageLineIndexAt(double d, double e);
-
-    @Shadow
-    protected abstract double screenToChatX(double d);
-
-    @Shadow
-    protected abstract double screenToChatY(double d);
+    private int chatScrollbarPos;
 
     @Override
     public MessageCache modKrowd$getMessageAt(double x, double y) {
-        double f = this.screenToChatX(x);
-        double g = this.screenToChatY(y);
-        int i = this.getMessageLineIndexAt(f, g);
-
-        if (i >= 0 && i < this.extendedMessages.size()) {
-            GuiMessage.Line line = this.extendedMessages.get(i);
-            return ((GuiMessageLineDuck)(Object) line).modKrowd$getMessageCache();
-        } else {
-            return null;
+        // Reverse the calculations manually instead of somehow using ChatGraphicsAccess and ActiveTextCollector
+        double scale = this.getScale();
+        int scaledWidth = Mth.floor(this.getWidth() / scale);
+        if (x >= -4 && x < scaledWidth + 4 + 4) {
+            int guiScaledHeight = this.minecraft.getWindow().getGuiScaledHeight();
+            int chatBottom = Mth.floor((guiScaledHeight - 40) / scale);
+            int index = Mth.floor((chatBottom - y) / this.getLineHeight()) + this.chatScrollbarPos;
+            if (index >= 0 && index < this.extendedMessages.size()) {
+                GuiMessage.Line line = this.extendedMessages.get(index);
+                return ((GuiMessageLineDuck)(Object) line).modKrowd$getMessageCache();
+            }
         }
+        return null;
     }
 
     // Redirected visibleMessages
     @Unique private List<GuiMessage.Line> extendedMessages = this.trimmedMessages;
 
     // Insert preview message efficiently
-    @Inject(method = "render", at = @At("HEAD"))
-    private void renderInject(GuiGraphics context, int currentTick, int mouseX, int mouseY, boolean focused, CallbackInfo ci) {
+    @Redirect(method = "forEachLine", at = @At(value = "FIELD", opcode = Opcodes.GETFIELD, target = "Lnet/minecraft/client/gui/components/ChatComponent;trimmedMessages:Ljava/util/List;"))
+    private List<GuiMessage.Line> forEachLine_trimmedMessagesRedirect(ChatComponent instance) {
+        return this.extendedMessages;
+    }
+
+    @Inject(method = "render(Lnet/minecraft/client/gui/components/ChatComponent$ChatGraphicsAccess;IIZ)V", at = @At("HEAD"))
+    private void renderInject(ChatComponent.ChatGraphicsAccess chatGraphicsAccess, int i, int j, boolean bl, CallbackInfo ci) {
         if (Features.MESSAGE_PREVIEW.active && Features.MESSAGE_PREVIEW.hasPreviewMessage()) {
             int width = Mth.floor((double) this.getWidth() / this.getScale());
             List<GuiMessage.Line> previewMessageLines = Features.MESSAGE_PREVIEW.getPreviewMessageLines(width, this.minecraft.font);
@@ -92,21 +92,16 @@ public abstract class ChatComponentMixin implements ChatComponentDuck {
         this.scrollChat(0);
     }
 
-    @Redirect(method = "render", at = @At(value = "FIELD", target = "Lnet/minecraft/client/gui/components/ChatComponent;trimmedMessages:Ljava/util/List;"))
+    @Redirect(method = "render(Lnet/minecraft/client/gui/components/ChatComponent$ChatGraphicsAccess;IIZ)V", at = @At(value = "FIELD", opcode = Opcodes.GETFIELD, target = "Lnet/minecraft/client/gui/components/ChatComponent;trimmedMessages:Ljava/util/List;"))
     private List<GuiMessage.Line> render_trimmedMessagesRedirect(ChatComponent instance) {
         return this.extendedMessages;
     }
 
-    @Redirect(method = "forEachLine", at = @At(value = "FIELD", target = "Lnet/minecraft/client/gui/components/ChatComponent;trimmedMessages:Ljava/util/List;"))
-    private List<GuiMessage.Line> forEachLine_trimmedMessagesRedirect(ChatComponent instance) {
-        return this.extendedMessages;
-    }
-
     // Lambda method! line is argsOnly due to being passed from outside
-    @ModifyArg(method = "method_71992", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/ARGB;color(FI)I", ordinal = 0))
-    private int withAlphaArg(int color, @Local(argsOnly = true) @NotNull GuiMessage.Line line) {
+    @Redirect(method = "method_75802", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/ARGB;black(F)I"))
+    private static int blackArg(float alpha, @Local(argsOnly = true) @NotNull GuiMessage.Line line) {
         GuiMessageLineDuck lineDuck = (GuiMessageLineDuck)(Object) line;
-        return color | lineDuck.modKrowd$getMessageCache().backgroundTint();
+        return ARGB.black(alpha) | lineDuck.modKrowd$getMessageCache().backgroundTint();
     }
 
     @Inject(method = "clearMessages", cancellable = true, at = @At("HEAD"))
@@ -143,37 +138,17 @@ public abstract class ChatComponentMixin implements ChatComponentDuck {
         cache.lines.clear();
     }
 
-    @ModifyArg(method = "addMessageToDisplayQueue", at = @At(value = "INVOKE", target = "Ljava/util/List;add(ILjava/lang/Object;)V"))
-    private Object addArg(Object t, @Local(argsOnly = true) @NotNull GuiMessage message) {
+    @ModifyArg(method = "addMessageToDisplayQueue", at = @At(value = "INVOKE", target = "Ljava/util/List;addFirst(Ljava/lang/Object;)V"))
+    private Object addFirstArg(Object e, @Local(argsOnly = true) @NotNull GuiMessage message) {
         GuiMessageDuck messageDuck = (GuiMessageDuck)(Object) message;
         // We would cast to GuiMessage.Line to undo type erasure, but this has to be a double cast anyway
-        GuiMessageLineDuck lineDuck = (GuiMessageLineDuck) t;
+        GuiMessageLineDuck lineDuck = (GuiMessageLineDuck) e;
         MessageCache cache = messageDuck.modKrowd$getMessageCache();
-        GuiMessage.Line line = (GuiMessage.Line) t;
+        GuiMessage.Line line = (GuiMessage.Line) e;
 
         lineDuck.modKrowd$setMessageCache(cache);
         cache.lines.add(line);
 
         return lineDuck;
-    }
-
-    @Redirect(method = "getClickedComponentStyleAt", at = @At(value = "FIELD", target = "Lnet/minecraft/client/gui/components/ChatComponent;trimmedMessages:Ljava/util/List;"))
-    private List<GuiMessage.Line> getClickedComponentStyleAt_trimmedMessagesRedirect(ChatComponent instance) {
-        return this.extendedMessages;
-    }
-
-    @Redirect(method = "getMessageTagAt", at = @At(value = "FIELD", target = "Lnet/minecraft/client/gui/components/ChatComponent;trimmedMessages:Ljava/util/List;"))
-    private List<GuiMessage.Line> getMessageTagAt_trimmedMessagesRedirect(ChatComponent instance) {
-        return this.extendedMessages;
-    }
-
-    @Redirect(method = "getMessageEndIndexAt", at = @At(value = "FIELD", target = "Lnet/minecraft/client/gui/components/ChatComponent;trimmedMessages:Ljava/util/List;"))
-    private List<GuiMessage.Line> getMessageEndIndexAt_trimmedMessagesRedirect(ChatComponent instance) {
-        return this.extendedMessages;
-    }
-
-    @Redirect(method = "getMessageLineIndexAt", at = @At(value = "FIELD", target = "Lnet/minecraft/client/gui/components/ChatComponent;trimmedMessages:Ljava/util/List;"))
-    private List<GuiMessage.Line> getMessageLineIndexAt_trimmedMessagesRedirect(ChatComponent instance) {
-        return this.extendedMessages;
     }
 }

@@ -8,6 +8,7 @@ import net.minecraft.world.level.block.StructureVoidBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import org.jetbrains.annotations.NotNull;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -39,7 +40,7 @@ public class StructureVoidBlockMixin extends Block {
 
 	// Glass-like rendering behavior
 	@Override
-	public boolean skipRendering(BlockState state, BlockState stateFrom, Direction direction) {
+	public boolean skipRendering(@NotNull BlockState state, BlockState stateFrom, @NotNull Direction direction) {
         return stateFrom.is(this) || super.skipRendering(state, stateFrom, direction);
     }
 }

@@ -35,7 +35,7 @@ public class ConfigTab implements Tab {
     }
 
     @Override
-    public void visitChildren(Consumer<AbstractWidget> consumer) {
+    public void visitChildren(@NotNull Consumer<AbstractWidget> consumer) {
         this.listWidget.visitWidgets(consumer);
     }
 
@@ -50,7 +50,7 @@ public class ConfigTab implements Tab {
         this.listWidget.refreshState();
     }
 
-    public class FeatureListWidget extends ContainerObjectSelectionList<FeatureEntry> {
+    public class FeatureListWidget extends ContainerObjectSelectionList<@NotNull FeatureEntry> {
         public FeatureListWidget(Minecraft minecraft, ConfigScreen screen, int width, int height, int y, int itemHeight) {
             super(minecraft, width, height, y, itemHeight);
             for (Feature feature : ConfigTab.this.tab.features) {

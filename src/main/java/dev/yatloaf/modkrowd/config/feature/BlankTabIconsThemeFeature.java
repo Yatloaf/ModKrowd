@@ -6,10 +6,10 @@ import dev.yatloaf.modkrowd.cubekrowd.tablist.TabIcon;
 import dev.yatloaf.modkrowd.cubekrowd.tablist.cache.TabEntryCache;
 import dev.yatloaf.modkrowd.cubekrowd.tablist.cache.TabListCache;
 import net.minecraft.client.Minecraft;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 public class BlankTabIconsThemeFeature extends ThemeFeature {
-    public static final ResourceLocation BLANK = ResourceLocation.fromNamespaceAndPath("modkrowd", "textures/theme/blank_tab_list_icon/blank.png");
+    public static final Identifier BLANK = Identifier.fromNamespaceAndPath("modkrowd", "textures/theme/blank_tab_list_icon/blank.png");
 
     public BlankTabIconsThemeFeature(String id, Restriction restriction) {
         super(id, restriction);

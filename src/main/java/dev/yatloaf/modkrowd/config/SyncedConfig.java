@@ -13,6 +13,7 @@ import dev.yatloaf.modkrowd.custom.Custom;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientConfigurationPacketListenerImpl;
 import net.minecraft.client.multiplayer.ClientPacketListener;
+import net.minecraft.server.permissions.PermissionSet;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -64,10 +65,10 @@ public class SyncedConfig extends Config {
 
     public void updateFeatures() {
         Minecraft minecraft = Minecraft.getInstance();
-        this.updateFeatures(minecraft, ModKrowd.currentSubserver, minecraft.player != null ? minecraft.player.getPermissionLevel() : 0);
+        this.updateFeatures(minecraft, ModKrowd.currentSubserver, minecraft.player != null ? minecraft.player.permissions() : PermissionSet.NO_PERMISSIONS);
     }
 
-    public synchronized void updateFeatures(Minecraft minecraft, Subserver subserver, int permissionLevel) {
+    public synchronized void updateFeatures(Minecraft minecraft, Subserver subserver, PermissionSet permissions) {
         boolean disable = subserver != Subservers.PENDING;
 
         List<Feature> eventEnable = new ArrayList<>();
@@ -77,7 +78,7 @@ public class SyncedConfig extends Config {
             // there are no two conflicting SyncedConfig instances
 
             FeatureState featureState = this.getState(feature);
-            if (featureState.enabled && feature.restriction.test.test(subserver, permissionLevel)) {
+            if (featureState.enabled && feature.restriction.test.test(subserver, permissions)) {
                 if (!feature.active) {
                     feature.active = true;
                     this.enabledFeatures.add(feature);
@@ -106,7 +107,7 @@ public class SyncedConfig extends Config {
         ActionQueue queue = new ActionQueue();
         for (Feature feature : Features.FEATURES) {
             FeatureState featureState = this.getState(feature);
-            if (featureState.enabled && feature.restriction.test.test(Subservers.NONE, 0)) {
+            if (featureState.enabled && feature.restriction.test.test(Subservers.NONE, PermissionSet.NO_PERMISSIONS)) {
                 feature.active = true;
                 this.enabledFeatures.add(feature);
                 feature.onInitEnable(minecraft, queue);

@@ -43,13 +43,13 @@ public class LightBlockMixin extends Block {
 
 	// Fix the collision shape, which relies on the outline shape by default
 	@Override
-	public @NotNull VoxelShape getCollisionShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
+	public @NotNull VoxelShape getCollisionShape(@NotNull BlockState state, @NotNull BlockGetter world, @NotNull BlockPos pos, @NotNull CollisionContext context) {
 		return Shapes.empty();
 	}
 
 	// Glass-like rendering behavior
 	@Override
-	public boolean skipRendering(BlockState state, BlockState stateFrom, Direction direction) {
+	public boolean skipRendering(@NotNull BlockState state, BlockState stateFrom, @NotNull Direction direction) {
         return stateFrom.is(this) || super.skipRendering(state, stateFrom, direction);
     }
 }

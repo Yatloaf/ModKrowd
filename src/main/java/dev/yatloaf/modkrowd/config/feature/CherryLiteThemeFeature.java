@@ -35,7 +35,7 @@ import dev.yatloaf.modkrowd.util.text.StyledString;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextColor;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 public class CherryLiteThemeFeature extends ThemeFeature {
     public static final TextColor CHERRY1 = TextColor.fromRgb(0xe986bb);
@@ -52,12 +52,12 @@ public class CherryLiteThemeFeature extends ThemeFeature {
 
     public static final TextCache LITERAL_SERVERS = TextCache.of(TabLiteral.SERVERS.text.fillColor(CHERRY4));
 
-    public static final ResourceLocation CHERRY_PLANKS = ResourceLocation.fromNamespaceAndPath("modkrowd", "textures/theme/cherry/cherry_planks.png");
-    public static final ResourceLocation CHERRY_RIGHT_ARROW = ResourceLocation.fromNamespaceAndPath("modkrowd", "textures/theme/cherry/cherry_right_arrow.png");
-    public static final ResourceLocation CHERRY_EXCLAMATION = ResourceLocation.fromNamespaceAndPath("modkrowd", "textures/theme/cherry/cherry_exclamation.png");
-    public static final ResourceLocation CHERRY_STONE_RIGHT_ARROW = ResourceLocation.fromNamespaceAndPath("modkrowd", "textures/theme/cherry/cherry_stone_right_arrow.png");
-    public static final ResourceLocation CHERRY_STONE_PLAYERS = ResourceLocation.fromNamespaceAndPath("modkrowd", "textures/theme/cherry/cherry_stone_players.png");
-    public static final ResourceLocation CHERRY_STONE_PING = ResourceLocation.fromNamespaceAndPath("modkrowd", "textures/theme/cherry/cherry_stone_ping.png");
+    public static final Identifier CHERRY_PLANKS = Identifier.fromNamespaceAndPath("modkrowd", "textures/theme/cherry/cherry_planks.png");
+    public static final Identifier CHERRY_RIGHT_ARROW = Identifier.fromNamespaceAndPath("modkrowd", "textures/theme/cherry/cherry_right_arrow.png");
+    public static final Identifier CHERRY_EXCLAMATION = Identifier.fromNamespaceAndPath("modkrowd", "textures/theme/cherry/cherry_exclamation.png");
+    public static final Identifier CHERRY_STONE_RIGHT_ARROW = Identifier.fromNamespaceAndPath("modkrowd", "textures/theme/cherry/cherry_stone_right_arrow.png");
+    public static final Identifier CHERRY_STONE_PLAYERS = Identifier.fromNamespaceAndPath("modkrowd", "textures/theme/cherry/cherry_stone_players.png");
+    public static final Identifier CHERRY_STONE_PING = Identifier.fromNamespaceAndPath("modkrowd", "textures/theme/cherry/cherry_stone_ping.png");
 
     public CherryLiteThemeFeature(String id, Restriction restriction) {
         super(id, restriction);

@@ -15,6 +15,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.level.storage.WritableLevelData;
+import org.jetbrains.annotations.NotNull;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -28,7 +29,7 @@ public abstract class ClientLevelMixin extends Level {
 
     @Shadow @Final private Minecraft minecraft;
 
-    private ClientLevelMixin(WritableLevelData properties, ResourceKey<Level> registryRef, RegistryAccess registryManager, Holder<DimensionType> dimensionEntry, boolean isClient, boolean debugWorld, long seed, int maxChainedNeighborUpdates) {
+    private ClientLevelMixin(WritableLevelData properties, ResourceKey<@NotNull Level> registryRef, RegistryAccess registryManager, Holder<@NotNull DimensionType> dimensionEntry, boolean isClient, boolean debugWorld, long seed, int maxChainedNeighborUpdates) {
         super(properties, registryRef, registryManager, dimensionEntry, isClient, debugWorld, seed, maxChainedNeighborUpdates);
     }
 
@@ -37,7 +38,7 @@ public abstract class ClientLevelMixin extends Level {
     @Unique private long greenWinTick = -1;
 
     @Override
-    public void updatePOIOnBlockStateChange(BlockPos pos, BlockState oldBlock, BlockState newBlock) {
+    public void updatePOIOnBlockStateChange(@NotNull BlockPos pos, @NotNull BlockState oldBlock, @NotNull BlockState newBlock) {
         super.updatePOIOnBlockStateChange(pos, oldBlock, newBlock);
 
         if (Features.TIE_DETECTOR.active && oldBlock.is(Blocks.NETHER_PORTAL)) {

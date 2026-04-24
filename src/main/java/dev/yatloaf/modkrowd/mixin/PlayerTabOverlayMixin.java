@@ -16,7 +16,7 @@ import net.minecraft.core.ClientAsset;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.FormattedText;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.CommonColors;
 import net.minecraft.util.FormattedCharSequence;
 import org.jetbrains.annotations.NotNull;
@@ -146,13 +146,13 @@ public abstract class PlayerTabOverlayMixin implements PlayerTabOverlayDuck {
 	}
 
 	// Assume the face is upside-down
-	@ModifyArg(method = "render", index = 6, at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/components/PlayerFaceRenderer;draw(Lnet/minecraft/client/gui/GuiGraphics;Lnet/minecraft/resources/ResourceLocation;IIIZZI)V"))
+	@ModifyArg(method = "render", index = 6, at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/components/PlayerFaceRenderer;draw(Lnet/minecraft/client/gui/GuiGraphics;Lnet/minecraft/resources/Identifier;IIIZZI)V"))
 	private boolean upsideDownArg(boolean upsideDown) {
 		return upsideDown || Features.DINNERBONE_GRUMM.active && this.currentEntry.result().isPlayer();
 	}
 
-    @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/core/ClientAsset$Texture;texturePath()Lnet/minecraft/resources/ResourceLocation;"))
-    private ResourceLocation texturePathRedirect(ClientAsset.Texture instance) {
+    @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/core/ClientAsset$Texture;texturePath()Lnet/minecraft/resources/Identifier;"))
+    private Identifier texturePathRedirect(ClientAsset.Texture instance) {
         return this.currentEntry.getSkinThemed();
     }
 

@@ -34,7 +34,7 @@ import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.client.multiplayer.ServerData;
 import net.minecraft.network.chat.FontDescription;
 import net.minecraft.network.chat.Style;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.lwjgl.glfw.GLFW;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -53,7 +53,7 @@ public class ModKrowd implements ClientModInitializer {
             "[ModKrowd] Stay Hydrintegrated!",
     };
     public static final Object USELESS = new Object();
-    public static final FontDescription NARROW_FONT = new FontDescription.Resource(ResourceLocation.fromNamespaceAndPath("modkrowd", "narrow"));
+    public static final FontDescription NARROW_FONT = new FontDescription.Resource(Identifier.fromNamespaceAndPath("modkrowd", "narrow"));
     public static final Style NARROW_FONT_STYLE = Style.EMPTY.withFont(NARROW_FONT);
 
 	// This logger is used to write text to the console and the log file.
@@ -85,7 +85,7 @@ public class ModKrowd implements ClientModInitializer {
 
 		LOGGER.info(HELLO[new Random().nextInt(HELLO.length)]);
 
-		KeyMapping.Category category = KeyMapping.Category.register(ResourceLocation.fromNamespaceAndPath("modkrowd", "modkrowd"));
+		KeyMapping.Category category = KeyMapping.Category.register(Identifier.fromNamespaceAndPath("modkrowd", "modkrowd"));
 		OPTIONS_KEY = KeyBindingHelper.registerKeyBinding(new KeyMapping("key.modkrowd.options",
 				InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_UNKNOWN, category));
 		NEXT_SUBSERVER_KEY = KeyBindingHelper.registerKeyBinding(new KeyMapping("key.modkrowd.next_subserver",

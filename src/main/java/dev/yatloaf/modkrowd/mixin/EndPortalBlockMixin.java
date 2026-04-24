@@ -19,13 +19,13 @@ public class EndPortalBlockMixin extends Block {
 
 	// Actually render the model
 	@Override
-	public @NotNull RenderShape getRenderShape(BlockState state) {
+	public @NotNull RenderShape getRenderShape(@NotNull BlockState state) {
         return Features.TANGIBLE_END_PORTALS.active ? RenderShape.MODEL : RenderShape.INVISIBLE;
 	}
 
 	// Glass-like rendering behavior
 	@Override
-	public boolean skipRendering(BlockState state, BlockState stateFrom, Direction direction) {
+	public boolean skipRendering(@NotNull BlockState state, BlockState stateFrom, @NotNull Direction direction) {
 		return stateFrom.is(this) || super.skipRendering(state, stateFrom, direction);
 	}
 }

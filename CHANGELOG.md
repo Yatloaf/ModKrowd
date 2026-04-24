@@ -4,6 +4,8 @@
 
 New contributor: Hydrintegral!
 
+- Update to 1.21.11.
+
 ### Added
 
 - Message Copy feature. (Hydrintegral)

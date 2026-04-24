@@ -17,6 +17,7 @@ import net.minecraft.client.gui.navigation.ScreenRectangle;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.input.KeyEvent;
 import net.minecraft.network.chat.Component;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * May your deity of choice help you
@@ -124,7 +125,7 @@ public class ConfigScreen extends Screen {
     }
 
     @Override
-    public boolean keyPressed(KeyEvent input) {
+    public boolean keyPressed(@NotNull KeyEvent input) {
         if (this.awaitingKeyBind != null) {
             // Set keybind
             FeatureState featureState = this.config.getState(this.awaitingKeyBind);
@@ -149,9 +150,7 @@ public class ConfigScreen extends Screen {
 
     @Override
     public void onClose() {
-        if (this.minecraft != null) {
-            this.minecraft.setScreen(this.parent);
-        }
+        this.minecraft.setScreen(this.parent);
     }
 
     @FunctionalInterface
