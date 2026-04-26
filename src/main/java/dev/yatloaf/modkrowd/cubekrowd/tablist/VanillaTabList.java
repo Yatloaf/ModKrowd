@@ -2,10 +2,9 @@ package dev.yatloaf.modkrowd.cubekrowd.tablist;
 
 import dev.yatloaf.modkrowd.ModKrowd;
 import dev.yatloaf.modkrowd.cubekrowd.common.SelfPlayer;
-import dev.yatloaf.modkrowd.cubekrowd.common.cache.TextCache;
+import dev.yatloaf.modkrowd.cubekrowd.common.TextCache;
 import dev.yatloaf.modkrowd.cubekrowd.subserver.Subserver;
 import dev.yatloaf.modkrowd.cubekrowd.subserver.Subservers;
-import dev.yatloaf.modkrowd.cubekrowd.tablist.cache.TabListCache;
 
 import java.util.ArrayList;
 import java.util.List;

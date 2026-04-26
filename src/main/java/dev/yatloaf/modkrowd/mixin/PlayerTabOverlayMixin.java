@@ -3,7 +3,7 @@ package dev.yatloaf.modkrowd.mixin;
 import dev.yatloaf.modkrowd.ModKrowd;
 import dev.yatloaf.modkrowd.config.Features;
 import dev.yatloaf.modkrowd.config.feature.PingDisplayFeature;
-import dev.yatloaf.modkrowd.cubekrowd.tablist.cache.TabEntryCache;
+import dev.yatloaf.modkrowd.cubekrowd.tablist.TabEntryCache;
 import dev.yatloaf.modkrowd.mixinduck.PlayerTabOverlayDuck;
 import dev.yatloaf.modkrowd.util.Util;
 import net.minecraft.client.Minecraft;

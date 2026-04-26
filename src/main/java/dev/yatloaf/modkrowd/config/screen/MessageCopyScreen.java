@@ -2,7 +2,7 @@ package dev.yatloaf.modkrowd.config.screen;
 
 import com.mojang.serialization.JsonOps;
 import dev.yatloaf.modkrowd.cubekrowd.common.CKColor;
-import dev.yatloaf.modkrowd.cubekrowd.message.cache.MessageCache;
+import dev.yatloaf.modkrowd.cubekrowd.message.MessageCache;
 import dev.yatloaf.modkrowd.util.text.StyledString;
 import net.kyori.adventure.platform.modcommon.MinecraftClientAudiences;
 import net.kyori.adventure.text.minimessage.MiniMessage;

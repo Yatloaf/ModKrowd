@@ -1,4 +1,4 @@
-package dev.yatloaf.modkrowd.cubekrowd.common.cache;
+package dev.yatloaf.modkrowd.cubekrowd.common;
 
 import dev.yatloaf.modkrowd.util.text.StyledString;
 import net.minecraft.network.chat.Component;

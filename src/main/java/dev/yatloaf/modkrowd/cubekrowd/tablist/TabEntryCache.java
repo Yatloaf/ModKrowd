@@ -1,10 +1,8 @@
-package dev.yatloaf.modkrowd.cubekrowd.tablist.cache;
+package dev.yatloaf.modkrowd.cubekrowd.tablist;
 
 import dev.yatloaf.modkrowd.config.DefaultTheme;
-import dev.yatloaf.modkrowd.cubekrowd.common.cache.TextCache;
-import dev.yatloaf.modkrowd.cubekrowd.common.cache.TextCacheCache;
-import dev.yatloaf.modkrowd.cubekrowd.tablist.TabEntry;
-import dev.yatloaf.modkrowd.cubekrowd.tablist.TabIcon;
+import dev.yatloaf.modkrowd.cubekrowd.common.TextCache;
+import dev.yatloaf.modkrowd.cubekrowd.common.TextCacheCache;
 import net.minecraft.client.multiplayer.PlayerInfo;
 import net.minecraft.core.ClientAsset;
 import net.minecraft.network.chat.MutableComponent;

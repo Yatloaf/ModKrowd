@@ -1,6 +1,6 @@
 package dev.yatloaf.modkrowd.mixin;
 
-import dev.yatloaf.modkrowd.cubekrowd.message.cache.MessageCache;
+import dev.yatloaf.modkrowd.cubekrowd.message.MessageCache;
 import dev.yatloaf.modkrowd.mixinduck.GuiMessageLineDuck;
 import net.minecraft.client.GuiMessage;
 import org.spongepowered.asm.mixin.Mixin;

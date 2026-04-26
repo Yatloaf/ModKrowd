@@ -1,4 +1,4 @@
-package dev.yatloaf.modkrowd.cubekrowd.common.cache;
+package dev.yatloaf.modkrowd.cubekrowd.common;
 
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;

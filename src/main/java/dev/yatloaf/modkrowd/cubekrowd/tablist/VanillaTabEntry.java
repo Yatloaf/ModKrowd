@@ -1,6 +1,6 @@
 package dev.yatloaf.modkrowd.cubekrowd.tablist;
 
-import dev.yatloaf.modkrowd.cubekrowd.common.cache.TextCache;
+import dev.yatloaf.modkrowd.cubekrowd.common.TextCache;
 import dev.yatloaf.modkrowd.cubekrowd.subserver.Subserver;
 import dev.yatloaf.modkrowd.util.text.StyledString;
 

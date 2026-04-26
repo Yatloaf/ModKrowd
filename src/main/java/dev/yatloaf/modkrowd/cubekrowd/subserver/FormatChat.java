@@ -2,7 +2,7 @@ package dev.yatloaf.modkrowd.cubekrowd.subserver;
 
 import dev.yatloaf.modkrowd.cubekrowd.common.MinigameTeamName;
 import dev.yatloaf.modkrowd.cubekrowd.common.SelfPlayer;
-import dev.yatloaf.modkrowd.cubekrowd.common.cache.TextCache;
+import dev.yatloaf.modkrowd.cubekrowd.common.TextCache;
 import dev.yatloaf.modkrowd.util.text.StyledString;
 
 @FunctionalInterface

@@ -1,7 +1,7 @@
 package dev.yatloaf.modkrowd.cubekrowd.command;
 
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import dev.yatloaf.modkrowd.cubekrowd.common.cache.TextCache;
+import dev.yatloaf.modkrowd.cubekrowd.common.TextCache;
 
 /**
  * Hacky

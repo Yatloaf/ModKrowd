@@ -1,9 +1,7 @@
-package dev.yatloaf.modkrowd.cubekrowd.tablist.cache;
+package dev.yatloaf.modkrowd.cubekrowd.tablist;
 
 import dev.yatloaf.modkrowd.ModKrowd;
-import dev.yatloaf.modkrowd.cubekrowd.common.cache.TextCache;
-import dev.yatloaf.modkrowd.cubekrowd.tablist.TabFooter;
-import dev.yatloaf.modkrowd.cubekrowd.tablist.TabHeader;
+import dev.yatloaf.modkrowd.cubekrowd.common.TextCache;
 import dev.yatloaf.modkrowd.mixinduck.PlayerTabOverlayDuck;
 import dev.yatloaf.modkrowd.util.text.StyledStringReader;
 import net.minecraft.client.Minecraft;

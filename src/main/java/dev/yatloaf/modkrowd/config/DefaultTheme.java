@@ -3,7 +3,7 @@ package dev.yatloaf.modkrowd.config;
 import dev.yatloaf.modkrowd.ModKrowd;
 import dev.yatloaf.modkrowd.config.feature.PingDisplayFeature;
 import dev.yatloaf.modkrowd.cubekrowd.common.LatencyLevel;
-import dev.yatloaf.modkrowd.cubekrowd.common.cache.TextCache;
+import dev.yatloaf.modkrowd.cubekrowd.common.TextCache;
 import dev.yatloaf.modkrowd.util.Util;
 import net.minecraft.network.chat.Component;
 

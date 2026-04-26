@@ -2,7 +2,6 @@ package dev.yatloaf.modkrowd.cubekrowd.common;
 
 import com.google.common.net.HostAndPort;
 import dev.yatloaf.modkrowd.ModKrowd;
-import dev.yatloaf.modkrowd.cubekrowd.common.cache.TextCache;
 import dev.yatloaf.modkrowd.util.RabinKarp;
 import dev.yatloaf.modkrowd.util.text.StyledString;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;

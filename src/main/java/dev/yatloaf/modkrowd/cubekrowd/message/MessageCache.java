@@ -1,20 +1,7 @@
-package dev.yatloaf.modkrowd.cubekrowd.message.cache;
+package dev.yatloaf.modkrowd.cubekrowd.message;
 
-import dev.yatloaf.modkrowd.cubekrowd.common.cache.TextCache;
-import dev.yatloaf.modkrowd.cubekrowd.common.cache.ThemedCache;
-import dev.yatloaf.modkrowd.cubekrowd.message.AfkMessage;
-import dev.yatloaf.modkrowd.cubekrowd.message.AlohaMessage;
-import dev.yatloaf.modkrowd.cubekrowd.message.ConnectingMessage;
-import dev.yatloaf.modkrowd.cubekrowd.message.DirectMessage;
-import dev.yatloaf.modkrowd.cubekrowd.message.MixedChatMessage;
-import dev.yatloaf.modkrowd.cubekrowd.message.UnavailableReasonMessage;
-import dev.yatloaf.modkrowd.cubekrowd.message.RankChatMessage;
-import dev.yatloaf.modkrowd.cubekrowd.message.Message;
-import dev.yatloaf.modkrowd.cubekrowd.message.TeamChatMessage;
-import dev.yatloaf.modkrowd.cubekrowd.message.DeathMessage;
-import dev.yatloaf.modkrowd.cubekrowd.message.MissileWarsGameEndMessage;
-import dev.yatloaf.modkrowd.cubekrowd.message.UnavailableGenericMessage;
-import dev.yatloaf.modkrowd.cubekrowd.message.WhereamiMessage;
+import dev.yatloaf.modkrowd.cubekrowd.common.TextCache;
+import dev.yatloaf.modkrowd.cubekrowd.common.ThemedCache;
 import dev.yatloaf.modkrowd.cubekrowd.subserver.Subserver;
 import dev.yatloaf.modkrowd.util.text.StyledStringReader;
 import net.minecraft.client.GuiMessage;
