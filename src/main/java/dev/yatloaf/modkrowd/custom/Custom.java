@@ -1,7 +1,7 @@
 package dev.yatloaf.modkrowd.custom;
 
 import dev.yatloaf.modkrowd.cubekrowd.common.CKColor;
-import dev.yatloaf.modkrowd.cubekrowd.common.cache.TextCache;
+import dev.yatloaf.modkrowd.cubekrowd.common.TextCache;
 import net.minecraft.client.GuiMessageTag;
 import net.minecraft.network.chat.Component;
 

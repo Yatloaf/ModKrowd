@@ -3,8 +3,6 @@ package dev.yatloaf.modkrowd.cubekrowd.tablist;
 import dev.yatloaf.modkrowd.cubekrowd.common.SelfPlayer;
 import dev.yatloaf.modkrowd.cubekrowd.subserver.Subserver;
 import dev.yatloaf.modkrowd.cubekrowd.subserver.Subservers;
-import dev.yatloaf.modkrowd.cubekrowd.tablist.cache.TabEntryCache;
-import dev.yatloaf.modkrowd.cubekrowd.tablist.cache.TabListCache;
 import dev.yatloaf.modkrowd.util.text.StyledString;
 import dev.yatloaf.modkrowd.util.text.StyledStringReader;
 

@@ -2,7 +2,7 @@ package dev.yatloaf.modkrowd.config.feature;
 
 import dev.yatloaf.modkrowd.config.ActionQueue;
 import dev.yatloaf.modkrowd.config.Restriction;
-import dev.yatloaf.modkrowd.cubekrowd.tablist.cache.TabListCache;
+import dev.yatloaf.modkrowd.cubekrowd.tablist.TabListCache;
 import net.minecraft.client.Minecraft;
 
 public class ShadedTabThemeFeature extends ThemeFeature {

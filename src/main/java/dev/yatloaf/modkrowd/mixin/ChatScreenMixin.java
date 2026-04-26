@@ -3,7 +3,7 @@ package dev.yatloaf.modkrowd.mixin;
 import dev.yatloaf.modkrowd.config.Features;
 import dev.yatloaf.modkrowd.config.screen.MessageCopyScreen;
 import dev.yatloaf.modkrowd.cubekrowd.command.PreviewCommands;
-import dev.yatloaf.modkrowd.cubekrowd.message.cache.MessageCache;
+import dev.yatloaf.modkrowd.cubekrowd.message.MessageCache;
 import dev.yatloaf.modkrowd.mixinduck.ChatComponentDuck;
 import net.minecraft.client.gui.screens.ChatScreen;
 import net.minecraft.client.gui.screens.Screen;

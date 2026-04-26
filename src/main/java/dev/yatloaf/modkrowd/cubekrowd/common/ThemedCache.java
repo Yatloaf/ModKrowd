@@ -1,4 +1,4 @@
-package dev.yatloaf.modkrowd.cubekrowd.common.cache;
+package dev.yatloaf.modkrowd.cubekrowd.common;
 
 public class ThemedCache {
     public final TextCache original;

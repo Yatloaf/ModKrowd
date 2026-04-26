@@ -10,7 +10,7 @@ import dev.yatloaf.modkrowd.config.screen.FeatureEntry;
 import dev.yatloaf.modkrowd.config.FeatureState;
 import dev.yatloaf.modkrowd.cubekrowd.common.CKColor;
 import dev.yatloaf.modkrowd.cubekrowd.message.MissileWarsGameEndMessage;
-import dev.yatloaf.modkrowd.cubekrowd.message.cache.MessageCache;
+import dev.yatloaf.modkrowd.cubekrowd.message.MessageCache;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.network.chat.Component;

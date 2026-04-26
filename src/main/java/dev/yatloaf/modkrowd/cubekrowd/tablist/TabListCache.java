@@ -1,10 +1,6 @@
-package dev.yatloaf.modkrowd.cubekrowd.tablist.cache;
+package dev.yatloaf.modkrowd.cubekrowd.tablist;
 
 import dev.yatloaf.modkrowd.ModKrowd;
-import dev.yatloaf.modkrowd.cubekrowd.tablist.MainTabList;
-import dev.yatloaf.modkrowd.cubekrowd.tablist.GameTabList;
-import dev.yatloaf.modkrowd.cubekrowd.tablist.TabList;
-import dev.yatloaf.modkrowd.cubekrowd.tablist.VanillaTabList;
 import dev.yatloaf.modkrowd.mixinduck.PlayerTabOverlayDuck;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.PlayerTabOverlay;

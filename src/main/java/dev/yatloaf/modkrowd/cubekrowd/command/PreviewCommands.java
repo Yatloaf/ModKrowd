@@ -12,7 +12,7 @@ import dev.yatloaf.modkrowd.cubekrowd.common.CKColor;
 import dev.yatloaf.modkrowd.cubekrowd.common.CubeKrowd;
 import dev.yatloaf.modkrowd.cubekrowd.common.RankBrackets;
 import dev.yatloaf.modkrowd.cubekrowd.common.SelfPlayer;
-import dev.yatloaf.modkrowd.cubekrowd.common.cache.TextCache;
+import dev.yatloaf.modkrowd.cubekrowd.common.TextCache;
 import dev.yatloaf.modkrowd.cubekrowd.message.DirectMessage;
 import dev.yatloaf.modkrowd.cubekrowd.message.Direction;
 import dev.yatloaf.modkrowd.util.Util;

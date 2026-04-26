@@ -2,7 +2,7 @@ package dev.yatloaf.modkrowd.cubekrowd.subserver;
 
 import dev.yatloaf.modkrowd.cubekrowd.common.CKColor;
 import dev.yatloaf.modkrowd.cubekrowd.common.MinigameTeam;
-import dev.yatloaf.modkrowd.cubekrowd.common.cache.TextCache;
+import dev.yatloaf.modkrowd.cubekrowd.common.TextCache;
 import dev.yatloaf.modkrowd.util.Util;
 import net.minecraft.client.multiplayer.ClientPacketListener;
 
