@@ -4,8 +4,8 @@ import com.mojang.serialization.JsonOps;
 import dev.yatloaf.modkrowd.cubekrowd.common.CKColor;
 import dev.yatloaf.modkrowd.cubekrowd.message.cache.MessageCache;
 import dev.yatloaf.modkrowd.util.text.StyledString;
+import net.kyori.adventure.platform.modcommon.MinecraftClientAudiences;
 import net.kyori.adventure.text.minimessage.MiniMessage;
-import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.minecraft.client.GuiMessage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -232,13 +232,8 @@ public class MessageCopyScreen extends Screen {
     }
 
     private static String vanillaToMiniMessage(Component component) {
-        String json = ComponentSerialization.CODEC
-                .encodeStart(JsonOps.INSTANCE, component)
-                .getOrThrow()
-                .toString();
-
         // Java is silly and gets confused if there are conflicting class names, hence the long-winded variable type
-        net.kyori.adventure.text.Component adventureComponent = GsonComponentSerializer.gson().deserialize(json);
+        net.kyori.adventure.text.Component adventureComponent = MinecraftClientAudiences.of().asAdventure(component);
 
         String serialized = MiniMessage.miniMessage().serialize(adventureComponent);
         // MiniMessage doesn't do this part on its own
