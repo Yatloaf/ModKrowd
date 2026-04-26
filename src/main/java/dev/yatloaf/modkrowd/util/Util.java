@@ -58,22 +58,8 @@ public final class Util {
         }
     }
 
-    @Deprecated(forRemoval = true, since = "0.3.0")
-    public static <T, R> R[] listToArray(List<T> list, Function<T, R> mapper, IntFunction<R[]> generator) {
-        return list.stream().map(mapper).toArray(generator);
-    }
-
     public static <T, K, V> Map<K, V> arrayToMap(T[] arr, Function<T, K> keyMapper, Function<T, V> valueMapper) {
         return Arrays.stream(arr).collect(Collectors.toMap(keyMapper, valueMapper));
-    }
-
-    @Deprecated(forRemoval = true, since = "0.1.1")
-    public static SemanticVersion constVersion(String s) {
-        try {
-            return SemanticVersion.parse(s);
-        } catch (VersionParsingException e) {
-            throw new AssertionError(e);
-        }
     }
 
     public static void sendCommandPacket(ClientPacketListener listener, String command) {
