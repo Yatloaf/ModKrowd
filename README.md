@@ -12,52 +12,56 @@ CubeKrowd has strict rules regarding allowed mods, which means some aren’t all
 
 ## Ingredients
 
+All features are disabled by default. To use them, open the config screen, either by setting its keybind or by using Mod Menu. Within the config screen, you can toggle the features directly or associate quick toggle keybinds with them. Some features also contain suboptions that can be modified there.
+
+Additionally, there is a keybind outside the config screen for switching directly to the next MissileWars lobby, not to be confused with the Autoswitch feature which does so automatically.
+
 <details>
 <summary>Features</summary>
 
 ### Appearance
 
-- Devoid
-- Ping Display
-- Slim Armor
-- Dinnerbone/Grumm
-- deadmau5
-- Own Nametag
-- All Nametags
-- No Nametags
-- Hide Others
-- Hide Yourself
+- <u>Devoid</u>: Remove the dark horizon in lower Y levels
+- <u>Ping Display</u>: Display the exact latency in the tab list
+- <u>Slim Armor</u>: Adjust the armor model on slim skins
+- <u>Dinnerbone/Grumm</u>: Turn every player upside down
+- <u>deadmau5</u>: Give every player gigantic ears
+- <u>Own Nametag</u>: Show your own nametag
+- <u>All Nametags</u>: Show every nametag
+- <u>No Nametags</u>: Hide every nametag
+- <u>Hide Others</u>: Hide every player model except your own
+- <u>Hide Yourself</u>: Hide your own player model
 
 ### Chat
 
-- Persistent Chat History
-- Separate Chat History
-- You’ve Got Mail
-- Message Copy
-- Message Preview
+- <u>Persistent Chat History</u>: Keep chat through rejoins
+- <u>Separate Chat History</u>: Keep track of separate chat histories per server
+- <u>You’ve Got Mail</u>: Play a sound when receiving a direct message
+- <u>Message Copy</u>: Right click a chat message to copy it in various formats
+- <u>Message Preview</u>: Display a preview of the typed message
 
 ### Creative
 
-- Uninvisibility
-- Tangible Barriers
-- Tangible Structure Voids
-- Tangible Lights
-- Tangible Moving Pistons
-- Tangible End Portals
+- <u>Uninvisibility</u>: Show invisible entities like in spectator mode
+- <u>Tangible Barriers</u>: Give barrier blocks a render model
+- <u>Tangible Structure Voids</u>: Give structure voids a render model and bigger hitbox
+- <u>Tangible Lights</u>: Give light blocks a render model and hitbox
+- <u>Tangible Moving Pistons</u>: Give moving pistons a render model and hitbox
+- <u>Tangible End Portals</u>: Give end portals and end gateways a flat model
 
 ### MissileWars
 
-- Autoswitch
-- Tie Detector
-- Respectate
+- <u>Autoswitch</u>: Automatically switch to the next MissileWars lobby after a game
+- <u>Tie Detector</u>: Measure ties in MissileWars
+- <u>Respectate</u>: Keep spectating players after they die
 
 ### Theme
 
-- Shaded Tab
-- Blank Tab Icons
-- High Contrast
-- Cherry Lite
-- Cherry
+- <u>Shaded Tab</u>: Darken the tab list background
+- <u>Blank Tab Icons</u>: Make the gray icons in the tab list fully transparent
+- <u>High Contrast</u>: Adjust text formatting for accessibility
+- <u>Cherry Lite</u>: A hint of pink
+- <u>Cherry</u>: Welcome to Cherrytown!
 
 </details>
 
