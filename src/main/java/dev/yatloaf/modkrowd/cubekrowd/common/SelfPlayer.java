@@ -15,7 +15,7 @@ public class SelfPlayer {
 
     public static RankName rankNameSoft() {
         if (ModKrowd.currentSubserver.isCubeKrowd) {
-            RankName candidate = ModKrowd.TAB_DECO.tabHeaderSoft().rankName();
+            RankName candidate = ModKrowd.TAB_DECO.tabHeaderFast().rankName();
             if (candidate.isReal()) {
                 rankName = candidate;
             }

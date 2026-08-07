@@ -227,21 +227,32 @@ public class CherryLiteThemeFeature extends ThemeFeature {
 
     @Override
     public void onTabDeco(TabDecoCache tabDeco, Minecraft minecraft, ActionQueue queue) {
-        tabDeco.setHeaderThemed(this.tabHeader(tabDeco.tabHeaderSoft()));
-        tabDeco.setFooterThemed(this.tabFooter(tabDeco.tabFooterSoft()));
+        TabHeader header = tabDeco.tabHeaderFast();
+        TabFooter footer = tabDeco.tabFooterFast();
+        if (header.isReal()) {
+            tabDeco.setHeaderThemed(this.tabHeader(header));
+        }
+        if (footer.isReal()) {
+            tabDeco.setFooterThemed(this.tabFooter(footer));
+        }
     }
 
     protected TextCache tabHeader(TabHeader tabHeader) {
         return TextCache.of(StyledString.concat(
-                TabHeader.PREFIX1.fillColor(CHERRY1),
+                tabHeader.leftHyphens().fillColor(CHERRY1),
+                StyledString.SPACE,
                 TabHeader.INFIX1.fillColor(CHERRY5),
+                StyledString.SPACE,
                 this.rankName(tabHeader.rankName()),
-                TabHeader.SUFFIX1.fillColor(CHERRY1),
+                StyledString.SPACE,
+                tabHeader.rightHyphens().fillColor(CHERRY1),
                 StyledString.NEWLINE,
                 TabHeader.PREFIX2.fillColor(CHERRY5),
+                StyledString.SPACE,
                 this.cubeKrowd(tabHeader.cubeKrowd()),
                 StyledString.NEWLINE,
                 TabHeader.PREFIX3.fillColor(CHERRY4),
+                StyledString.SPACE,
                 tabHeader.time().appearance().fillColor(CHERRY6)
         ));
     }

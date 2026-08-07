@@ -20,7 +20,7 @@ public class StyledStringReader {
         return new StyledStringReader(source);
     }
 
-    public synchronized boolean isAtEnd() {
+    public boolean isAtEnd() {
         return this.cursor == this.length;
     }
 
@@ -30,30 +30,36 @@ public class StyledStringReader {
      * @param count Amount of characters to read if possible.
      * @return A subview of the string.
      */
-    public synchronized StyledString read(int count) {
+    public StyledString read(int count) {
         int actualCount = Math.min(count, this.length - this.cursor);
         StyledString result = this.source.subView(this.cursor, this.cursor + actualCount);
         this.cursor += actualCount;
         return result;
     }
 
-    public synchronized StyledString readAll() {
+    public StyledString readAll() {
         StyledString result = this.source.subView(this.cursor);
         this.cursor = this.length;
         return result;
     }
 
-    public synchronized StyledString readUntil(StyledString stop) {
+    public StyledString readUntil(StyledString stop) {
         int stopIndex = this.source.subView(this.cursor).firstIndexOf(stop);
         return stopIndex == -1 ? this.readAll() : this.read(stopIndex);
     }
 
-    public synchronized StyledString readUntil(String stop) {
+    public StyledString readUntil(String stop) {
         int stopIndex = this.source.subView(this.cursor).firstIndexOf(stop);
         return stopIndex == -1 ? this.readAll() : this.read(stopIndex);
     }
 
-    public synchronized StyledString readUntilAny(String... stops) {
+    public StyledString readUntilAfter(String stop) {
+        int[] codePoints = stop.codePoints().toArray();
+        int stopIndex = this.source.subView(this.cursor).firstIndexOfCodePoints(codePoints) + codePoints.length;
+        return stopIndex == -1 ? this.readAll() : this.read(stopIndex);
+    }
+
+    public StyledString readUntilAny(String... stops) {
         int stopIndex = Arrays.stream(stops)
                 .mapToInt(this.source.subView(this.cursor)::firstIndexOf)
                 .filter(item -> item != -1)
@@ -62,31 +68,37 @@ public class StyledStringReader {
         return this.read(stopIndex);
     }
 
+    public StyledString readUntilSpace() {
+        int start = this.cursor;
+        this.skipUntilSpace();
+        return this.source.subView(start, this.cursor);
+    }
+
     @SuppressWarnings("StatementWithEmptyBody")
-    public synchronized StyledString readWhile(String repeat) {
+    public StyledString readWhile(String repeat) {
         int start = this.cursor;
         while (this.skipIfNext(repeat));
         return this.source.subView(start, this.cursor);
     }
 
-    public synchronized StyledString peek(int count) {
+    public StyledString peek(int count) {
         int actualCount = Math.min(count, this.length - this.cursor);
         return this.source.subView(this.cursor, this.cursor + actualCount);
     }
 
-    public synchronized StyledString peekAll() {
+    public StyledString peekAll() {
         return this.source.subView(this.cursor);
     }
 
-    public synchronized void skip(int count) {
+    public void skip(int count) {
         this.cursor += Math.min(count, this.length - this.cursor);
     }
 
-    public synchronized void skipAll() {
+    public void skipAll() {
         this.cursor = this.length;
     }
 
-    public synchronized void skipUntil(StyledString stop) {
+    public void skipUntil(StyledString stop) {
         int stopIndex = this.source.subView(this.cursor).firstIndexOf(stop);
         if (stopIndex == -1) {
             this.skipAll();
@@ -95,7 +107,7 @@ public class StyledStringReader {
         }
     }
 
-    public synchronized void skipUntilAfter(StyledString stop) {
+    public void skipUntilAfter(StyledString stop) {
         int stopIndex = this.source.subView(this.cursor).firstIndexOf(stop);
         if (stopIndex == -1) {
             this.skipAll();
@@ -104,7 +116,7 @@ public class StyledStringReader {
         }
     }
 
-    public synchronized void skipUntilAfter(String stop) {
+    public void skipUntilAfter(String stop) {
         int[] stopCodePoints = stop.codePoints().toArray();
         int stopIndex = this.source.subView(this.cursor).firstIndexOfCodePoints(stopCodePoints);
         if (stopIndex == -1) {
@@ -114,7 +126,19 @@ public class StyledStringReader {
         }
     }
 
-    public synchronized boolean skipIfNext(StyledString next) {
+    public void skipSpace() {
+        while (!this.isAtEnd() && Character.isWhitespace(this.source.codePointAt(this.cursor))) {
+            this.skip(1);
+        }
+    }
+
+    public void skipUntilSpace() {
+        while (!this.isAtEnd() && !Character.isWhitespace(this.source.codePointAt(this.cursor))) {
+            this.skip(1);
+        }
+    }
+
+    public boolean skipIfNext(StyledString next) {
         if (this.source.subView(this.cursor).startsWith(next)) {
             this.cursor += next.length();
             return true;
@@ -123,7 +147,7 @@ public class StyledStringReader {
         }
     }
 
-    public synchronized boolean skipIfNext(String next) {
+    public boolean skipIfNext(String next) {
         int[] nextCodePoints = next.codePoints().toArray();
         if (this.source.subView(this.cursor).startsWithCodePoints(nextCodePoints)) {
             this.cursor += nextCodePoints.length;
@@ -133,7 +157,7 @@ public class StyledStringReader {
         }
     }
 
-    public synchronized <V> V mapNextOrDefault(Map<StyledString, V> map, V fallback) {
+    public <V> V mapNextOrDefault(Map<StyledString, V> map, V fallback) {
         int keyMaxLength = map.keySet().stream().mapToInt(StyledString::length).max().orElse(0);
         int maxLength = Math.min(keyMaxLength, this.length - this.cursor);
 

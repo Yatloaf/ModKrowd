@@ -6,17 +6,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 public record TabFooter(TabFooterSection[] sections, boolean isReal) {
+    public static final TabFooter FAILURE = new TabFooter(new TabFooterSection[0], false);
 
-    public static TabFooter readSoft(StyledStringReader source) {
+    public static TabFooter readFast(StyledStringReader source) {
         List<TabFooterSection> sections = new ArrayList<>();
-        boolean isReal = true;
         while (!source.isAtEnd()) {
-            TabFooterSection section = TabFooterSection.readSoft(source);
+            TabFooterSection section = TabFooterSection.readFast(source);
+            if (!section.isReal()) return FAILURE;
             sections.add(section);
-            isReal &= section.isReal();
         }
-        isReal &= !sections.isEmpty();
+        if (sections.isEmpty()) return FAILURE;
 
-        return new TabFooter(sections.toArray(TabFooterSection[]::new), isReal);
+        return new TabFooter(sections.toArray(TabFooterSection[]::new), true);
     }
 }
