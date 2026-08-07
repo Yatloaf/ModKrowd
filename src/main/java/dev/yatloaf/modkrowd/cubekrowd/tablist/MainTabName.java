@@ -30,7 +30,7 @@ public record MainTabName(Afk afk, RankName rankName, Subserver subserver, boole
         if (!rankName.isReal()) return FAILURE;
 
         if (subserver == Subservers.SURVIVAL_AMBIGUOUS) {
-            source.skipUntilAfter(" ");
+            source.skipSpace();
             if (source.skipIfNext(SU2)) {
                 subserver = Subservers.SURVIVAL2;
             } else {

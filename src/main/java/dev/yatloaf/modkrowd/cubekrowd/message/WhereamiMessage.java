@@ -13,12 +13,11 @@ public record WhereamiMessage(Subserver subserver, boolean isReal) implements Me
 
     public static WhereamiMessage readFast(StyledStringReader source) {
         if (!source.skipIfNext(WHEREAMI_RESPONSE_PREFIX)) return FAILURE;
-        source.skipUntilAfter(" ");
+        source.skipSpace();
+
         Subserver subserver = Subservers.fromId(source.readAll().toUnstyledString());
-        if (subserver.isReal) {
-            return new WhereamiMessage(subserver, true);
-        } else {
-            return FAILURE;
-        }
+        if (!subserver.isReal) return FAILURE;
+
+        return new WhereamiMessage(subserver, true);
     }
 }

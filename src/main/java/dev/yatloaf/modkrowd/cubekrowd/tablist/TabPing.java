@@ -11,11 +11,11 @@ public record TabPing(int latency, boolean isReal) implements TabEntry {
     public static final StyledString YOUR_PING_ = StyledString.fromString("Your ping:", CKColor.YELLOW.style);
 
     public static TabPing readFast(StyledStringReader source) {
-        source.skipUntilAfter(YOUR_PING_);
-        source.skipUntilAfter(" ");
+        if(!source.skipIfNext(YOUR_PING_)) return FAILURE;
+        source.skipSpace();
 
-        int latency = Util.parseIntOr(source.readUntil("ms").toUnstyledString(), -1);
-        if (latency < 0) return FAILURE;
+        int latency = Util.parseIntOr(source.readUntil("ms").toUnstyledString(), Integer.MIN_VALUE);
+        if (latency == Integer.MIN_VALUE) return FAILURE;
 
         if (!source.skipIfNext("ms")) return FAILURE;
 

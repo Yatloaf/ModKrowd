@@ -15,18 +15,19 @@ public record DirectMessage(Direction direction, String sender, String recipient
     public static final String ME = "me";
 
     public static DirectMessage readFast(StyledStringReader source) {
-        StyledString senderStyled = source.readUntil(" ");
+        StyledString senderStyled = source.readUntilSpace();
         if (senderStyled.isEmpty()) return FAILURE;
         String sender = senderStyled.toUnstyledString();
 
-        source.skipUntilAfter(CubeKrowd.RIGHT_ARROW);
-        source.skipUntilAfter(" ");
+        source.skipSpace();
+        if(!source.skipIfNext(CubeKrowd.RIGHT_ARROW)) return FAILURE;
+        source.skipSpace();
 
-        StyledString recipientStyled = source.readUntil(" ");
+        StyledString recipientStyled = source.readUntilSpace();
         if (recipientStyled.isEmpty()) return FAILURE;
         String recipient = recipientStyled.toUnstyledString();
 
-        source.skipUntilAfter(" ");
+        source.skipSpace();
         StyledString content = source.readAll().isolate();
         if (content.isEmpty()) return FAILURE;
 

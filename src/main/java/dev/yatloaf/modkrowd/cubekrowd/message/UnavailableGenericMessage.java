@@ -18,7 +18,7 @@ public record UnavailableGenericMessage(Subserver subserver, boolean isReal) imp
         Subserver subserver = Subservers.fromId(source.readUntil(".").toUnstyledString());
         if (!subserver.isReal) return FAILURE;
 
-        source.skipUntilAfter(" ");
+        source.skipSpace();
         if (!source.skipIfNext(SUFFIX)) return FAILURE;
 
         return new UnavailableGenericMessage(subserver, true);
