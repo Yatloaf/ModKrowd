@@ -49,9 +49,6 @@ public abstract class ChatComponentMixin implements ChatComponentDuck {
     @Shadow public abstract void scrollChat(int scroll);
 
     @Shadow
-    protected abstract int getMessageEndIndexAt(double d, double e);
-
-    @Shadow
     protected abstract int getMessageLineIndexAt(double d, double e);
 
     @Shadow
