@@ -50,16 +50,16 @@ public class TabDecoCache {
         ModKrowd.CONFIG.onTabDeco(this);
     }
 
-    public TabHeader tabHeaderSoft() {
+    public TabHeader tabHeaderFast() {
         if (this.tabHeader == null) {
-            this.tabHeader = TabHeader.readSoft(StyledStringReader.of(this.header.styledString()));
+            this.tabHeader = TabHeader.readFast(StyledStringReader.of(this.header.styledString()));
         }
         return this.tabHeader;
     }
 
-    public TabFooter tabFooterSoft() {
+    public TabFooter tabFooterFast() {
         if (this.tabFooter == null) {
-            this.tabFooter = TabFooter.readSoft(StyledStringReader.of(this.footer.styledString()));
+            this.tabFooter = TabFooter.readFast(StyledStringReader.of(this.footer.styledString()));
         }
         return this.tabFooter;
     }

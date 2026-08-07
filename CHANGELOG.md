@@ -5,6 +5,7 @@
 ### Fixed
 
 - Message Preview activating on other servers.
+- Themes applying to tab list header and footer even if they have an unexpected format.
 
 ## 0.3.0: 2026-04-26
 

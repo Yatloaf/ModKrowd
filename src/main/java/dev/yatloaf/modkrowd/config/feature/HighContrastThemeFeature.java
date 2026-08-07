@@ -180,20 +180,30 @@ public class HighContrastThemeFeature extends ThemeFeature {
 
     @Override
     public void onTabDeco(TabDecoCache tabDeco, Minecraft minecraft, ActionQueue queue) {
-        TabHeader tabHeader = tabDeco.tabHeaderSoft();
-        switch (tabHeader.rankName().rank().letters()) {
-            case RESPECTED, VETERAN -> tabDeco.setHeaderThemed(this.tabHeader(tabHeader));
+        TabHeader tabHeader = tabDeco.tabHeaderFast();
+        if (tabHeader.isReal()) {
+            switch (tabHeader.rankName().rank().letters()) {
+                case RESPECTED, VETERAN -> tabDeco.setHeaderThemed(this.tabHeader(tabHeader));
+            }
         }
     }
 
     protected TextCache tabHeader(TabHeader tabHeader) {
         return TextCache.of(StyledString.concat(
-                TabHeader.PREFIX1,
+                tabHeader.leftHyphens(),
+                StyledString.SPACE,
                 TabHeader.INFIX1,
+                StyledString.SPACE,
                 this.modifyRankName(tabHeader.rankName()).appearance(),
-                TabHeader.SUFFIX1,
+                StyledString.SPACE,
+                tabHeader.rightHyphens(),
+                StyledString.NEWLINE,
+                TabHeader.PREFIX2,
+                StyledString.SPACE,
+                tabHeader.cubeKrowd(),
                 StyledString.NEWLINE,
                 TabHeader.PREFIX3,
+                StyledString.SPACE,
                 tabHeader.time().appearance()
         ));
     }
