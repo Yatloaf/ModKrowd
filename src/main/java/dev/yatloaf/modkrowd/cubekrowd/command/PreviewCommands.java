@@ -206,12 +206,16 @@ public final class PreviewCommands {
      */
     public static @NotNull TextCache preview(@NotNull String args) {
         if (args.startsWith("/")) {
-            try {
-                DISPATCHER.execute(args.substring(1), ModKrowd.USELESS);
-                return TextCache.EMPTY;
-            } catch (PreviewResult r) {
-                return r.value;
-            } catch (CommandSyntaxException e) {
+            if (ModKrowd.currentSubserver.isCubeKrowd) {
+                try {
+                    DISPATCHER.execute(args.substring(1), ModKrowd.USELESS);
+                    return TextCache.EMPTY;
+                } catch (PreviewResult r) {
+                    return r.value;
+                } catch (CommandSyntaxException e) {
+                    return TextCache.EMPTY;
+                }
+            } else {
                 return TextCache.EMPTY;
             }
         } else {

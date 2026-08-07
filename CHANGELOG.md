@@ -2,6 +2,10 @@
 
 ## 0.3.1: Unreleased
 
+### Fixed
+
+- Message Preview activating on other servers.
+
 ## 0.3.0: 2026-04-26
 
 New contributor: Hydrintegral!
