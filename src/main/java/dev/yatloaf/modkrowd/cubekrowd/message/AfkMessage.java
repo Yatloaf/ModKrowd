@@ -8,10 +8,10 @@ public record AfkMessage(Afk afk, StyledString name, boolean isReal) implements 
     public static final AfkMessage FAILURE = new AfkMessage(Afk.UNKNOWN, StyledString.EMPTY, false);
 
     public static AfkMessage readFast(StyledStringReader source) {
-        StyledString name = source.readUntil(" ").isolate();
+        StyledString name = source.readUntilSpace().isolate();
         if (name.isEmpty()) return FAILURE;
 
-        source.skipUntilAfter(" ");
+        source.skipSpace();
         Afk afk = Afk.readSuffix(source);
         if (!afk.isReal()) return FAILURE;
 

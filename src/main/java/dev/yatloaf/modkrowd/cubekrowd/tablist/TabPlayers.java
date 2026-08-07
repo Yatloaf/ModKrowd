@@ -12,7 +12,7 @@ public record TabPlayers(int playerCount, boolean isReal) implements TabEntry {
 
     public static TabPlayers readFast(StyledStringReader source) {
         source.skipUntilAfter(PLAYERS_);
-        source.skipUntilAfter(" ");
+        source.skipSpace();
 
         String playerCountString = source.readAll().toUnstyledString();
         if (playerCountString.isEmpty()) return FAILURE;
