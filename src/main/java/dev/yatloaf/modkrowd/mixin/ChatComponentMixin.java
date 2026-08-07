@@ -98,10 +98,17 @@ public abstract class ChatComponentMixin implements ChatComponentDuck {
     }
 
     // Lambda method! line is argsOnly due to being passed from outside
-    @Redirect(method = "method_75802", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/ARGB;black(F)I"))
-    private static int blackArg(float alpha, @Local(argsOnly = true) @NotNull GuiMessage.Line line) {
-        GuiMessageLineDuck lineDuck = (GuiMessageLineDuck)(Object) line;
-        return ARGB.black(alpha) | lineDuck.modKrowd$getMessageCache().backgroundTint();
+    // COMPAT: fi.dy.masa.tweakeroo.mixin.hud.MixinChatHud::tweakeroo_overrideChatBackgroundColor already does @Redirect,
+    // avoid conflict by using @ModifyArg instead and potentially using Tweakeroo's result
+    @ModifyArg(method = "method_75802", index = 4, at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/components/ChatComponent$ChatGraphicsAccess;fill(IIIII)V"))
+    private static int fillArg(int color, @Local(argsOnly = true) @NotNull GuiMessage.Line line) {
+        // If any RGB bits are set, this was certainly modified by another mod. Don't mess with that
+        if ((color & 0x00_FF_FF_FF) != 0) {
+            return color;
+        } else {
+            GuiMessageLineDuck lineDuck = (GuiMessageLineDuck)(Object) line;
+            return color | lineDuck.modKrowd$getMessageCache().backgroundTint();
+        }
     }
 
     @Inject(method = "clearMessages", cancellable = true, at = @At("HEAD"))
