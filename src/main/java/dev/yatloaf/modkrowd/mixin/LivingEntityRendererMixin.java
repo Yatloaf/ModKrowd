@@ -2,6 +2,7 @@ package dev.yatloaf.modkrowd.mixin;
 
 import dev.yatloaf.modkrowd.config.Features;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Hud;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -20,7 +21,7 @@ public class LivingEntityRendererMixin<T extends LivingEntity> {
 	// Hud appears always disabled
 	// This overrides the other mixins below
 	@Inject(method = "shouldShowName(Lnet/minecraft/world/entity/LivingEntity;D)Z", at = @At("HEAD"), cancellable = true)
-	private void shouldShowNameInject(T livingEntity, double d, CallbackInfoReturnable<Boolean> cir) {
+	private void shouldShowNameInject(T entity, double distanceToCameraSq, CallbackInfoReturnable<Boolean> cir) {
 		if (Features.ALWAYS_HIDE_LABELS.active) {
 			cir.setReturnValue(false);
 		}
@@ -33,8 +34,8 @@ public class LivingEntityRendererMixin<T extends LivingEntity> {
 	}
 
 	// Hud appears always enabled
-	@Redirect(method = "shouldShowName(Lnet/minecraft/world/entity/LivingEntity;D)Z", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/Minecraft;renderNames()Z"))
-	private boolean renderNamesRedirect() {
-        return Features.ALWAYS_SHOW_LABELS.active || Minecraft.renderNames();
+	@Redirect(method = "shouldShowName(Lnet/minecraft/world/entity/LivingEntity;D)Z", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/Hud;isHidden()Z"))
+	private boolean renderNamesRedirect(Hud instance) {
+        return !Features.ALWAYS_SHOW_LABELS.active && instance.isHidden();
 	}
 }

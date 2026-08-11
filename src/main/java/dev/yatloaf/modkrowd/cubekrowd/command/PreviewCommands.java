@@ -110,7 +110,7 @@ public final class PreviewCommands {
         chattymote2("%s challenges %s to %s", "chal", "challenge");
         chattymote0("%s applauds", "clap", "claps");
         command(
-                literal("coin").executes(context -> {
+                literal("coin").executes(_ -> {
                     checkChattymote();
                     throw result(Component.literal(SelfPlayer.username() + " flips a coin. It shows ").withStyle(ChatFormatting.LIGHT_PURPLE)
                             .append(Component.literal("#####").withStyle(ChatFormatting.OBFUSCATED)));
@@ -122,7 +122,7 @@ public final class PreviewCommands {
         chattymote0("%s cries", "cry", "cri", "cries");
         command(
                 literal("dice")
-                        .executes(context -> {
+                        .executes(_ -> {
                             checkChattymote();
                             throw result(Component.literal(SelfPlayer.username() + " throws a 6 sided dice. It shows ").withStyle(ChatFormatting.LIGHT_PURPLE)
                                     .append(Component.literal("0").withStyle(ChatFormatting.OBFUSCATED)));
@@ -150,7 +150,7 @@ public final class PreviewCommands {
         chattymote1("%s loves %s", "love");
         chattymote0("%s doesn't like it", "meh");
         command(
-                literal("meow").executes(context -> {
+                literal("meow").executes(_ -> {
                     checkChattymote();
                     throw result(Component.literal(SelfPlayer.username() + currentMeow).withStyle(ChatFormatting.LIGHT_PURPLE));
                 })
@@ -177,7 +177,7 @@ public final class PreviewCommands {
         chattymoteV("%s waves", "%s waves to %s", "wave", "waves");
         command(
                 literal("welcome")
-                        .executes(context -> {
+                        .executes(_ -> {
                             checkChattymote();
                             throw result(Component.literal(SelfPlayer.username() + ": Welcome to ").withStyle(ChatFormatting.LIGHT_PURPLE)
                                     .append(Component.literal("Cube").withStyle(ChatFormatting.DARK_AQUA))
@@ -212,7 +212,7 @@ public final class PreviewCommands {
                     return TextCache.EMPTY;
                 } catch (PreviewResult r) {
                     return r.value;
-                } catch (CommandSyntaxException e) {
+                } catch (CommandSyntaxException _) {
                     return TextCache.EMPTY;
                 }
             } else {
@@ -277,7 +277,7 @@ public final class PreviewCommands {
     public static void chattymote0(String format, String canonical, String... aliases) {
         command(
                 literal(canonical)
-                        .executes(context -> {
+                        .executes(_ -> {
                             checkChattymote();
                             throw result(Component.literal(format.formatted(SelfPlayer.username())).withStyle(ChatFormatting.LIGHT_PURPLE));
                         }),
@@ -346,7 +346,7 @@ public final class PreviewCommands {
     public static void chattymoteV(String format0, String format1, String canonical, String... aliases) {
         command(
                 literal(canonical)
-                        .executes(context -> {
+                        .executes(_ -> {
                             checkChattymote();
                             throw result(Component.literal(format0.formatted(SelfPlayer.username())).withStyle(ChatFormatting.LIGHT_PURPLE));
                         })

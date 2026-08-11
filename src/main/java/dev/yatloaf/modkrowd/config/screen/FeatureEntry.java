@@ -3,7 +3,7 @@ package dev.yatloaf.modkrowd.config.screen;
 import dev.yatloaf.modkrowd.config.FeatureState;
 import dev.yatloaf.modkrowd.cubekrowd.common.CKColor;
 import it.unimi.dsi.fastutil.booleans.BooleanConsumer;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.ContainerObjectSelectionList;
 import net.minecraft.client.gui.components.Renderable;
 import net.minecraft.client.gui.components.StringWidget;
@@ -21,10 +21,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BooleanSupplier;
 import java.util.function.Consumer;
-import java.util.function.DoubleConsumer;
-import java.util.function.DoubleSupplier;
-import java.util.function.IntConsumer;
-import java.util.function.IntSupplier;
 import java.util.function.Supplier;
 
 public class FeatureEntry extends ContainerObjectSelectionList.Entry<@NotNull FeatureEntry> implements Layout {
@@ -53,12 +49,12 @@ public class FeatureEntry extends ContainerObjectSelectionList.Entry<@NotNull Fe
         this.addLine(new BooleanLine(label, tooltip, startValue, getter, setter));
     }
 
-    public void addInt(Component label, Tooltip tooltip, int startValue, int minValue, int maxValue, IntSupplier getter, IntConsumer setter) {
-        this.addLine(new IntLine(label, tooltip, startValue, minValue, maxValue, getter, setter));
+    public void addInt(Component label, Tooltip tooltip, int oldValue, int minValue, int maxValue, Supplier<Integer> getter, Consumer<Integer> setter) {
+        this.addLine(new IntLine(label, tooltip, oldValue, minValue, maxValue, getter, setter));
     }
 
-    public void addDouble(Component label, Tooltip tooltip, double startValue, double minValue, double maxValue, DoubleSupplier getter, DoubleConsumer setter) {
-        this.addLine(new DoubleLine(label, tooltip, startValue, minValue, maxValue, getter, setter));
+    public void addDouble(Component label, Tooltip tooltip, double oldValue, double minValue, double maxValue, Supplier<Double> getter, Consumer<Double> setter) {
+        this.addLine(new DoubleLine(label, tooltip, oldValue, minValue, maxValue, getter, setter));
     }
 
     public void addIdentifier(Component label, Tooltip tooltip, Identifier startValue, Supplier<Identifier> getter, Consumer<Identifier> setter) {
@@ -88,8 +84,8 @@ public class FeatureEntry extends ContainerObjectSelectionList.Entry<@NotNull Fe
     }
 
     @Override
-    public void visitChildren(@NotNull Consumer<LayoutElement> consumer) {
-        this.vertical.visitChildren(consumer);
+    public void visitChildren(@NotNull Consumer<LayoutElement> layoutElementVisitor) {
+        this.vertical.visitChildren(layoutElementVisitor);
     }
 
     public void arrangeElements() {
@@ -102,7 +98,12 @@ public class FeatureEntry extends ContainerObjectSelectionList.Entry<@NotNull Fe
     }
 
     @Override
-    public void renderContent(@NotNull GuiGraphics guiGraphics, int mouseX, int mouseY, boolean hovered, float deltaTicks) {
+    public void removeChildren() {
+        this.vertical.removeChildren();
+    }
+
+    @Override
+    public void extractContent(@NotNull GuiGraphicsExtractor graphics, int mouseX, int mouseY, boolean hovered, float a) {
         this.arrangeElements();
 
         if (this.lines.size() > 1) {
@@ -113,7 +114,7 @@ public class FeatureEntry extends ContainerObjectSelectionList.Entry<@NotNull Fe
                     int x1 = this.getContentX() + 6;
                     int x2 = x1 + 4;
                     int y = widget.getY() + 8;
-                    guiGraphics.hLine(x1, x2, y, TREE_COLOR);
+                    graphics.horizontalLine(x1, x2, y, TREE_COLOR);
                 }
             }
 
@@ -123,7 +124,7 @@ public class FeatureEntry extends ContainerObjectSelectionList.Entry<@NotNull Fe
             int x = this.getContentX() + 6;
             int y1 = topWidget.getBottom() - 1;
             int y2 = bottomWidget.getY() + 8;
-            guiGraphics.vLine(x, y1, y2, TREE_COLOR);
+            graphics.verticalLine(x, y1, y2, TREE_COLOR);
         }
 
         if (hovered) {
@@ -132,15 +133,15 @@ public class FeatureEntry extends ContainerObjectSelectionList.Entry<@NotNull Fe
                 int y1 = line.horizontal.getY();
                 int x2 = this.getContentRight();
                 int y2 = y1 + line.horizontal.getHeight();
-                if (guiGraphics.containsPointInScissor(mouseX, mouseY) && mouseX >= x1 && mouseY >= y1 && mouseX < x2 && mouseY < y2) {
+                if (graphics.containsPointInScissor(mouseX, mouseY) && mouseX >= x1 && mouseY >= y1 && mouseX < x2 && mouseY < y2) {
                     // Draw hover background
-                    guiGraphics.fill(x1, y1, x2, y2, HOVER_COLOR);
+                    graphics.fill(x1, y1, x2, y2, HOVER_COLOR);
                 }
             }
         }
 
         for (Renderable renderable : this.renderables) {
-            renderable.render(guiGraphics, mouseX, mouseY, deltaTicks);
+            renderable.extractRenderState(graphics, mouseX, mouseY, a);
         }
     }
 

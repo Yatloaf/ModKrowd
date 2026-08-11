@@ -42,7 +42,7 @@ public class MovingPistonBlockMixin extends Block {
 
 	// Glass-like rendering behavior
 	@Override
-	public boolean skipRendering(@NotNull BlockState state, BlockState stateFrom, @NotNull Direction direction) {
-        return stateFrom.is(this) || super.skipRendering(state, stateFrom, direction);
+	public boolean skipRendering(@NotNull BlockState state, BlockState neighborState, @NotNull Direction direction) {
+        return neighborState.is(this) || super.skipRendering(state, neighborState, direction);
     }
 }

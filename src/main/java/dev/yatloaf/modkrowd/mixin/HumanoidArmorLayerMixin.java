@@ -46,15 +46,16 @@ public abstract class HumanoidArmorLayerMixin<S extends HumanoidRenderState> {
 
 	// Save whether it's slim
 	@Inject(method = "submit(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;ILnet/minecraft/client/renderer/entity/state/HumanoidRenderState;FF)V", at = @At("HEAD"))
-	private void submitInject(PoseStack matrixStack, SubmitNodeCollector orderedRenderCommandQueue, int i, S bipedEntityRenderState, float f, float g, CallbackInfo ci) {
+	private void submitInject(PoseStack poseStack, SubmitNodeCollector submitNodeCollector, int lightCoords, S state, float yRot, float xRot, CallbackInfo ci) {
 		this.slim = Features.SLIM_ARMOR.active
-				&& bipedEntityRenderState instanceof AvatarRenderState playerEntityRenderState
+				&& state instanceof AvatarRenderState playerEntityRenderState
 				&& playerEntityRenderState.skin.model() == PlayerModelType.SLIM;
 	}
 
 	// Modify asset to slim version
 	// See also EquipmentLayerRendererMixin
-	@SuppressWarnings("OptionalUsedAsFieldOrParameterType")
+    // For some reason specifying `@Local(argsOnly = true, name = "slot")` fails, so this must do
+	@SuppressWarnings({"OptionalUsedAsFieldOrParameterType", "LocalMayUseName"})
     @Redirect(method = "renderArmorPiece", at = @At(value = "INVOKE", target = "Ljava/util/Optional;orElseThrow()Ljava/lang/Object;"))
 	private Object orElseThrowRedirect(Optional<ResourceKey<@NotNull EquipmentAsset>> instance, @Local(argsOnly = true) EquipmentSlot slot) {
 		ResourceKey<@NotNull EquipmentAsset> result = instance.orElseThrow();

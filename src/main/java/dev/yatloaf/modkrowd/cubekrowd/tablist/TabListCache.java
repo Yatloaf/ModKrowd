@@ -34,7 +34,7 @@ public class TabListCache {
             this.hud = null;
             this.playerInfos = List.of();
         } else {
-            this.hud = minecraft.gui.getTabList();
+            this.hud = minecraft.gui.hud.getTabList();
             this.playerInfos = ((PlayerTabOverlayDuck) this.hud).modKrowd$getPlayerInfos();
         }
 

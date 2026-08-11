@@ -19,7 +19,7 @@ import dev.yatloaf.modkrowd.util.Util;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
-import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
+import net.fabricmc.fabric.api.client.keymapping.v1.KeyMappingHelper;
 import net.fabricmc.fabric.api.client.networking.v1.ClientConfigurationConnectionEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
@@ -86,9 +86,9 @@ public class ModKrowd implements ClientModInitializer {
 		LOGGER.info(HELLO[new Random().nextInt(HELLO.length)]);
 
 		KeyMapping.Category category = KeyMapping.Category.register(Identifier.fromNamespaceAndPath("modkrowd", "modkrowd"));
-		OPTIONS_KEY = KeyBindingHelper.registerKeyBinding(new KeyMapping("key.modkrowd.options",
+		OPTIONS_KEY = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.modkrowd.options",
 				InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_UNKNOWN, category));
-		NEXT_SUBSERVER_KEY = KeyBindingHelper.registerKeyBinding(new KeyMapping("key.modkrowd.next_subserver",
+		NEXT_SUBSERVER_KEY = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.modkrowd.next_subserver",
 				InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_UNKNOWN, category));
 		INIT = true;
 
@@ -129,7 +129,7 @@ public class ModKrowd implements ClientModInitializer {
 
 		// Wait until no ChatScreen is open or the force tick has been reached
 		if (switchStatus instanceof SwitchDelay(int index, long switchTick, long forceTick) && (
-				forceTick <= tick || switchTick <= tick && !(minecraft.screen instanceof ChatScreen)
+				forceTick <= tick || switchTick <= tick && !(minecraft.gui.screen() instanceof ChatScreen)
 		)) {
             ClientPacketListener listener = minecraft.getConnection();
             if (listener != null) {
@@ -183,7 +183,7 @@ public class ModKrowd implements ClientModInitializer {
 
 	private static void tickKeys(Minecraft minecraft) {
 		if (OPTIONS_KEY.consumeClick()) {
-			minecraft.setScreen(createConfigScreen(minecraft.screen));
+			minecraft.gui.setScreen(createConfigScreen(minecraft.gui.screen()));
 			((KeyMappingAccessor) OPTIONS_KEY).callRelease();
 		}
 		if (NEXT_SUBSERVER_KEY.consumeClick()) {

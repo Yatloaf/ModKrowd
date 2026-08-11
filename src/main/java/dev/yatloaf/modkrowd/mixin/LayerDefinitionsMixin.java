@@ -35,18 +35,18 @@ public class LayerDefinitionsMixin {
     // Ordinals would be brittle, this replaces every call but is only called on reload anyway
     // Even better would be reassigning the keys at the end, but then build() would have to be replaced by buildKeepingLast()
     @Redirect(method = "createRoots", at = @At(value = "INVOKE", remap = false, target = "Lnet/minecraft/client/renderer/entity/ArmorModelSet;putFrom(Lnet/minecraft/client/renderer/entity/ArmorModelSet;Lcom/google/common/collect/ImmutableMap$Builder;)V"))
-    private static <T> void putFromRedirect(ArmorModelSet<@NotNull T> instance, ArmorModelSet<@NotNull LayerDefinition> texturedModelData, ImmutableMap.Builder<@NotNull T, @NotNull LayerDefinition> builder) {
+    private static <T> void putFromRedirect(ArmorModelSet<@NotNull T> instance, ArmorModelSet<@NotNull LayerDefinition> values, ImmutableMap.Builder<@NotNull T, @NotNull LayerDefinition> output) {
         if (Features.SLIM_ARMOR.active && instance == ModelLayers.PLAYER_SLIM_ARMOR) {
             // .map() would modify every part, we only want to modify the chest
             ArmorModelSet<@NotNull LayerDefinition> slimData = new ArmorModelSet<>(
-                    texturedModelData.head(),
-                    texturedModelData.chest().apply(LayerDefinitionsMixin::transformSlim),
-                    texturedModelData.legs(),
-                    texturedModelData.feet()
+                    values.head(),
+                    values.chest().apply(LayerDefinitionsMixin::transformSlim),
+                    values.legs(),
+                    values.feet()
             );
-            instance.putFrom(slimData, builder);
+            instance.putFrom(slimData, output);
         } else {
-            instance.putFrom(texturedModelData, builder);
+            instance.putFrom(values, output);
         }
     }
 

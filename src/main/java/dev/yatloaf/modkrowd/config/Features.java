@@ -3,7 +3,6 @@ package dev.yatloaf.modkrowd.config;
 import dev.yatloaf.modkrowd.config.api.FeatureExtender;
 import dev.yatloaf.modkrowd.config.feature.AutoswitchFeature;
 import dev.yatloaf.modkrowd.config.feature.BlankTabIconsThemeFeature;
-import dev.yatloaf.modkrowd.config.feature.BlockCutoutFeature;
 import dev.yatloaf.modkrowd.config.feature.CherryLiteThemeFeature;
 import dev.yatloaf.modkrowd.config.feature.CherryThemeFeature;
 import dev.yatloaf.modkrowd.config.feature.DirectMessageSoundFeature;
@@ -11,11 +10,11 @@ import dev.yatloaf.modkrowd.config.feature.Feature;
 import dev.yatloaf.modkrowd.config.feature.HighContrastThemeFeature;
 import dev.yatloaf.modkrowd.config.feature.MessagePreviewFeature;
 import dev.yatloaf.modkrowd.config.feature.PingDisplayFeature;
+import dev.yatloaf.modkrowd.config.feature.ReloadChunksFeature;
 import dev.yatloaf.modkrowd.config.feature.ReloadResourcesFeature;
 import dev.yatloaf.modkrowd.config.feature.SeparateChatHistoryFeature;
 import dev.yatloaf.modkrowd.config.feature.ShadedTabThemeFeature;
 import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.world.level.block.Blocks;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -97,25 +96,20 @@ public final class Features {
     public static final Feature UNINVISIBILITY = CREATIVE.feature(new Feature(
             "anti_invisibility", Restriction.CREATIVE
     ));
-    public static final BlockCutoutFeature TANGIBLE_BARRIERS = CREATIVE.feature(new BlockCutoutFeature(
-            "tangible_barrier", Restriction.CREATIVE,
-            Blocks.BARRIER
+    public static final ReloadChunksFeature TANGIBLE_BARRIERS = CREATIVE.feature(new ReloadChunksFeature(
+            "tangible_barrier", Restriction.CREATIVE
     ));
-    public static final BlockCutoutFeature TANGIBLE_STRUCTURE_VOIDS = CREATIVE.feature(new BlockCutoutFeature(
-            "tangible_structure_void", Restriction.CREATIVE,
-            Blocks.STRUCTURE_VOID
+    public static final ReloadChunksFeature TANGIBLE_STRUCTURE_VOIDS = CREATIVE.feature(new ReloadChunksFeature(
+            "tangible_structure_void", Restriction.CREATIVE
     ));
-    public static final BlockCutoutFeature TANGIBLE_LIGHTS = CREATIVE.feature(new BlockCutoutFeature(
-            "tangible_light", Restriction.CREATIVE,
-            Blocks.LIGHT
+    public static final ReloadChunksFeature TANGIBLE_LIGHTS = CREATIVE.feature(new ReloadChunksFeature(
+            "tangible_light", Restriction.CREATIVE
     ));
-    public static final BlockCutoutFeature TANGIBLE_MOVING_PISTONS = CREATIVE.feature(new BlockCutoutFeature(
-            "tangible_moving_piston", Restriction.CREATIVE,
-            Blocks.MOVING_PISTON
+    public static final ReloadChunksFeature TANGIBLE_MOVING_PISTONS = CREATIVE.feature(new ReloadChunksFeature(
+            "tangible_moving_piston", Restriction.CREATIVE
     ));
-    public static final BlockCutoutFeature TANGIBLE_END_PORTALS = CREATIVE.feature(new BlockCutoutFeature(
-            "tangible_end_portal_and_gateway", Restriction.CREATIVE,
-            Blocks.END_PORTAL, Blocks.END_GATEWAY
+    public static final ReloadChunksFeature TANGIBLE_END_PORTALS = CREATIVE.feature(new ReloadChunksFeature(
+            "tangible_end_portal_and_gateway", Restriction.CREATIVE
     ));
 
 

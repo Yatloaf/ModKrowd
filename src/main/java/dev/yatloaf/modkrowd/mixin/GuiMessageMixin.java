@@ -2,7 +2,7 @@ package dev.yatloaf.modkrowd.mixin;
 
 import dev.yatloaf.modkrowd.cubekrowd.message.MessageCache;
 import dev.yatloaf.modkrowd.mixinduck.GuiMessageDuck;
-import net.minecraft.client.GuiMessage;
+import net.minecraft.client.multiplayer.chat.GuiMessage;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 

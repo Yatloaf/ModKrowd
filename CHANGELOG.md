@@ -2,6 +2,8 @@
 
 ## 0.3.1: Unreleased
 
+- Update to 26.2.
+
 ### Fixed
 
 - Message Preview activating on other servers.

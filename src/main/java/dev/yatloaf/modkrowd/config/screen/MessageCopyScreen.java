@@ -6,15 +6,15 @@ import dev.yatloaf.modkrowd.cubekrowd.message.MessageCache;
 import dev.yatloaf.modkrowd.util.text.StyledString;
 import net.kyori.adventure.platform.modcommon.MinecraftClientAudiences;
 import net.kyori.adventure.text.minimessage.MiniMessage;
-import net.minecraft.client.GuiMessage;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.ChatComponent;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.components.StringWidget;
 import net.minecraft.client.gui.layouts.GridLayout;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.multiplayer.chat.GuiMessage;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.Component;
@@ -120,7 +120,7 @@ public class MessageCopyScreen extends Screen {
             }
 
             String clipboard = encoded;
-            copyButton = Button.builder(Component.translatable("modkrowd.message_copy.copy"), b ->
+            copyButton = Button.builder(Component.translatable("modkrowd.message_copy.copy"), _ ->
                             this.minecraft.keyboardHandler
                             .setClipboard(clipboard))
                             .size(64, 20).build();
@@ -140,8 +140,8 @@ public class MessageCopyScreen extends Screen {
     }
 
     @Override
-    public void render(@NotNull GuiGraphics guiGraphics, int i, int j, float f) {
-        super.render(guiGraphics, i, j, f);
+    public void extractRenderState(@NotNull GuiGraphicsExtractor graphics, int mouseX, int mouseY, float a) {
+        super.extractRenderState(graphics, mouseX, mouseY, a);
 
         double width = ChatComponent.getWidth(this.minecraft.options.chatWidth().get());
         double scale = this.minecraft.options.chatScale().get();
@@ -154,7 +154,7 @@ public class MessageCopyScreen extends Screen {
         int y = this.grid.getY() - this.lines.size() * lineHeight - 11;
         int textY = y + lineHeight - (int) Math.round(8.0 * (spacing + 1.0) - 4.0 * spacing);
 
-        guiGraphics.drawCenteredString(
+        graphics.centeredText(
                 this.minecraft.font,
                 Component.translatable("modkrowd.message_copy.title"),
                 this.width / 2,
@@ -162,7 +162,7 @@ public class MessageCopyScreen extends Screen {
                 0xFF_FF_FF_FF
         );
 
-        guiGraphics.fill(
+        graphics.fill(
                 x - 4,
                 y,
                 x + scaledWidth + 4 + 4,
@@ -171,7 +171,7 @@ public class MessageCopyScreen extends Screen {
         );
 
         for (GuiMessage.Line line : this.lines) {
-            guiGraphics.drawString(
+            graphics.text(
                     this.minecraft.font,
                     line.content(),
                     x,

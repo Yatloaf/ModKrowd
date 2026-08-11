@@ -20,7 +20,7 @@ public class ActionQueue {
             this.reloadResources = false;
             this.reloadChunks = false;
         } else if (this.reloadChunks) {
-            minecraft.levelRenderer.allChanged();
+            minecraft.levelExtractor.allChanged();
             this.reloadChunks = false;
         }
     }

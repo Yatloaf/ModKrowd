@@ -7,6 +7,7 @@
         "AvatarRendererMixin",
         "BarrierBlockMixin",
         "ChatComponentMixin",
+        "ChatFormattingAccessor",
         "ChatScreenMixin",
         "ClientCommonPacketListenerImplAccessor",
         "ClientLevelDataMixin",
@@ -18,7 +19,6 @@
         "EntityMixin",
         "EquipmentLayerRendererMixin",
         "GameRendererMixin",
-        "GuiMessageLineMixin",
         "GuiMessageMixin",
         "HumanoidArmorLayerMixin",
         "ItemInHandRendererMixin",
@@ -28,11 +28,11 @@
         "LightBlockMixin",
         "LivingEntityRendererMixin",
         "LocalPlayerMixin",
+        "MenuTabBarMixin",
         "MovingPistonBlockMixin",
         "PlayerTabOverlayMixin",
         "RemotePlayerMixin",
-        "StructureVoidBlockMixin",
-        "TabNavigationBarMixin"
+        "StructureVoidBlockMixin"
     ],
     "injectors": {
         "defaultRequire": 1

@@ -14,8 +14,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class KeyboardHandlerMixin {
     // In addition to KeyMapping#click, toggle every feature whose key bind is set to this one
     @Inject(method = "keyPress", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/KeyMapping;click(Lcom/mojang/blaze3d/platform/InputConstants$Key;)V"))
-    private void keyPressInject(long l, int i, KeyEvent keyEvent, CallbackInfo ci) {
-        InputConstants.Key key = InputConstants.getKey(keyEvent);
+    private void keyPressInject(long handle, int action, KeyEvent event, CallbackInfo ci) {
+        InputConstants.Key key = InputConstants.getKey(event);
         for (FeatureState featureState : ModKrowd.CONFIG.states()) {
             if (featureState.toggleKey == key) {
                 featureState.enabled = !featureState.enabled;

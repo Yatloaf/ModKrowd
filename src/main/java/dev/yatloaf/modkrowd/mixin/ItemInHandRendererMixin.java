@@ -12,7 +12,7 @@ public class ItemInHandRendererMixin {
     // HIDE_SELF
 
     // Hide first person arm
-    @Redirect(method = "renderArmWithItem", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/AbstractClientPlayer;isInvisible()Z"))
+    @Redirect(method = "submitArmWithItem", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/AbstractClientPlayer;isInvisible()Z"))
     private boolean isInvisibleRedirect(AbstractClientPlayer instance) {
         return instance.isInvisible() || Features.HIDE_SELF.active;
     }

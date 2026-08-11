@@ -17,7 +17,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(ClientPacketListener.class)
 public class ClientPacketListenerMixin {
     @Inject(method = "handleTabListCustomisation", at = @At("RETURN"))
-    public void handleTabListCustomisationInject(ClientboundTabListPacket clientboundTabListPacket, CallbackInfo ci) {
+    public void handleTabListCustomisationInject(ClientboundTabListPacket packet, CallbackInfo ci) {
         ModKrowd.TAB_DECO.invalidateAll();
     }
 

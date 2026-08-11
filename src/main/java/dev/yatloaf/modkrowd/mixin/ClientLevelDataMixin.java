@@ -14,9 +14,9 @@ public class ClientLevelDataMixin {
 
 	// Dark horizon only below the world
 	@Inject(at = @At("HEAD"), method = "getHorizonHeight", cancellable = true)
-	private void getHorizonHeightInject(LevelHeightAccessor world, CallbackInfoReturnable<Double> cir) {
+	private void getHorizonHeightInject(LevelHeightAccessor level, CallbackInfoReturnable<Double> cir) {
 		if (Features.DEVOID.active) {
-			cir.setReturnValue((double) world.getMinY());
+			cir.setReturnValue((double) level.getMinY());
 		}
 	}
 }

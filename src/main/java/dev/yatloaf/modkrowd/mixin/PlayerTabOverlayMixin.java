@@ -9,9 +9,10 @@ import dev.yatloaf.modkrowd.util.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.PlayerTabOverlay;
 import net.minecraft.client.multiplayer.PlayerInfo;
+import net.minecraft.client.renderer.entity.player.AvatarRenderer;
 import net.minecraft.core.ClientAsset;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.FormattedText;
@@ -19,6 +20,7 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.CommonColors;
 import net.minecraft.util.FormattedCharSequence;
+import net.minecraft.world.entity.player.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
@@ -42,18 +44,17 @@ public abstract class PlayerTabOverlayMixin implements PlayerTabOverlayDuck {
     @Unique private static final String MIN_RESERVED_LATENCY = Util.superscript(999, false);
 
 	@Shadow @Final private Minecraft minecraft;
-	@Shadow private @Nullable Component header;
-	@Shadow private @Nullable Component footer;
+    @Shadow private @Nullable Component footer;
+    @Shadow private @Nullable Component header;
+    @Shadow protected abstract List<PlayerInfo> getPlayerInfos();
+    @Shadow protected abstract void extractPingIcon(GuiGraphicsExtractor graphics, int slotWidth, int xo, int yo, PlayerInfo info);
 
     @Unique private int minReservedLatencyWidth;
 	@Unique private TabEntryCache[] currentEntries;
 	@Unique private int currentIndex;
 	@Unique private TabEntryCache currentEntry;
 
-	@Shadow protected abstract List<PlayerInfo> getPlayerInfos();
-	@Shadow protected abstract void renderPingIcon(GuiGraphics context, int width, int x, int y, PlayerInfo entry);
-
-	@Unique @Override
+    @Unique @Override
 	public @Nullable MutableComponent modKrowd$getHeader() {
 		return (MutableComponent) this.header;
 	}
@@ -79,7 +80,7 @@ public abstract class PlayerTabOverlayMixin implements PlayerTabOverlayDuck {
     // Send this through TabListCache to avoid re-sorting every frame
     // Also reset custom counter (incremented at the start of the loop) and cache reserved ping width
     // ClientPacketListener#handlePlayerInfo* should be on the same thread as this, so no synchronization needed
-    @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/components/PlayerTabOverlay;getPlayerInfos()Ljava/util/List;"))
+    @Redirect(method = "extractRenderState", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/components/PlayerTabOverlay;getPlayerInfos()Ljava/util/List;"))
     private List<PlayerInfo> getPlayerInfosRedirect(PlayerTabOverlay instance) {
         PingDisplayFeature.State state = (PingDisplayFeature.State) ModKrowd.CONFIG.getState(Features.PING_DISPLAY);
         Component minReservedLatency = Component.literal(MIN_RESERVED_LATENCY).withStyle(state.style());
@@ -90,15 +91,15 @@ public abstract class PlayerTabOverlayMixin implements PlayerTabOverlayDuck {
     }
 
 	// Increment custom counter, capture current entry, modify name for theme
-	@Redirect(method = "render", at = @At(value = "INVOKE", ordinal = 0, target = "Lnet/minecraft/client/gui/components/PlayerTabOverlay;getNameForDisplay(Lnet/minecraft/client/multiplayer/PlayerInfo;)Lnet/minecraft/network/chat/Component;"))
-	private Component getNameForDisplayRedirect(PlayerTabOverlay instance, PlayerInfo entry) {
+	@Redirect(method = "extractRenderState", at = @At(value = "INVOKE", ordinal = 0, target = "Lnet/minecraft/client/gui/components/PlayerTabOverlay;getNameForDisplay(Lnet/minecraft/client/multiplayer/PlayerInfo;)Lnet/minecraft/network/chat/Component;"))
+	private Component getNameForDisplayRedirect(PlayerTabOverlay instance, PlayerInfo info) {
 		this.currentIndex += 1;
 		this.currentEntry = this.currentEntries[this.currentIndex];
         return this.currentEntry.getNameThemed().text();
     }
 
 	// Adjust width
-	@Redirect(method = "render", at = @At(value = "INVOKE", ordinal = 0, target = "Ljava/lang/Math;max(II)I"))
+	@Redirect(method = "extractRenderState", at = @At(value = "INVOKE", ordinal = 0, target = "Ljava/lang/Math;max(II)I"))
 	private int maxRedirect(int a, int b) {
 		if (Features.PING_DISPLAY.active) {
 			// Hardcoded width of the Vanilla ping bars: 10
@@ -115,19 +116,19 @@ public abstract class PlayerTabOverlayMixin implements PlayerTabOverlayDuck {
 	}
 
 	// Theme header
-	@Redirect(method = "render", at = @At(value = "INVOKE", ordinal = 0, target = "Lnet/minecraft/client/gui/Font;split(Lnet/minecraft/network/chat/FormattedText;I)Ljava/util/List;"))
-	private List<FormattedCharSequence> splitRedirect0(Font instance, FormattedText text, int width) {
+	@Redirect(method = "extractRenderState", at = @At(value = "INVOKE", ordinal = 0, target = "Lnet/minecraft/client/gui/Font;split(Lnet/minecraft/network/chat/FormattedText;I)Ljava/util/List;"))
+	private List<FormattedCharSequence> splitRedirect0(Font instance, FormattedText input, int maxWidth) {
         return ModKrowd.currentSubserver.isCubeKrowd
-				? instance.split(ModKrowd.TAB_DECO.getHeaderThemed().text(), width)
-				: instance.split(text, width);
+				? instance.split(ModKrowd.TAB_DECO.getHeaderThemed().text(), maxWidth)
+				: instance.split(input, maxWidth);
     }
 
 	// Theme footer
-	@Redirect(method = "render", at = @At(value = "INVOKE", ordinal = 1, target = "Lnet/minecraft/client/gui/Font;split(Lnet/minecraft/network/chat/FormattedText;I)Ljava/util/List;"))
-	private List<FormattedCharSequence> splitRedirect1(Font instance, FormattedText text, int width) {
+	@Redirect(method = "extractRenderState", at = @At(value = "INVOKE", ordinal = 1, target = "Lnet/minecraft/client/gui/Font;split(Lnet/minecraft/network/chat/FormattedText;I)Ljava/util/List;"))
+	private List<FormattedCharSequence> splitRedirect1(Font instance, FormattedText input, int maxWidth) {
         return ModKrowd.currentSubserver.isCubeKrowd
-				? instance.split(ModKrowd.TAB_DECO.getFooterThemed().text(), width)
-				: instance.split(text, width);
+				? instance.split(ModKrowd.TAB_DECO.getFooterThemed().text(), maxWidth)
+				: instance.split(input, maxWidth);
     }
 
 	// ----------------------------
@@ -135,7 +136,7 @@ public abstract class PlayerTabOverlayMixin implements PlayerTabOverlayDuck {
 	// ----------------------------
 
 	// Capture current entry and index, very convenient
-	@Redirect(method = "render", at = @At(value = "INVOKE", target = "Ljava/util/List;get(I)Ljava/lang/Object;"))
+	@Redirect(method = "extractRenderState", at = @At(value = "INVOKE", target = "Ljava/util/List;get(I)Ljava/lang/Object;"))
 	private <E> E getRedirect(List<E> instance, int i) {
 		E element = instance.get(i);
 		if (element instanceof PlayerInfo) {
@@ -146,27 +147,27 @@ public abstract class PlayerTabOverlayMixin implements PlayerTabOverlayDuck {
 	}
 
 	// Assume the face is upside-down
-	@ModifyArg(method = "render", index = 6, at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/components/PlayerFaceRenderer;draw(Lnet/minecraft/client/gui/GuiGraphics;Lnet/minecraft/resources/Identifier;IIIZZI)V"))
-	private boolean upsideDownArg(boolean upsideDown) {
-		return upsideDown || Features.DINNERBONE_GRUMM.active && this.currentEntry.result().isPlayer();
+	@Redirect(method = "extractRenderState", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/entity/player/AvatarRenderer;isPlayerUpsideDown(Lnet/minecraft/world/entity/player/Player;)Z"))
+	private boolean isPlayerUpsideDownArg(Player player) {
+		return Features.DINNERBONE_GRUMM.active && this.currentEntry.result().isPlayer() || AvatarRenderer.isPlayerUpsideDown(player);
 	}
 
-    @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/core/ClientAsset$Texture;texturePath()Lnet/minecraft/resources/Identifier;"))
+    @Redirect(method = "extractRenderState", at = @At(value = "INVOKE", target = "Lnet/minecraft/core/ClientAsset$Texture;texturePath()Lnet/minecraft/resources/Identifier;"))
     private Identifier texturePathRedirect(ClientAsset.Texture instance) {
         return this.currentEntry.getSkinThemed();
     }
 
 	// Draw ping instead
-	@Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/components/PlayerTabOverlay;renderPingIcon(Lnet/minecraft/client/gui/GuiGraphics;IIILnet/minecraft/client/multiplayer/PlayerInfo;)V"))
-	private void renderPingIconRedirect(PlayerTabOverlay instance, GuiGraphics context, int width, int x, int y, PlayerInfo entry) {
+	@Redirect(method = "extractRenderState", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/components/PlayerTabOverlay;extractPingIcon(Lnet/minecraft/client/gui/GuiGraphicsExtractor;IIILnet/minecraft/client/multiplayer/PlayerInfo;)V"))
+	private void renderPingIconRedirect(PlayerTabOverlay instance, GuiGraphicsExtractor graphics, int slotWidth, int xo, int yo, PlayerInfo info) {
 		if (Features.PING_DISPLAY.active) {
 			if (this.currentEntry.result().isPlayer()) {
 				MutableComponent text = this.currentEntry.getLatencyThemed().text();
 				// color gets overridden by the text style anyway, but we need the opacity
-				context.drawString(this.minecraft.font, text, x + width - this.minecraft.font.width(text), y, CommonColors.WHITE);
+				graphics.text(this.minecraft.font, text, xo + slotWidth - this.minecraft.font.width(text), yo, CommonColors.WHITE);
 			}
 		} else {
-			this.renderPingIcon(context, width, x, y, entry);
+			this.extractPingIcon(graphics, slotWidth, xo, yo, info);
 		}
 	}
 
@@ -174,24 +175,24 @@ public abstract class PlayerTabOverlayMixin implements PlayerTabOverlayDuck {
 	// ---------- OTHERS ----------
 	// ----------------------------
 
-	@Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/Options;getBackgroundColor(I)I"))
-	private int getBackgroundColorRedirect(Options instance, int fallbackColor) {
-		return ModKrowd.TAB_LIST.entryColorOr(fallbackColor);
+	@Redirect(method = "extractRenderState", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/Options;getBackgroundColor(I)I"))
+	private int getBackgroundColorRedirect(Options instance, int defaultColor) {
+		return ModKrowd.TAB_LIST.entryColorOr(defaultColor);
 	}
 
 	// DRY fans hate this trick
 
-	@ModifyArg(method = "render", index = 4, at = @At(value = "INVOKE", ordinal = 0, target = "Lnet/minecraft/client/gui/GuiGraphics;fill(IIIII)V"))
+	@ModifyArg(method = "extractRenderState", index = 4, at = @At(value = "INVOKE", ordinal = 0, target = "Lnet/minecraft/client/gui/GuiGraphicsExtractor;fill(IIIII)V"))
 	private int fillArg0(int color) {
 		return ModKrowd.TAB_LIST.hudColorOr(color);
 	}
 
-	@ModifyArg(method = "render", index = 4, at = @At(value = "INVOKE", ordinal = 1, target = "Lnet/minecraft/client/gui/GuiGraphics;fill(IIIII)V"))
+	@ModifyArg(method = "extractRenderState", index = 4, at = @At(value = "INVOKE", ordinal = 1, target = "Lnet/minecraft/client/gui/GuiGraphicsExtractor;fill(IIIII)V"))
 	private int fillArg1(int color) {
 		return ModKrowd.TAB_LIST.hudColorOr(color);
 	}
 
-	@ModifyArg(method = "render", index = 4, at = @At(value = "INVOKE", ordinal = 3, target = "Lnet/minecraft/client/gui/GuiGraphics;fill(IIIII)V"))
+	@ModifyArg(method = "extractRenderState", index = 4, at = @At(value = "INVOKE", ordinal = 3, target = "Lnet/minecraft/client/gui/GuiGraphicsExtractor;fill(IIIII)V"))
 	private int fillArg3(int color) {
 		return ModKrowd.TAB_LIST.hudColorOr(color);
 	}

@@ -174,7 +174,7 @@ public class Config {
         String string = GsonHelper.convertToString(element, name);
         try {
             return SemanticVersion.parse(string);
-        } catch (VersionParsingException e) {
+        } catch (VersionParsingException _) {
             throw new JsonParseException("Expected " + element + " to be a SemanticVersion, was " + GsonHelper.getType(element));
         }
     }

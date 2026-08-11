@@ -23,7 +23,7 @@ public record TabHeaderTime(ZonedDateTime time, boolean isReal) {
         try {
             ZonedDateTime time = ZonedDateTime.parse(timeString, FORMATTER);
             return new TabHeaderTime(time, true);
-        } catch (DateTimeParseException e) {
+        } catch (DateTimeParseException _) {
             return FAILURE; // Debug this maybe?
         }
     }

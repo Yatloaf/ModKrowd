@@ -7,6 +7,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.ContainerObjectSelectionList;
 import net.minecraft.client.gui.components.tabs.Tab;
+import net.minecraft.client.gui.layouts.Layout;
 import net.minecraft.client.gui.navigation.ScreenRectangle;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.NotNull;
@@ -35,15 +36,21 @@ public class ConfigTab implements Tab {
     }
 
     @Override
-    public void visitChildren(@NotNull Consumer<AbstractWidget> consumer) {
-        this.listWidget.visitWidgets(consumer);
+    public void visitChildren(@NotNull Consumer<AbstractWidget> childrenConsumer) {
+        this.listWidget.visitWidgets(childrenConsumer);
     }
 
     @Override
-    public void doLayout(ScreenRectangle tabArea) {
+    public void doLayout(ScreenRectangle screenRectangle) {
         // Unlike setDimensionsAndPosition, position also calls recalculateAllChildrenPositions
-        this.listWidget.updateSizeAndPosition(tabArea.width(), tabArea.height(), 0, tabArea.top());
+        this.listWidget.updateSizeAndPosition(screenRectangle.width(), screenRectangle.height(), 0, screenRectangle.top());
         this.listWidget.arrangeElements();
+    }
+
+    @Override
+    public @NotNull Layout getLayout() {
+        // This is only called by `FriendsOverlayScreen`
+        throw new AssertionError("unreachable");
     }
 
     public void refreshState() {

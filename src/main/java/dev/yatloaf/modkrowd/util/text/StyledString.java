@@ -1,5 +1,7 @@
 package dev.yatloaf.modkrowd.util.text;
 
+import dev.yatloaf.modkrowd.mixin.ChatFormattingAccessor;
+import dev.yatloaf.modkrowd.util.Util;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntList;
 import net.minecraft.ChatFormatting;
@@ -519,18 +521,16 @@ public class StyledString {
 
         public static RollingStyle fromStyle(Style style) {
             TextColor textColor = style.getColor();
-            ChatFormatting color = textColor == null ? null : ChatFormatting.getByName(textColor.serialize());
+            ChatFormatting color = textColor == null ? null : Util.legacyFormattingFromRgb(textColor.getValue());
             return new RollingStyle(color, style.isObfuscated(), style.isBold(), style.isStrikethrough(), style.isUnderlined(), style.isItalic());
         }
 
         @SuppressWarnings("UnusedReturnValue")
         public StringBuilder difference(RollingStyle previous, String formatChar, StringBuilder builder) {
             if (this.color != null && this.color != previous.color) {
-                builder.append(formatChar);
-                builder.append(this.color.getChar());
+                this.formatting(formatChar, this.color, builder);
             } else if (this.lessThan(previous)) {
-                builder.append(formatChar);
-                builder.append(ChatFormatting.RESET.getChar());
+                this.formatting(formatChar, ChatFormatting.RESET, builder);
             } else {
                 if (this.obfuscated && !previous.obfuscated)
                     this.formatting(formatChar, ChatFormatting.OBFUSCATED, builder);
@@ -560,7 +560,7 @@ public class StyledString {
         @SuppressWarnings("UnusedReturnValue")
         private StringBuilder formatting(String formatChar, ChatFormatting formatting, StringBuilder builder) {
             builder.append(formatChar);
-            builder.append(formatting.getChar());
+            builder.append(((ChatFormattingAccessor)(Object) formatting).getCode());
             return builder;
         }
     }

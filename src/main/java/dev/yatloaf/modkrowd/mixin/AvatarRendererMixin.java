@@ -19,7 +19,7 @@ public class AvatarRendererMixin<AvatarlikeEntity extends Avatar & ClientAvatarE
 	// This only gets called for player entities, so no instanceof required
 	// Don't set the flipUpsideDown field directly because that is handled by a superclass, so it would affect all entities
 	@Inject(method = "isEntityUpsideDown(Lnet/minecraft/world/entity/Avatar;)Z", at = @At("HEAD"), cancellable = true)
-	private void isEntityUpsideDownInject(AvatarlikeEntity avatar, CallbackInfoReturnable<Boolean> cir) {
+	private void isEntityUpsideDownInject(AvatarlikeEntity mob, CallbackInfoReturnable<Boolean> cir) {
 		if (Features.DINNERBONE_GRUMM.active) {
 			cir.setReturnValue(true);
 		}

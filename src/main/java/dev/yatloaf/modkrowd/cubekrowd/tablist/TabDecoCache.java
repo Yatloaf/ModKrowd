@@ -29,7 +29,7 @@ public class TabDecoCache {
             this.header = TextCache.EMPTY;
             this.footer = TextCache.EMPTY;
         } else {
-            PlayerTabOverlayDuck hudDuck = (PlayerTabOverlayDuck) minecraft.gui.getTabList();
+            PlayerTabOverlayDuck hudDuck = (PlayerTabOverlayDuck) minecraft.gui.hud.getTabList();
 
             MutableComponent header = hudDuck.modKrowd$getHeader();
             this.header = header != null ? TextCache.of(header) : TextCache.EMPTY;

@@ -10,9 +10,9 @@ import dev.yatloaf.modkrowd.config.SyncedConfig;
 import dev.yatloaf.modkrowd.config.exception.ConfigException;
 import dev.yatloaf.modkrowd.config.feature.Feature;
 import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.components.tabs.MenuTabBar;
 import net.minecraft.client.gui.components.tabs.Tab;
 import net.minecraft.client.gui.components.tabs.TabManager;
-import net.minecraft.client.gui.components.tabs.TabNavigationBar;
 import net.minecraft.client.gui.navigation.ScreenRectangle;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.input.KeyEvent;
@@ -30,7 +30,7 @@ public class ConfigScreen extends Screen {
     public final ConfigTab[] tabs;
 
     private final TabManager tabManager;
-    private final TabNavigationBar tabNavigation;
+    private final MenuTabBar tabBar;
 
     public final Button reloadButton;
     public final Button cancelButton;
@@ -50,7 +50,7 @@ public class ConfigScreen extends Screen {
             this.tabs[i] = new ConfigTab(this, tab);
         }
         this.tabManager = new TabManager(this::addRenderableWidget, this::removeWidget);
-        this.tabNavigation = TabNavigationBar.builder(this.tabManager, this.width).addTabs(this.tabs).build();
+        this.tabBar = MenuTabBar.builder(this.tabManager, this.width).addTabs(this.tabs).build();
         this.reloadButton = Button.builder(Component.translatable("modkrowd.config.reload"), this::onReloadButton).build();
         this.cancelButton = Button.builder(Component.translatable("modkrowd.config.cancel"), this::onCancelButton).build();
         this.doneButton = Button.builder(Component.translatable("modkrowd.config.done"), this::onDoneButton).build();
@@ -99,10 +99,10 @@ public class ConfigScreen extends Screen {
 
     @Override
     protected void init() {
-        this.tabNavigation.setWidth(this.width);
-        this.tabNavigation.arrangeElements(); // Enhanced by TabNavigationBarMixin <3
+        this.tabBar.setWidth(this.width);
+        this.tabBar.arrangeElements(this.width); // Enhanced by MenuTabBarMixin <3
 
-        int contentTop = this.tabNavigation.getRectangle().bottom();
+        int contentTop = this.tabBar.getRectangle().bottom();
         ScreenRectangle tabArea = new ScreenRectangle(0, contentTop, this.width, this.height - contentTop - 36);
         this.tabManager.setTabArea(tabArea);
 
@@ -110,11 +110,11 @@ public class ConfigScreen extends Screen {
         this.cancelButton.setRectangle(64, 20, this.width - 144, this.height - 28);
         this.doneButton.setRectangle(64, 20, this.width - 72, this.height - 28);
 
-        this.addRenderableWidget(this.tabNavigation);
+        this.addRenderableWidget(this.tabBar);
 
         Tab currentTab = this.tabManager.getCurrentTab();
         if (currentTab == null) {
-            this.tabNavigation.selectTab(this.config.selectedTab.index, false);
+            this.tabBar.selectTab(this.config.selectedTab.index, false);
         } else {
             currentTab.visitChildren(this::addRenderableWidget); // This is already done in tabManager.selectTab()
         }
@@ -125,32 +125,32 @@ public class ConfigScreen extends Screen {
     }
 
     @Override
-    public boolean keyPressed(@NotNull KeyEvent input) {
+    public boolean keyPressed(@NotNull KeyEvent event) {
         if (this.awaitingKeyBind != null) {
             // Set keybind
             FeatureState featureState = this.config.getState(this.awaitingKeyBind);
-            if (input.isEscape()) {
+            if (event.isEscape()) {
                 featureState.toggleKey = InputConstants.UNKNOWN;
             } else {
-                featureState.toggleKey = InputConstants.getKey(input);
+                featureState.toggleKey = InputConstants.getKey(event);
             }
             this.awaitingKeyBind = null;
             if (this.tabManager.getCurrentTab() instanceof ConfigTab tab) {
                 tab.refreshState();
             }
             return true;
-        } else if (input.isEscape()) {
+        } else if (event.isEscape()) {
             // Save even when pressing Esc
             this.saveAndClose();
             return true;
         } else {
-            return super.keyPressed(input);
+            return super.keyPressed(event);
         }
     }
 
     @Override
     public void onClose() {
-        this.minecraft.setScreen(this.parent);
+        this.minecraft.gui.setScreen(this.parent);
     }
 
     @FunctionalInterface

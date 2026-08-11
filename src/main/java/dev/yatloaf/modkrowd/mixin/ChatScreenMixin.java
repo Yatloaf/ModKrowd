@@ -33,7 +33,7 @@ public class ChatScreenMixin extends Screen {
 
     // Clear even if the feature is disabled
     @Inject(method = "handleChatInput", at = @At("HEAD"))
-    private void handleChatInputInject(String chatText, boolean addToHistory, CallbackInfo ci) {
+    private void handleChatInputInject(String msg, boolean addToRecent, CallbackInfo ci) {
         Features.MESSAGE_PREVIEW.queueClearPreviewMessage();
         if (Features.AUTOSWITCH.active) {
             Features.AUTOSWITCH.onSendMessage();
@@ -41,19 +41,19 @@ public class ChatScreenMixin extends Screen {
     }
 
     @Inject(method = "onEdited", at = @At("TAIL"))
-    private void onEditedInject(String chatText, CallbackInfo ci) {
+    private void onEditedInject(String value, CallbackInfo ci) {
         if (Features.MESSAGE_PREVIEW.active) {
-            updatePreview(chatText);
+            updatePreview(value);
         }
     }
 
     @Inject(method = "mouseClicked", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screens/Screen;mouseClicked(Lnet/minecraft/client/input/MouseButtonEvent;Z)Z"))
-    private void mouseClickedInject(MouseButtonEvent mouseButtonEvent, boolean bl, CallbackInfoReturnable<Boolean> cir) {
-        if (Features.MESSAGE_COPY.active && mouseButtonEvent.button() == 1) {
-            ChatComponentDuck chat = (ChatComponentDuck) this.minecraft.gui.getChat();
-            MessageCache message = chat.modKrowd$getMessageAt(mouseButtonEvent.x(), mouseButtonEvent.y());
+    private void mouseClickedInject(MouseButtonEvent event, boolean doubleClick, CallbackInfoReturnable<Boolean> cir) {
+        if (Features.MESSAGE_COPY.active && event.button() == 1) {
+            ChatComponentDuck chat = (ChatComponentDuck) this.minecraft.gui.hud.getChat();
+            MessageCache message = chat.modKrowd$getMessageAt(event.x(), event.y());
             if (message != null) {
-                this.minecraft.setScreen(new MessageCopyScreen(message));
+                this.minecraft.gui.setScreen(new MessageCopyScreen(message));
             }
         }
     }

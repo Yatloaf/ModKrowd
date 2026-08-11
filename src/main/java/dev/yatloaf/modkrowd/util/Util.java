@@ -2,7 +2,11 @@ package dev.yatloaf.modkrowd.util;
 
 import it.unimi.dsi.fastutil.chars.Char2CharMap;
 import it.unimi.dsi.fastutil.chars.Char2CharOpenHashMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.multiplayer.ClientPacketListener;
+import net.minecraft.network.chat.TextColor;
 import net.minecraft.network.protocol.game.ServerboundChatCommandPacket;
 
 import java.util.Arrays;
@@ -12,8 +16,16 @@ import java.util.stream.Collectors;
 
 @SuppressWarnings("UnnecessaryUnicodeEscape")
 public final class Util {
+    private static final Int2ObjectMap<ChatFormatting> RGB_TO_LEGACY_FORMAT = new Int2ObjectOpenHashMap<>();
     private static final Char2CharMap NUMERAL_TO_SUPERSCRIPT = new Char2CharOpenHashMap();
     static {
+        for (ChatFormatting formatting : ChatFormatting.values()) {
+            TextColor color = TextColor.fromLegacyFormat(formatting);
+            if (color != null) {
+                RGB_TO_LEGACY_FORMAT.put(color.getValue(), formatting);
+            }
+        }
+
         NUMERAL_TO_SUPERSCRIPT.put('0', '⁰');
         NUMERAL_TO_SUPERSCRIPT.put('1', '¹');
         NUMERAL_TO_SUPERSCRIPT.put('2', '²');
@@ -26,6 +38,10 @@ public final class Util {
         NUMERAL_TO_SUPERSCRIPT.put('9', '⁹');
         NUMERAL_TO_SUPERSCRIPT.put('-', '\u207B');
         NUMERAL_TO_SUPERSCRIPT.put('k', '\u1d4f');
+    }
+
+    public static ChatFormatting legacyFormattingFromRgb(int rgb) {
+        return RGB_TO_LEGACY_FORMAT.get(rgb);
     }
 
     public static String superscript(int n, boolean abbreviate) {
@@ -49,7 +65,7 @@ public final class Util {
     public static int parseIntOr(String s, int fallback) {
         try {
             return Integer.parseInt(s);
-        } catch (NumberFormatException e) {
+        } catch (NumberFormatException _) {
             return fallback;
         }
     }

@@ -1,20 +1,23 @@
 package dev.yatloaf.modkrowd.mixin;
 
 import com.google.common.collect.ImmutableList;
+import net.minecraft.client.gui.components.TabButton;
+import net.minecraft.client.gui.components.tabs.MenuTabBar;
 import net.minecraft.client.gui.components.tabs.Tab;
+import net.minecraft.client.gui.components.tabs.TabManager;
 import net.minecraft.client.gui.components.tabs.TabNavigationBar;
 import org.jetbrains.annotations.NotNull;
-import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
-@Mixin(TabNavigationBar.class)
-public class TabNavigationBarMixin {
+@Mixin(MenuTabBar.class)
+public class MenuTabBarMixin extends TabNavigationBar {
     // Slightly improve the config screen
 
-    @Shadow @Final private ImmutableList<@NotNull Tab> tabs;
+    protected MenuTabBarMixin(int x, int y, int width, int height, TabManager tabManager, ImmutableList<@NotNull TabButton> tabButtons, ImmutableList<@NotNull Tab> tabs) {
+        super(x, y, width, height, tabManager, tabButtons, tabs);
+    }
 
     @Redirect(method = "arrangeElements", at = @At(value = "INVOKE", target = "Ljava/lang/Math;min(II)I"))
     private int minRedirect(int a, int b) {

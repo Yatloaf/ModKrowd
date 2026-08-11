@@ -4,8 +4,10 @@ import dev.yatloaf.modkrowd.ModKrowd;
 import dev.yatloaf.modkrowd.config.Features;
 import dev.yatloaf.modkrowd.custom.Custom;
 import dev.yatloaf.modkrowd.custom.MissileWarsTieMessage;
+import dev.yatloaf.modkrowd.mixinduck.ChatComponentDuck;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.client.multiplayer.chat.GuiMessageSource;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.RegistryAccess;
@@ -38,10 +40,10 @@ public abstract class ClientLevelMixin extends Level {
     @Unique private long greenWinTick = -1;
 
     @Override
-    public void updatePOIOnBlockStateChange(@NotNull BlockPos pos, @NotNull BlockState oldBlock, @NotNull BlockState newBlock) {
-        super.updatePOIOnBlockStateChange(pos, oldBlock, newBlock);
+    public void updatePOIOnBlockStateChange(@NotNull BlockPos pos, @NotNull BlockState oldState, @NotNull BlockState newState) {
+        super.updatePOIOnBlockStateChange(pos, oldState, newState);
 
-        if (Features.TIE_DETECTOR.active && oldBlock.is(Blocks.NETHER_PORTAL)) {
+        if (Features.TIE_DETECTOR.active && oldState.is(Blocks.NETHER_PORTAL)) {
 
             switch (pos.getZ()) {
                 case 72 -> {
@@ -69,9 +71,10 @@ public abstract class ClientLevelMixin extends Level {
 
     @Unique
     private void sendTieMessage() {
-        this.minecraft.gui.getChat().addMessage(
+        ((ChatComponentDuck) this.minecraft.gui.hud.getChat()).modKrowd$addMessage(
                 ModKrowd.CONFIG.themeCustom(new MissileWarsTieMessage(this.redWinTick, this.greenWinTick)).text(),
                 null,
+                GuiMessageSource.SYSTEM_CLIENT,
                 Custom.MESSAGE_INDICATOR
         );
     }

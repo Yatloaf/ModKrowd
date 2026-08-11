@@ -8,13 +8,14 @@ import dev.yatloaf.modkrowd.cubekrowd.common.CKColor;
 import dev.yatloaf.modkrowd.cubekrowd.common.TextCache;
 import dev.yatloaf.modkrowd.cubekrowd.message.DirectMessage;
 import dev.yatloaf.modkrowd.cubekrowd.message.MessageCache;
-import dev.yatloaf.modkrowd.mixinduck.GuiMessageLineDuck;
-import net.minecraft.client.GuiMessage;
-import net.minecraft.client.GuiMessageTag;
+import dev.yatloaf.modkrowd.mixinduck.GuiMessageDuck;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.components.ComponentRenderUtils;
 import net.minecraft.client.gui.screens.ChatScreen;
+import net.minecraft.client.multiplayer.chat.GuiMessage;
+import net.minecraft.client.multiplayer.chat.GuiMessageSource;
+import net.minecraft.client.multiplayer.chat.GuiMessageTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.FormattedCharSequence;
 
@@ -50,7 +51,7 @@ public class MessagePreviewFeature extends Feature {
 
     @Override
     public void onMessage(MessageCache message, Minecraft minecraft, ActionQueue queue) {
-        if (!(minecraft.screen instanceof ChatScreen)) {
+        if (!(minecraft.gui.screen() instanceof ChatScreen)) {
             this.clearPreviewMessage();
         }
 
@@ -79,6 +80,9 @@ public class MessagePreviewFeature extends Feature {
         MessageCache cache = new MessageCache(this.previewMessage, ModKrowd.currentSubserver);
         cache.setBackgroundTint(PREVIEW_BACKGROUND_TINT);
 
+        GuiMessage message = new GuiMessage(Integer.MIN_VALUE, this.previewMessage.text(), null, GuiMessageSource.SYSTEM_CLIENT, PREVIEW_INDICATOR);
+        ((GuiMessageDuck)(Object) message).modKrowd$setMessageCache(cache);
+
         List<FormattedCharSequence> orderedTextLines = ComponentRenderUtils.wrapComponents(
                 this.previewMessage.text(), width, font
         );
@@ -88,8 +92,7 @@ public class MessagePreviewFeature extends Feature {
             FormattedCharSequence currentLine = orderedTextLines.get(l);
             boolean endOfEntry = l == orderedTextLines.size() - 1;
 
-            GuiMessage.Line line = new GuiMessage.Line(Integer.MIN_VALUE, currentLine, PREVIEW_INDICATOR, endOfEntry);
-            ((GuiMessageLineDuck)(Object) line).modKrowd$setMessageCache(cache);
+            GuiMessage.Line line = new GuiMessage.Line(message, currentLine, endOfEntry);
             lines.add(line);
             cache.lines.add(line);
         }

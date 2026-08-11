@@ -4,7 +4,7 @@ import dev.yatloaf.modkrowd.cubekrowd.common.TextCache;
 import dev.yatloaf.modkrowd.cubekrowd.common.ThemedCache;
 import dev.yatloaf.modkrowd.cubekrowd.subserver.Subserver;
 import dev.yatloaf.modkrowd.util.text.StyledStringReader;
-import net.minecraft.client.GuiMessage;
+import net.minecraft.client.multiplayer.chat.GuiMessage;
 
 import java.util.ArrayList;
 import java.util.List;

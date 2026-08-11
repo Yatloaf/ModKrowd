@@ -42,7 +42,7 @@ public final class CubeKrowd {
     public static boolean addressIsCubeKrowd(String address) {
         try {
             return CUBEKROWD_REGEX.matcher(HostAndPort.fromString(address).getHost()).matches();
-        } catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException _) {
             return false;
         }
     }

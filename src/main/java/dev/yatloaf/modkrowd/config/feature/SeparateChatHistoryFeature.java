@@ -7,11 +7,13 @@ import dev.yatloaf.modkrowd.cubekrowd.message.Aloha;
 import dev.yatloaf.modkrowd.custom.Custom;
 import dev.yatloaf.modkrowd.custom.SelfAlohaMessage;
 import dev.yatloaf.modkrowd.mixin.ClientCommonPacketListenerImplAccessor;
+import dev.yatloaf.modkrowd.mixinduck.ChatComponentDuck;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.ChatComponent;
 import net.minecraft.client.multiplayer.ClientConfigurationPacketListenerImpl;
 import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.client.multiplayer.ServerData;
+import net.minecraft.client.multiplayer.chat.GuiMessageSource;
 
 import java.util.HashMap;
 import java.util.List;
@@ -31,7 +33,7 @@ public class SeparateChatHistoryFeature extends Feature {
     public void onEnable(Minecraft minecraft, ActionQueue queue) {
         ClientPacketListener listener = minecraft.getConnection();
         if (listener != null) {
-            this.chatStates.put(Location.of(listener.getServerData()), minecraft.gui.getChat().storeState());
+            this.chatStates.put(Location.of(listener.getServerData()), minecraft.gui.hud.getChat().storeState());
         }
     }
 
@@ -45,11 +47,12 @@ public class SeparateChatHistoryFeature extends Feature {
         Location location = Location.of(((ClientCommonPacketListenerImplAccessor) listener).getServerData());
         if (!location.equals(this.currentLocation)) {
             this.currentLocation = location;
-            minecraft.gui.getChat().restoreState(this.chatStates.getOrDefault(location, EMPTY_CHAT_STATE));
+            minecraft.gui.hud.getChat().restoreState(this.chatStates.getOrDefault(location, EMPTY_CHAT_STATE));
             if (location instanceof Server server) {
-                minecraft.gui.getChat().addMessage(
+                ((ChatComponentDuck) minecraft.gui.hud.getChat()).modKrowd$addMessage(
                         ModKrowd.CONFIG.themeCustom(new SelfAlohaMessage(Aloha.JOIN, server.info)).text(),
                         null,
+                        GuiMessageSource.SYSTEM_CLIENT,
                         Custom.MESSAGE_INDICATOR
                 );
             }
@@ -60,13 +63,14 @@ public class SeparateChatHistoryFeature extends Feature {
     public void onDisconnect(ClientPacketListener listener, Minecraft minecraft, ActionQueue queue) {
         Location location = Location.of(listener.getServerData());
         if (location instanceof Server server) {
-            minecraft.gui.getChat().addMessage(
+            ((ChatComponentDuck) minecraft.gui.hud.getChat()).modKrowd$addMessage(
                     ModKrowd.CONFIG.themeCustom(new SelfAlohaMessage(Aloha.LEAVE, server.info)).text(),
                     null,
+                    GuiMessageSource.SYSTEM_CLIENT,
                     Custom.MESSAGE_INDICATOR
             );
         }
-        this.chatStates.put(location, minecraft.gui.getChat().storeState());
+        this.chatStates.put(location, minecraft.gui.hud.getChat().storeState());
         this.currentLocation = null;
     }
 
