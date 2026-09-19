@@ -1,6 +1,8 @@
 # ModKrowd changelog
 
-## 0.3.1: Unreleased
+## 0.3.2: Unreleased
+
+## 0.3.1: 2026-08-12
 
 - Update to 26.2.
 
