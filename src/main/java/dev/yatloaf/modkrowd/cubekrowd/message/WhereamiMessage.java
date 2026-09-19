@@ -16,7 +16,7 @@ public record WhereamiMessage(Subserver subserver, boolean isReal) implements Me
         source.skipSpace();
 
         Subserver subserver = Subservers.fromId(source.readAll().toUnstyledString());
-        if (!subserver.isReal) return FAILURE;
+        // Even if the subserver is unknown, this message is still accepted
 
         return new WhereamiMessage(subserver, true);
     }

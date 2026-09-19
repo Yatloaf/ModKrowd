@@ -2,6 +2,10 @@
 
 ## 0.3.2: Unreleased
 
+### Fixed
+
+- Unexpected servers being handled incorrectly.
+
 ## 0.3.1: 2026-08-12
 
 - Update to 26.2.
