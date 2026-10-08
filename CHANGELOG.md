@@ -2,6 +2,10 @@
 
 ## 0.3.2: Unreleased
 
+### Added
+
+- MiniMessage support for Message Preview.
+
 ### Changed
 
 - Updated parsing in line with CubeKrowd.

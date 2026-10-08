@@ -3,11 +3,10 @@ package dev.yatloaf.modkrowd.cubekrowd.common;
 import dev.yatloaf.modkrowd.ModKrowd;
 import dev.yatloaf.modkrowd.cubekrowd.tablist.MinigameTabName;
 import dev.yatloaf.modkrowd.util.text.StyledString;
-import net.minecraft.ChatFormatting;
+import net.kyori.adventure.platform.modcommon.MinecraftClientAudiences;
 import net.minecraft.client.Minecraft;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
-
-import java.util.EnumSet;
 
 public class SelfPlayer {
     public static RankName rankName = RankName.FAILURE;
@@ -35,12 +34,24 @@ public class SelfPlayer {
     }
 
     public static StyledString tryFormat(String message) {
-        EnumSet<ChatFormatting> permittedFormattings = SelfPlayer.rankNameSoft().rank().letters().permittedFormattings();
-        return StyledString.fromFormattedString(message, '&', permittedFormattings);
+        return tryFormat(message, null);
     }
 
     public static StyledString tryFormat(String message, Style startStyle) {
-        EnumSet<ChatFormatting> permittedFormattings = SelfPlayer.rankNameSoft().rank().letters().permittedFormattings();
-        return StyledString.fromFormattedString(message, '&', permittedFormattings, startStyle);
+        // TODO: Emoji
+
+        FormattingPermission permission = SelfPlayer.rankNameSoft().rank().letters().formattingPermission();
+
+        StyledString legacy = startStyle != null
+                ? StyledString.fromFormattedString(message, '&', permission.legacy, startStyle)
+                : StyledString.fromFormattedString(message, '&', permission.legacy);
+        // Did that change anything?
+        if (!legacy.equalsString(message)) return legacy;
+
+        net.kyori.adventure.text.Component adventure = permission.miniMessage.deserialize(message);
+        Component vanilla = MinecraftClientAudiences.of().asNative(adventure);
+        return startStyle != null
+                ? StyledString.fromText(vanilla, startStyle)
+                : StyledString.fromText(vanilla);
     }
 }

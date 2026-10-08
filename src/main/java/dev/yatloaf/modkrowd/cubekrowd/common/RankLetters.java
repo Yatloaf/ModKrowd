@@ -3,10 +3,8 @@ package dev.yatloaf.modkrowd.cubekrowd.common;
 import dev.yatloaf.modkrowd.util.Util;
 import dev.yatloaf.modkrowd.util.text.StyledString;
 import dev.yatloaf.modkrowd.util.text.StyledStringReader;
-import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Style;
 
-import java.util.EnumSet;
 import java.util.Map;
 
 public enum RankLetters {
@@ -25,15 +23,6 @@ public enum RankLetters {
     ADMIN(CKColor.RED, StyledString.fromString("A", Style.EMPTY.withBold(true))),
     UNKNOWN(CKColor.WHITE, StyledString.fromString("?"));
 
-    public static final EnumSet<ChatFormatting> PF_NONE = EnumSet.noneOf(ChatFormatting.class);
-    public static final EnumSet<ChatFormatting> PF_LIMITED = EnumSet.of(
-            ChatFormatting.STRIKETHROUGH,
-            ChatFormatting.UNDERLINE,
-            ChatFormatting.ITALIC,
-            ChatFormatting.RESET
-    );
-    public static final EnumSet<ChatFormatting> PF_ALL = EnumSet.allOf(ChatFormatting.class);
-
     public final CKColor color;
     public final StyledString letter;
 
@@ -48,12 +37,12 @@ public enum RankLetters {
         return source.mapNextOrDefault(FROM_LETTER, UNKNOWN);
     }
 
-    public EnumSet<ChatFormatting> permittedFormattings() {
+    public FormattingPermission formattingPermission() {
         // Can't really know for stacked ranks
         return switch (this) {
-            case ADMIN, MODERATOR, HELPER, DEVELOPER -> PF_ALL;
-            case ZIPKROWD, YOUTUBE, SPECIAL_GUEST, BUILDER, VETERAN, RESPECTED -> PF_LIMITED;
-            default -> PF_NONE;
+            case ADMIN, MODERATOR, HELPER, DEVELOPER -> FormattingPermission.ALL;
+            case ZIPKROWD, YOUTUBE, SPECIAL_GUEST, BUILDER, VETERAN, RESPECTED -> FormattingPermission.LIMITED;
+            default -> FormattingPermission.NONE;
         };
     }
 
