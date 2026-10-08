@@ -2,6 +2,10 @@
 
 ## 0.3.2: Unreleased
 
+### Changed
+
+- Updated parsing in line with CubeKrowd.
+
 ### Fixed
 
 - Unexpected servers being handled incorrectly.

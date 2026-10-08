@@ -23,7 +23,7 @@ public record MinigameTabName(Afk afk, MinigameTeamName teamName, Subserver subs
         StyledString remaining = source.peekAll();
         if (remaining.startsWith("§")) {
             source.skipAll();
-            StyledString remainingFixed = StyledString.fromFormattedString(remaining.toUnstyledString(), '§', RankLetters.PF_ALMOST_ALL);
+            StyledString remainingFixed = StyledString.fromFormattedString(remaining.toUnstyledString(), '§', RankLetters.PF_ALL);
             minigameTeamName = MinigameTeamName.readFast(StyledStringReader.of(remainingFixed), subserver);
         } else {
             minigameTeamName = MinigameTeamName.readFast(source, subserver);

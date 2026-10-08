@@ -32,10 +32,7 @@ public enum RankLetters {
             ChatFormatting.ITALIC,
             ChatFormatting.RESET
     );
-    public static final EnumSet<ChatFormatting> PF_ALMOST_ALL = EnumSet.allOf(ChatFormatting.class);
-    static {
-        PF_ALMOST_ALL.remove(ChatFormatting.OBFUSCATED);
-    }
+    public static final EnumSet<ChatFormatting> PF_ALL = EnumSet.allOf(ChatFormatting.class);
 
     public final CKColor color;
     public final StyledString letter;
@@ -54,7 +51,7 @@ public enum RankLetters {
     public EnumSet<ChatFormatting> permittedFormattings() {
         // Can't really know for stacked ranks
         return switch (this) {
-            case ADMIN, MODERATOR, HELPER, DEVELOPER -> PF_ALMOST_ALL;
+            case ADMIN, MODERATOR, HELPER, DEVELOPER -> PF_ALL;
             case ZIPKROWD, YOUTUBE, SPECIAL_GUEST, BUILDER, VETERAN, RESPECTED -> PF_LIMITED;
             default -> PF_NONE;
         };
