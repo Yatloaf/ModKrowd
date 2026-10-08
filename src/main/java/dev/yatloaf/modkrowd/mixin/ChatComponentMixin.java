@@ -15,7 +15,6 @@ import net.minecraft.client.multiplayer.chat.GuiMessageSource;
 import net.minecraft.client.multiplayer.chat.GuiMessageTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MessageSignature;
-import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.util.Mth;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
@@ -132,7 +131,7 @@ public abstract class ChatComponentMixin implements ChatComponentDuck {
         GuiMessage loggedLine = new GuiMessage(this.minecraft.gui.hud.getGuiTicks(), contents, signature, source, tag);
         this.logChatMessage(loggedLine);
 
-        MessageCache messageCache = MessageCache.of(TextCache.of((MutableComponent) contents), ModKrowd.currentSubserver);
+        MessageCache messageCache = MessageCache.of(TextCache.of(contents), ModKrowd.currentSubserver);
         ModKrowd.onMessage(messageCache);
 
         if (!messageCache.blocked()) {

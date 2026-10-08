@@ -242,7 +242,7 @@ public class CherryThemeFeature extends CherryLiteThemeFeature {
     }
 
     public TextCache selfAlohaMessage(SelfAlohaMessage selfAlohaMessage) {
-        return TextCache.of(selfAlohaMessage.appearance().text().setStyle(Style.EMPTY.withColor(CHERRY5)));
+        return TextCache.of(selfAlohaMessage.appearance().text().copy().setStyle(Style.EMPTY.withColor(CHERRY5)));
     }
 
     // DRY!!

@@ -162,7 +162,7 @@ public abstract class PlayerTabOverlayMixin implements PlayerTabOverlayDuck {
 	private void renderPingIconRedirect(PlayerTabOverlay instance, GuiGraphicsExtractor graphics, int slotWidth, int xo, int yo, PlayerInfo info) {
 		if (Features.PING_DISPLAY.active) {
 			if (this.currentEntry.result().isPlayer()) {
-				MutableComponent text = this.currentEntry.getLatencyThemed().text();
+				Component text = this.currentEntry.getLatencyThemed().text();
 				// color gets overridden by the text style anyway, but we need the opacity
 				graphics.text(this.minecraft.font, text, xo + slotWidth - this.minecraft.font.width(text), yo, CommonColors.WHITE);
 			}

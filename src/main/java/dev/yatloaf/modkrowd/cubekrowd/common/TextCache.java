@@ -2,7 +2,6 @@ package dev.yatloaf.modkrowd.cubekrowd.common;
 
 import dev.yatloaf.modkrowd.util.text.StyledString;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.MutableComponent;
 import org.jspecify.annotations.NonNull;
 
 public abstract class TextCache {
@@ -12,13 +11,13 @@ public abstract class TextCache {
     public static final TextCache EMPTY = new OfEmpty();
 
     /**
-     * Get the {@link MutableComponent} representation after generating it if required.
+     * Get the {@link Component} representation after generating it if required.
      * <p>
      * <b>Do not mutate this object without copying it first.</b>
      *
-     * @return The {@link MutableComponent} representation of the original.
+     * @return The {@link Component} representation of the original.
      */
-    public abstract MutableComponent text();
+    public abstract Component text();
 
     /**
      * Get the {@link StyledString} representation after generating it if required.
@@ -35,19 +34,19 @@ public abstract class TextCache {
     public abstract String string();
 
     /**
-     * Box a {@link MutableComponent}, deferring and caching its conversion into {@link StyledString} or {@link String}.
+     * Box a {@link Component}, deferring and caching its conversion into {@link StyledString} or {@link String}.
      * <p>
      * <b>Do not mutate the source after boxing without copying it first.</b>
      *
-     * @param text The original {@link MutableComponent}.
+     * @param text The original {@link Component}.
      * @return A cache of the original and its converted forms.
      */
-    public static TextCache of(@NonNull MutableComponent text) {
+    public static TextCache of(@NonNull Component text) {
         return new OfText(text);
     }
 
     /**
-     * Box a {@link StyledString}, deferring and caching its conversion into {@link MutableComponent} or {@link String}.
+     * Box a {@link StyledString}, deferring and caching its conversion into {@link Component} or {@link String}.
      *
      * @param styledString The original {@link StyledString}.
      * @return A cache of the original and its converted forms.
@@ -57,17 +56,17 @@ public abstract class TextCache {
     }
 
     private static class OfText extends TextCache {
-        private final MutableComponent text;
+        private final Component text;
 
         private StyledString styledString;
         private String string;
 
-        private OfText(MutableComponent text) {
+        private OfText(Component text) {
             this.text = text;
         }
 
         @Override
-        public final MutableComponent text() {
+        public final Component text() {
             return this.text;
         }
 
@@ -91,7 +90,7 @@ public abstract class TextCache {
     private static class OfStyledString extends TextCache {
         private final StyledString styledString;
 
-        private MutableComponent text;
+        private Component text;
         private String string;
 
         private OfStyledString(StyledString styledString) {
@@ -99,7 +98,7 @@ public abstract class TextCache {
         }
 
         @Override
-        public MutableComponent text() {
+        public Component text() {
             if (this.text == null) {
                 this.text = this.styledString.toText();
             }
@@ -122,10 +121,10 @@ public abstract class TextCache {
     }
 
     private static class OfEmpty extends TextCache {
-        private static final MutableComponent EMPTY_TEXT = Component.empty();
+        private static final Component EMPTY_TEXT = Component.empty();
 
         @Override
-        public MutableComponent text() {
+        public Component text() {
             return EMPTY_TEXT;
         }
 
