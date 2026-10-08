@@ -108,12 +108,14 @@ public abstract class ChatComponentMixin implements ChatComponentDuck {
     @ModifyArg(method = "lambda$extractRenderState$1", index = 4, at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/components/ChatComponent$ChatGraphicsAccess;fill(IIIII)V"))
     private static int fillArg(int color, @Local(argsOnly = true, name = "arg5") @NotNull GuiMessage.Line arg5) {
         // If any RGB bits are set, this was certainly modified by another mod. Don't mess with that
-        if ((color & 0x00_FF_FF_FF) != 0) {
-            return color;
-        } else {
-            GuiMessageDuck messageDuck = (GuiMessageDuck)(Object) arg5.parent();
-            return color | messageDuck.modKrowd$getMessageCache().backgroundTint();
+        if ((color & 0x00_FF_FF_FF) == 0) {
+            MessageCache messageCache = ((GuiMessageDuck)(Object) arg5.parent()).modKrowd$getMessageCache();
+            // COMPAT: Other mods might create GuiMessage instances without an associated MessageCache
+            if (messageCache != null) {
+                return color | messageCache.backgroundTint();
+            }
         }
+        return color;
     }
 
     @Inject(method = "clearMessages", cancellable = true, at = @At("HEAD"))
@@ -147,7 +149,9 @@ public abstract class ChatComponentMixin implements ChatComponentDuck {
     private void addMessageToDisplayQueueInject(GuiMessage message, CallbackInfo ci) {
         GuiMessageDuck messageDuck = (GuiMessageDuck)(Object) message;
         MessageCache cache = messageDuck.modKrowd$getMessageCache();
-        cache.lines.clear();
+        if (cache != null) {
+            cache.lines.clear();
+        }
     }
 
     @ModifyArg(method = "addMessageToDisplayQueue", at = @At(value = "INVOKE", target = "Ljava/util/List;addFirst(Ljava/lang/Object;)V"))
@@ -155,8 +159,9 @@ public abstract class ChatComponentMixin implements ChatComponentDuck {
         GuiMessage.Line line = (GuiMessage.Line) e;
         GuiMessageDuck messageDuck = (GuiMessageDuck)(Object) line.parent();
         MessageCache cache = messageDuck.modKrowd$getMessageCache();
-
-        cache.lines.add(line);
+        if (cache != null) {
+            cache.lines.add(line);
+        }
 
         return e;
     }
