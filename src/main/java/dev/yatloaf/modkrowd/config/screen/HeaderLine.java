@@ -9,7 +9,7 @@ import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.util.function.Supplier;
 
@@ -20,7 +20,7 @@ public class HeaderLine extends AbstractLine {
 
     private final ConfigScreen screen;
     private final FeatureState state;
-    private final CycleButton<@NotNull Boolean> toggleButton;
+    private final CycleButton<@NonNull Boolean> toggleButton;
     private final Button keyBindButton;
 
     public HeaderLine(ConfigScreen screen, FeatureState state) {
@@ -52,7 +52,7 @@ public class HeaderLine extends AbstractLine {
                 : Component.translatable("narrator.controls.bound", this.state.feature.name, message.get());
     }
 
-    private void onToggle(CycleButton<@NotNull Boolean> button, boolean value) {
+    private void onToggle(CycleButton<@NonNull Boolean> button, boolean value) {
         this.state.enabled = value;
     }
 

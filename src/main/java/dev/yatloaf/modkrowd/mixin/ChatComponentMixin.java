@@ -17,7 +17,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MessageSignature;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.util.Mth;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Final;
@@ -106,7 +106,7 @@ public abstract class ChatComponentMixin implements ChatComponentDuck {
     // COMPAT: fi.dy.masa.tweakeroo.mixin.hud.MixinChatHud::tweakeroo_overrideChatBackgroundColor already does @Redirect,
     // avoid conflict by using @ModifyArg instead and potentially using Tweakeroo's result
     @ModifyArg(method = "lambda$extractRenderState$1", index = 4, at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/components/ChatComponent$ChatGraphicsAccess;fill(IIIII)V"))
-    private static int fillArg(int color, @Local(argsOnly = true, name = "arg5") @NotNull GuiMessage.Line arg5) {
+    private static int fillArg(int color, @Local(argsOnly = true, name = "arg5") GuiMessage.@NonNull Line arg5) {
         // If any RGB bits are set, this was certainly modified by another mod. Don't mess with that
         if ((color & 0x00_FF_FF_FF) == 0) {
             MessageCache messageCache = ((GuiMessageDuck)(Object) arg5.parent()).modKrowd$getMessageCache();
@@ -146,7 +146,7 @@ public abstract class ChatComponentMixin implements ChatComponentDuck {
     }
 
     @Inject(method = "addMessageToDisplayQueue", at = @At("HEAD"))
-    private void addMessageToDisplayQueueInject(GuiMessage message, CallbackInfo ci) {
+    private void addMessageToDisplayQueueInject(@NonNull GuiMessage message, CallbackInfo ci) {
         GuiMessageDuck messageDuck = (GuiMessageDuck)(Object) message;
         MessageCache cache = messageDuck.modKrowd$getMessageCache();
         if (cache != null) {

@@ -13,7 +13,7 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.PlayerModelType;
 import net.minecraft.world.item.equipment.EquipmentAsset;
 import net.minecraft.world.item.equipment.EquipmentAssets;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -57,8 +57,8 @@ public abstract class HumanoidArmorLayerMixin<S extends HumanoidRenderState> {
     // For some reason specifying `@Local(argsOnly = true, name = "slot")` fails, so this must do
 	@SuppressWarnings({"OptionalUsedAsFieldOrParameterType", "LocalMayUseName"})
     @Redirect(method = "renderArmorPiece", at = @At(value = "INVOKE", target = "Ljava/util/Optional;orElseThrow()Ljava/lang/Object;"))
-	private Object orElseThrowRedirect(Optional<ResourceKey<@NotNull EquipmentAsset>> instance, @Local(argsOnly = true) EquipmentSlot slot) {
-		ResourceKey<@NotNull EquipmentAsset> result = instance.orElseThrow();
+	private Object orElseThrowRedirect(Optional<ResourceKey<@NonNull EquipmentAsset>> instance, @Local(argsOnly = true) EquipmentSlot slot) {
+		ResourceKey<@NonNull EquipmentAsset> result = instance.orElseThrow();
         Identifier id = result.identifier();
 		if (!this.slim || slot != EquipmentSlot.CHEST || !SLIMMABLE.contains(id)) return result;
 

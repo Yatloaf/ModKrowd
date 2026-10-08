@@ -20,7 +20,7 @@ import dev.yatloaf.modkrowd.util.text.StyledString;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.util.Random;
 
@@ -204,7 +204,7 @@ public final class PreviewCommands {
      * @param args current chat text, stripped of multi-spaces
      * @return the message preview, or {@link TextCache#EMPTY} if there is none
      */
-    public static @NotNull TextCache preview(@NotNull String args) {
+    public static @NonNull TextCache preview(@NonNull String args) {
         if (args.startsWith("/")) {
             if (ModKrowd.currentSubserver.isCubeKrowd) {
                 try {

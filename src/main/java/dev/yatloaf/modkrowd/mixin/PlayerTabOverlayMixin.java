@@ -21,8 +21,8 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.util.CommonColors;
 import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.world.entity.player.Player;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -65,7 +65,7 @@ public abstract class PlayerTabOverlayMixin implements PlayerTabOverlayDuck {
 	}
 
 	@Unique @Override
-	public @NotNull List<PlayerInfo> modKrowd$getPlayerInfos() {
+	public @NonNull List<PlayerInfo> modKrowd$getPlayerInfos() {
         if (this.minecraft.player == null) {
             return List.of();
         } else {

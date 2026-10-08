@@ -7,7 +7,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.state.BlockState;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -32,7 +32,7 @@ public class BarrierBlockMixin extends Block {
 
 	// Glass-like rendering behavior
 	@Override
-	public boolean skipRendering(@NotNull BlockState state, BlockState neighborState, @NotNull Direction direction) {
+	public boolean skipRendering(@NonNull BlockState state, BlockState neighborState, @NonNull Direction direction) {
         return neighborState.is(this) || super.skipRendering(state, neighborState, direction);
     }
 }

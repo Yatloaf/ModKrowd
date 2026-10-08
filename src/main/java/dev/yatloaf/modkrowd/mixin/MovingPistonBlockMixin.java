@@ -8,7 +8,7 @@ import net.minecraft.world.level.block.piston.MovingPistonBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -24,7 +24,7 @@ public class MovingPistonBlockMixin extends Block {
 
 	// Actually render the model
 	@Override
-	public @NotNull RenderShape getRenderShape(@NotNull BlockState state) {
+	public @NonNull RenderShape getRenderShape(@NonNull BlockState state) {
 		if (Features.TANGIBLE_MOVING_PISTONS.active) {
 			return RenderShape.MODEL;
 		} else {
@@ -42,7 +42,7 @@ public class MovingPistonBlockMixin extends Block {
 
 	// Glass-like rendering behavior
 	@Override
-	public boolean skipRendering(@NotNull BlockState state, BlockState neighborState, @NotNull Direction direction) {
+	public boolean skipRendering(@NonNull BlockState state, BlockState neighborState, @NonNull Direction direction) {
         return neighborState.is(this) || super.skipRendering(state, neighborState, direction);
     }
 }

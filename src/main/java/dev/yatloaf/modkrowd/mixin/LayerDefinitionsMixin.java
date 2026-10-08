@@ -12,7 +12,7 @@ import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.client.renderer.entity.ArmorModelSet;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -35,10 +35,10 @@ public class LayerDefinitionsMixin {
     // Ordinals would be brittle, this replaces every call but is only called on reload anyway
     // Even better would be reassigning the keys at the end, but then build() would have to be replaced by buildKeepingLast()
     @Redirect(method = "createRoots", at = @At(value = "INVOKE", remap = false, target = "Lnet/minecraft/client/renderer/entity/ArmorModelSet;putFrom(Lnet/minecraft/client/renderer/entity/ArmorModelSet;Lcom/google/common/collect/ImmutableMap$Builder;)V"))
-    private static <T> void putFromRedirect(ArmorModelSet<@NotNull T> instance, ArmorModelSet<@NotNull LayerDefinition> values, ImmutableMap.Builder<@NotNull T, @NotNull LayerDefinition> output) {
+    private static <T> void putFromRedirect(ArmorModelSet<@NonNull T> instance, ArmorModelSet<@NonNull LayerDefinition> values, ImmutableMap.Builder<@NonNull T, @NonNull LayerDefinition> output) {
         if (Features.SLIM_ARMOR.active && instance == ModelLayers.PLAYER_SLIM_ARMOR) {
             // .map() would modify every part, we only want to modify the chest
-            ArmorModelSet<@NotNull LayerDefinition> slimData = new ArmorModelSet<>(
+            ArmorModelSet<@NonNull LayerDefinition> slimData = new ArmorModelSet<>(
                     values.head(),
                     values.chest().apply(LayerDefinitionsMixin::transformSlim),
                     values.legs(),

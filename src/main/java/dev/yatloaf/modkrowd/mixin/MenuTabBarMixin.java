@@ -6,7 +6,7 @@ import net.minecraft.client.gui.components.tabs.MenuTabBar;
 import net.minecraft.client.gui.components.tabs.Tab;
 import net.minecraft.client.gui.components.tabs.TabManager;
 import net.minecraft.client.gui.components.tabs.TabNavigationBar;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 public class MenuTabBarMixin extends TabNavigationBar {
     // Slightly improve the config screen
 
-    protected MenuTabBarMixin(int x, int y, int width, int height, TabManager tabManager, ImmutableList<@NotNull TabButton> tabButtons, ImmutableList<@NotNull Tab> tabs) {
+    protected MenuTabBarMixin(int x, int y, int width, int height, TabManager tabManager, ImmutableList<@NonNull TabButton> tabButtons, ImmutableList<@NonNull Tab> tabs) {
         super(x, y, width, height, tabManager, tabButtons, tabs);
     }
 

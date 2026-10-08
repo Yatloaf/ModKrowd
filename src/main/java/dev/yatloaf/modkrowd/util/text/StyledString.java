@@ -11,8 +11,8 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextColor;
 import net.minecraft.util.StringDecomposer;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -77,7 +77,7 @@ public class StyledString {
      * @param source The content
      * @return A new {@code StyledString} with default style
      */
-    public static StyledString fromString(@NotNull String source) {
+    public static StyledString fromString(@NonNull String source) {
         return fromString(source, FALSE_STYLE);
     }
 
@@ -89,7 +89,7 @@ public class StyledString {
      * @param style  The style for every character
      * @return A new {@code StyledString} with a monotone style
      */
-    public static StyledString fromString(@NotNull String source, @NotNull Style style) {
+    public static StyledString fromString(@NonNull String source, @NonNull Style style) {
         Style filledStyle = style.applyTo(FALSE_STYLE);
 
         int[] codePoints = source.codePoints().toArray();
@@ -99,13 +99,13 @@ public class StyledString {
         return new StyledString(codePoints, styles);
     }
 
-    public static StyledString fromFormattedString(@NotNull String source, int formatChar,
-                                                   @NotNull EnumSet<ChatFormatting> formattings) {
+    public static StyledString fromFormattedString(@NonNull String source, int formatChar,
+                                                   @NonNull EnumSet<ChatFormatting> formattings) {
         return fromFormattedString(source, formatChar, formattings, FALSE_STYLE);
     }
 
-    public static StyledString fromFormattedString(@NotNull String source, int formatChar,
-                                                   @NotNull EnumSet<ChatFormatting> formattings, @NotNull Style startStyle) {
+    public static StyledString fromFormattedString(@NonNull String source, int formatChar,
+                                                   @NonNull EnumSet<ChatFormatting> formattings, @NonNull Style startStyle) {
         Style currentStyle = startStyle.applyTo(FALSE_STYLE);
 
         IntList codepoints = new IntArrayList(source.length());
@@ -137,11 +137,11 @@ public class StyledString {
         return new StyledString(codepoints.toIntArray(), styles.toArray(EMPTY_STYLES));
     }
 
-    public static StyledString fromText(@NotNull Component source) {
+    public static StyledString fromText(@NonNull Component source) {
         return fromText(source, FALSE_STYLE);
     }
 
-    public static StyledString fromText(@NotNull Component source, @NotNull Style rootStyle) {
+    public static StyledString fromText(@NonNull Component source, @NonNull Style rootStyle) {
         Style filledRootStyle = rootStyle.applyTo(FALSE_STYLE);
 
         IntList codePoints = new IntArrayList();

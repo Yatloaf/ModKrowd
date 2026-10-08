@@ -9,7 +9,7 @@ import net.minecraft.world.item.equipment.EquipmentAsset;
 import net.minecraft.world.item.equipment.EquipmentAssets;
 import net.minecraft.world.item.equipment.trim.ArmorTrim;
 import net.minecraft.world.item.equipment.trim.TrimPattern;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArgs;
@@ -26,12 +26,12 @@ public class EquipmentLayerRendererMixin {
     private void TrimSpriteKeyArgs(Args args) {
         if (!Features.SLIM_ARMOR.active) return;
 
-        ResourceKey<@NotNull EquipmentAsset> assetKey = args.get(2);
+        ResourceKey<@NonNull EquipmentAsset> assetKey = args.get(2);
         Identifier assetKeyId = assetKey.identifier();
         String assetKeyPath = assetKeyId.getPath();
         if (!assetKeyPath.endsWith("_slim")) return;
 
-        ResourceKey<@NotNull EquipmentAsset> normalAssetKey = ResourceKey.create(
+        ResourceKey<@NonNull EquipmentAsset> normalAssetKey = ResourceKey.create(
                 EquipmentAssets.ROOT_ID,
                 assetKeyId.withPath(assetKeyPath.replace("_slim", ""))
         );

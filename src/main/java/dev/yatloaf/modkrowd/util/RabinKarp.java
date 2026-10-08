@@ -4,7 +4,7 @@ import com.google.common.collect.Iterators;
 import dev.yatloaf.modkrowd.util.text.StyledString;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -88,7 +88,7 @@ public final class RabinKarp {
         }
 
         @Override
-        public @NotNull Iterator<Needle<V>> iterator() {
+        public @NonNull Iterator<Needle<V>> iterator() {
             return Iterators.transform(this.hashes.int2ObjectEntrySet().iterator(), entry -> new Needle<>(entry.getIntKey(), entry.getValue()));
         }
     }

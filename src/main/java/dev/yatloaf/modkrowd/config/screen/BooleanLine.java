@@ -5,14 +5,14 @@ import net.minecraft.client.gui.components.CycleButton;
 import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.util.function.BooleanSupplier;
 
 public class BooleanLine extends AbstractLine {
     private final BooleanSupplier getter;
     private final BooleanConsumer setter;
-    private final CycleButton<@NotNull Boolean> editButton;
+    private final CycleButton<@NonNull Boolean> editButton;
 
     public BooleanLine(Component label, Tooltip tooltip, boolean startValue, BooleanSupplier getter, BooleanConsumer setter) {
         super(false, label, tooltip);
@@ -31,7 +31,7 @@ public class BooleanLine extends AbstractLine {
         return value ? CommonComponents.GUI_YES : CommonComponents.GUI_NO;
     }
 
-    private void onEdit(CycleButton<@NotNull Boolean> button, boolean value) {
+    private void onEdit(CycleButton<@NonNull Boolean> button, boolean value) {
         this.setter.accept(value);
     }
 

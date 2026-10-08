@@ -10,7 +10,7 @@ import net.minecraft.client.gui.components.tabs.Tab;
 import net.minecraft.client.gui.layouts.Layout;
 import net.minecraft.client.gui.navigation.ScreenRectangle;
 import net.minecraft.network.chat.Component;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.util.function.Consumer;
 
@@ -25,18 +25,18 @@ public class ConfigTab implements Tab {
     }
 
     @Override
-    public @NotNull Component getTabTitle() {
+    public @NonNull Component getTabTitle() {
         return this.tab.name;
     }
 
     @Override
-    public @NotNull Component getTabExtraNarration() {
+    public @NonNull Component getTabExtraNarration() {
         // Accessibility? This is the default implementation in GridScreenTab
         return Component.empty();
     }
 
     @Override
-    public void visitChildren(@NotNull Consumer<AbstractWidget> childrenConsumer) {
+    public void visitChildren(@NonNull Consumer<AbstractWidget> childrenConsumer) {
         this.listWidget.visitWidgets(childrenConsumer);
     }
 
@@ -48,7 +48,7 @@ public class ConfigTab implements Tab {
     }
 
     @Override
-    public @NotNull Layout getLayout() {
+    public @NonNull Layout getLayout() {
         // This is only called by `FriendsOverlayScreen`
         throw new AssertionError("unreachable");
     }
@@ -57,7 +57,7 @@ public class ConfigTab implements Tab {
         this.listWidget.refreshState();
     }
 
-    public class FeatureListWidget extends ContainerObjectSelectionList<@NotNull FeatureEntry> {
+    public class FeatureListWidget extends ContainerObjectSelectionList<@NonNull FeatureEntry> {
         public FeatureListWidget(Minecraft minecraft, ConfigScreen screen, int width, int height, int y, int itemHeight) {
             super(minecraft, width, height, y, itemHeight);
             for (Feature feature : ConfigTab.this.tab.features) {

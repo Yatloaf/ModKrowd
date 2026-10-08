@@ -3,7 +3,7 @@ package dev.yatloaf.modkrowd.cubekrowd.common;
 import dev.yatloaf.modkrowd.util.text.StyledString;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 public abstract class TextCache {
     /**
@@ -42,7 +42,7 @@ public abstract class TextCache {
      * @param text The original {@link MutableComponent}.
      * @return A cache of the original and its converted forms.
      */
-    public static TextCache of(@NotNull MutableComponent text) {
+    public static TextCache of(@NonNull MutableComponent text) {
         return new OfText(text);
     }
 
@@ -52,7 +52,7 @@ public abstract class TextCache {
      * @param styledString The original {@link StyledString}.
      * @return A cache of the original and its converted forms.
      */
-    public static TextCache of(@NotNull StyledString styledString) {
+    public static TextCache of(@NonNull StyledString styledString) {
         return new OfStyledString(styledString);
     }
 

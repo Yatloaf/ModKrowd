@@ -11,7 +11,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -43,13 +43,13 @@ public class LightBlockMixin extends Block {
 
 	// Fix the collision shape, which relies on the outline shape by default
 	@Override
-	public @NotNull VoxelShape getCollisionShape(@NotNull BlockState state, @NotNull BlockGetter level, @NotNull BlockPos pos, @NotNull CollisionContext context) {
+	public @NonNull VoxelShape getCollisionShape(@NonNull BlockState state, @NonNull BlockGetter level, @NonNull BlockPos pos, @NonNull CollisionContext context) {
 		return Shapes.empty();
 	}
 
 	// Glass-like rendering behavior
 	@Override
-	public boolean skipRendering(@NotNull BlockState state, BlockState neighborState, @NotNull Direction direction) {
+	public boolean skipRendering(@NonNull BlockState state, BlockState neighborState, @NonNull Direction direction) {
         return neighborState.is(this) || super.skipRendering(state, neighborState, direction);
     }
 }

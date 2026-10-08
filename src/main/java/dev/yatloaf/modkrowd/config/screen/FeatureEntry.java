@@ -15,7 +15,7 @@ import net.minecraft.client.gui.layouts.LinearLayout;
 import net.minecraft.client.gui.narration.NarratableEntry;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +23,7 @@ import java.util.function.BooleanSupplier;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-public class FeatureEntry extends ContainerObjectSelectionList.Entry<@NotNull FeatureEntry> implements Layout {
+public class FeatureEntry extends ContainerObjectSelectionList.Entry<@NonNull FeatureEntry> implements Layout {
     public static final int TREE_COLOR = CKColor.GRAY.textColor.getValue() | 0xFF_00_00_00;
     public static final int HOVER_COLOR = 0x3F_9F_9F_9F;
 
@@ -84,7 +84,7 @@ public class FeatureEntry extends ContainerObjectSelectionList.Entry<@NotNull Fe
     }
 
     @Override
-    public void visitChildren(@NotNull Consumer<LayoutElement> layoutElementVisitor) {
+    public void visitChildren(@NonNull Consumer<LayoutElement> layoutElementVisitor) {
         this.vertical.visitChildren(layoutElementVisitor);
     }
 
@@ -103,7 +103,7 @@ public class FeatureEntry extends ContainerObjectSelectionList.Entry<@NotNull Fe
     }
 
     @Override
-    public void extractContent(@NotNull GuiGraphicsExtractor graphics, int mouseX, int mouseY, boolean hovered, float a) {
+    public void extractContent(@NonNull GuiGraphicsExtractor graphics, int mouseX, int mouseY, boolean hovered, float a) {
         this.arrangeElements();
 
         if (this.lines.size() > 1) {
@@ -156,12 +156,12 @@ public class FeatureEntry extends ContainerObjectSelectionList.Entry<@NotNull Fe
     }
 
     @Override
-    public @NotNull List<? extends NarratableEntry> narratables() {
+    public @NonNull List<? extends NarratableEntry> narratables() {
         return this.narratables;
     }
 
     @Override
-    public @NotNull List<? extends GuiEventListener> children() {
+    public @NonNull List<? extends GuiEventListener> children() {
         return this.listeners;
     }
 }
