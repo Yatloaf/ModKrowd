@@ -18,16 +18,8 @@ public record MinigameTabName(Afk afk, MinigameTeamName teamName, Subserver subs
         if (!afk.isReal()) return FAILURE;
 
         // *Sometimes*, this uses legacy formatting codes
-        // Hopefully it will be possible to remove this workaround someday
-        MinigameTeamName minigameTeamName;
-        StyledString remaining = source.peekAll();
-        if (remaining.startsWith("§")) {
-            source.skipAll();
-            StyledString remainingFixed = StyledString.fromFormattedString(remaining.toUnstyledString(), '§', RankLetters.PF_ALL);
-            minigameTeamName = MinigameTeamName.readFast(StyledStringReader.of(remainingFixed), subserver);
-        } else {
-            minigameTeamName = MinigameTeamName.readFast(source, subserver);
-        }
+        // This is now handled by `StyledString` upfront
+        MinigameTeamName minigameTeamName = MinigameTeamName.readFast(source, subserver);
         if (!minigameTeamName.isReal() || !source.isAtEnd()) return FAILURE;
 
         return new MinigameTabName(afk, minigameTeamName, subserver, true);

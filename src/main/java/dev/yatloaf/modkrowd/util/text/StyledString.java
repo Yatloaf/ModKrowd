@@ -10,6 +10,7 @@ import net.minecraft.network.chat.FontDescription;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextColor;
+import net.minecraft.util.StringDecomposer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -19,7 +20,6 @@ import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.PrimitiveIterator;
 import java.util.function.Function;
 import java.util.function.IntUnaryOperator;
@@ -141,22 +141,20 @@ public class StyledString {
         return fromText(source, FALSE_STYLE);
     }
 
-    public static StyledString fromText(@NotNull Component source, @NotNull Style parentStyle) {
-        Style filledParentStyle = parentStyle.applyTo(FALSE_STYLE);
+    public static StyledString fromText(@NotNull Component source, @NotNull Style rootStyle) {
+        Style filledRootStyle = rootStyle.applyTo(FALSE_STYLE);
 
-        IntList codepoints = new IntArrayList();
+        IntList codePoints = new IntArrayList();
         List<Style> styles = new ArrayList<>();
 
-        source.visit((style, string) -> {
-            Style filledStyle = style.applyTo(filledParentStyle);
-            string.codePoints().forEachOrdered(c -> {
-                codepoints.add(c);
-                styles.add(filledStyle);
-            });
-            return Optional.empty();
-        }, filledParentStyle);
+        // This function resolves legacy formatting codes
+        StringDecomposer.iterateFormatted(source, filledRootStyle, (_, style, codepoint) -> {
+            codePoints.add(codepoint);
+            styles.add(style);
+            return true;
+        });
 
-        return new StyledString(codepoints.toIntArray(), styles.toArray(EMPTY_STYLES));
+        return new StyledString(codePoints.toIntArray(), styles.toArray(EMPTY_STYLES));
         // This would use toArray(Style[]::new) if the ArrayList implementation was any good
     }
 
