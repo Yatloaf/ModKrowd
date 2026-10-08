@@ -119,7 +119,7 @@ public class StyledString {
                 int code = sourceIterator.nextInt();
 
                 if (code <= 'z' && ChatFormatting.getByCode((char) code) instanceof ChatFormatting f && formattings.contains(f)) {
-                    currentStyle = currentStyle.applyFormat(f);
+                    currentStyle = currentStyle.applyLegacyFormat(f);
                     continue;
                 }
 
@@ -451,6 +451,10 @@ public class StyledString {
     }
 
     public boolean contains(StyledString that) {
+        return this.firstIndexOf(that) != -1;
+    }
+
+    public boolean contains(String that) {
         return this.firstIndexOf(that) != -1;
     }
 

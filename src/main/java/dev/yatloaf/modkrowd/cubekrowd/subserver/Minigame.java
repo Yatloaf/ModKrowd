@@ -26,6 +26,12 @@ public enum Minigame {
             MinigameTeam.CC_PURPLE,
             MinigameTeam.CC_ORANGE
     ),
+    THE_PURPLE("The Purple",
+            MinigameTeam.PU_LOBBY,
+            MinigameTeam.PU_SPECTATOR,
+            MinigameTeam.PU_SURVIVOR,
+            MinigameTeam.PU_PURPLE
+    ),
     BACKSTABBED("BackStabbed!"),
     SNOWYSKIRMISH("SnowySkirmish",
             MinigameTeam.SS_LOBBY,
@@ -40,6 +46,12 @@ public enum Minigame {
     ),
     FISHSLAP("FishSlap",
             MinigameTeam.FS
+    ),
+    FOSSILFRIGHTS("FossilFrights",
+            MinigameTeam.FF_LOBBY,
+            MinigameTeam.FF_SPECTATOR,
+            MinigameTeam.FF_GUARD,
+            MinigameTeam.FF_THIEF
     ),
     UNKNOWN(null),
     ;

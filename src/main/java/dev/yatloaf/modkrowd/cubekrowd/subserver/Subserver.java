@@ -23,6 +23,7 @@ public class Subserver {
     private final FormatChat formatChat;
 
     public final boolean allowCheats;
+    public final boolean tabPrefixes;
     public final boolean hasChattymotes;
     public final boolean isMinigame;
     public final boolean isCubeKrowd;
@@ -38,6 +39,7 @@ public class Subserver {
             FormatChat formatChat,
             boolean allowCheats,
             boolean hasChattymotes,
+            boolean tabPrefixes,
             boolean isMinigame,
             boolean isCubeKrowd,
             boolean isReal
@@ -49,6 +51,7 @@ public class Subserver {
         this.formatChat = formatChat;
         this.allowCheats = allowCheats;
         this.hasChattymotes = hasChattymotes;
+        this.tabPrefixes = tabPrefixes;
         this.isMinigame = isMinigame;
         this.isCubeKrowd = isCubeKrowd;
         this.isReal = isReal;

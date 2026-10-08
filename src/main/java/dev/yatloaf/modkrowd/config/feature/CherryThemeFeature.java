@@ -13,6 +13,7 @@ import dev.yatloaf.modkrowd.cubekrowd.common.Rank;
 import dev.yatloaf.modkrowd.cubekrowd.common.RankName;
 import dev.yatloaf.modkrowd.cubekrowd.common.TextCache;
 import dev.yatloaf.modkrowd.cubekrowd.message.DeathMessage;
+import dev.yatloaf.modkrowd.cubekrowd.subserver.Minigame;
 import dev.yatloaf.modkrowd.cubekrowd.tablist.GameTabMinigame;
 import dev.yatloaf.modkrowd.cubekrowd.tablist.MainTabColumn;
 import dev.yatloaf.modkrowd.cubekrowd.tablist.MainTabName;
@@ -30,6 +31,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextColor;
+import net.minecraft.util.ARGB;
 
 public class CherryThemeFeature extends CherryLiteThemeFeature {
     public CherryThemeFeature(String id, Restriction restriction) {
@@ -93,12 +95,38 @@ public class CherryThemeFeature extends CherryLiteThemeFeature {
     protected TextCache minigameTabName(MinigameTabName tabName) {
         return TextCache.of(StyledString.concat(
                 this.afk(tabName.afk()),
+                tabName.prefix(),
                 this.minigameTeamName(tabName.teamName())
         ));
     }
 
     protected TextCache gameTabMinigame(GameTabMinigame gameTabMinigame) {
-        return TextCache.of(gameTabMinigame.minigameName().mapStyle(this::styleMinigame));
+        StyledString minigameName = gameTabMinigame.minigameName();
+        if (minigameName.equalsString(Minigame.THE_PURPLE.tabName)) {
+            // To avoid storing all possible gradient colors here, just do some math on the color
+            // In particular, `TextColor.DARK_PURPLE` is mapped to `CHERRY1`, white is mapped to white
+            // and everything in between is linearly interpolated
+            return TextCache.of(minigameName.mapStyle(style -> {
+                TextColor inColor = style.getColor();
+                if (inColor == null) return style;
+
+                int white = 0xFF;
+                int darkIn = TextColor.DARK_PURPLE.getValue();
+                int darkOut = CHERRY1.getValue();
+                double ratioR = (double) (white - ARGB.red(darkOut)) / (white - ARGB.red(darkIn));
+                double ratioG = (double) (white - ARGB.green(darkOut)) / (white - ARGB.green(darkIn));
+                double ratioB = (double) (white - ARGB.blue(darkOut)) / (white - ARGB.blue(darkIn));
+
+                int in = inColor.getValue();
+                int outR = Math.clamp((int) ((ARGB.red(in) - white) * ratioR) + white, 0, 0xFF);
+                int outG = Math.clamp((int) ((ARGB.green(in) - white) * ratioG) + white, 0, 0xFF);
+                int outB = Math.clamp((int) ((ARGB.blue(in) - white) * ratioB) + white, 0, 0xFF);
+
+                return style.withColor(ARGB.color(outR, outG, outB));
+            }));
+        } else {
+            return TextCache.of(minigameName.mapStyle(this::styleMinigame));
+        }
     }
 
     protected StyledString afk(Afk afk) {
@@ -167,10 +195,10 @@ public class CherryThemeFeature extends CherryLiteThemeFeature {
 
     protected TextColor colorNameFromTeam(MinigameTeam team) {
         return switch (team) {
-            case MW_LOBBY, RR_LOBBY, CC_LOBBY -> CHERRY1;
-            case MW_SPECTATOR, RR_SPECTATOR, IR_SPECTATOR, FS, CC_SPECTATOR -> CHERRY4;
-            case MW_RED, RR_BLUE, RR_CHASE, IR_RED, CC_PURPLE -> CHERRY3;
-            case MW_GREEN, RR_YELLOW, IR_GREEN, CC_ORANGE -> CHERRY6;
+            case MW_LOBBY, RR_LOBBY, CC_LOBBY, FF_LOBBY, SS_LOBBY, PU_LOBBY -> CHERRY1;
+            case MW_SPECTATOR, RR_SPECTATOR, IR_SPECTATOR, FS, CC_SPECTATOR, FF_SPECTATOR, SS_SPECTATOR, PU_SPECTATOR -> CHERRY4;
+            case MW_RED, RR_BLUE, RR_CHASE, IR_RED, CC_PURPLE, FF_THIEF, SS_RED, PU_PURPLE -> CHERRY3;
+            case MW_GREEN, RR_YELLOW, IR_GREEN, CC_ORANGE, FF_GUARD, SS_GREEN, PU_SURVIVOR -> CHERRY6;
             default -> CKColor.WHITE.textColor;
         };
     }
@@ -179,9 +207,9 @@ public class CherryThemeFeature extends CherryLiteThemeFeature {
         return switch (CKColor.fromStyle(style)) {
             case DARK_PURPLE -> style.withColor(CHERRY1);
             case BLUE, RED -> style.withColor(CHERRY2);
-            case DARK_AQUA, CRIMSON -> style.withColor(CHERRY3);
+            case DARK_AQUA, DIRT, CRIMSON -> style.withColor(CHERRY3);
             case GOLD -> style.withColor(CHERRY4);
-            case GREEN, SKY -> style.withColor(CHERRY5);
+            case GREEN, DINOCOIN, SKY -> style.withColor(CHERRY5);
             case AQUA, SILVER -> style.withColor(CHERRY6);
             case null, default -> style;
         };

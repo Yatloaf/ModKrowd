@@ -44,6 +44,9 @@ public final class Subservers {
     public static final Subserver CRAFTYCANNONEERS2 = Subserver.builder().id("craftycannoneers2").listName("CraftyCannoneers 2").tabNames("CC2").minigame(Minigame.CRAFTYCANNONEERS).minigameChat().build();
     public static final Subserver CRAFTYCANNONEERS3 = Subserver.builder().id("craftycannoneers3").listName("CraftyCannoneers 3").tabNames("CC3").minigame(Minigame.CRAFTYCANNONEERS).minigameChat().build();
     public static final Subserver CRAFTYCANNONEERS4 = Subserver.builder().id("craftycannoneers4").listName("CraftyCannoneers 4").tabNames("CC4").minigame(Minigame.CRAFTYCANNONEERS).minigameChat().build();
+    // TODO: Sprite prefixes in FossilFrights chat
+    public static final Subserver FOSSILFRIGHTS1 = Subserver.builder().id("fossilfrights1").listName("FossilFrights 1").tabNames("FF1").minigame(Minigame.FOSSILFRIGHTS).minigameChat().build();
+    public static final Subserver FOSSILFRIGHTS2 = Subserver.builder().id("fossilfrights2").listName("FossilFrights 2").tabNames("FF2").minigame(Minigame.FOSSILFRIGHTS).minigameChat().build();
     // TODO: Backstabbed Teams?
     public static final Subserver BACKSTABBED1 = Subserver.builder().id("backstabbed1").listName("Backstabbed! 1").tabNames("BS1").minigame(Minigame.UNKNOWN).minigameChat().build();
     public static final Subserver BACKSTABBED2 = Subserver.builder().id("backstabbed2").listName("Backstabbed! 2").tabNames("BS2").minigame(Minigame.UNKNOWN).minigameChat().build();
@@ -55,6 +58,10 @@ public final class Subservers {
     // TODO: Fishslap Teams...?
     public static final Subserver FISHSLAP = Subserver.builder().id("fishslap").name("FishSlap").minigame(Minigame.FISHSLAP).mixedChat().build();
     public static final Subserver SLAPFISH = Subserver.builder().id("pvp").name("PVP").minigame(Minigame.FISHSLAP).mainChat().build(); // Might change if PVP ever comes back for real
+    public static final Subserver THEPURPLE1 = Subserver.builder().id("thepurple1").listName("The Purple 1").tabNames("TP1").minigame(Minigame.THE_PURPLE).minigameChat().tabPrefixes().build();
+    public static final Subserver THEPURPLE2 = Subserver.builder().id("thepurple2").listName("The Purple 2").tabNames("TP2").minigame(Minigame.THE_PURPLE).minigameChat().tabPrefixes().build();
+    public static final Subserver THEPURPLE3 = Subserver.builder().id("thepurple3").listName("The Purple 3").tabNames("TP3").minigame(Minigame.THE_PURPLE).minigameChat().tabPrefixes().build();
+    public static final Subserver THEPURPLE4 = Subserver.builder().id("thepurple4").listName("The Purple 4").tabNames("TP4").minigame(Minigame.THE_PURPLE).minigameChat().tabPrefixes().build();
     // TODO: UHC Teams!
     public static final Subserver UHC = Subserver.builder().id("uhc").listName("UHC").build();
 

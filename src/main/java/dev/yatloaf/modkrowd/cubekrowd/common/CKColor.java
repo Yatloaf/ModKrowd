@@ -1,31 +1,32 @@
 package dev.yatloaf.modkrowd.cubekrowd.common;
 
 import dev.yatloaf.modkrowd.util.Util;
-import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextColor;
 
 import java.util.Map;
 
 public enum CKColor {
-    BLACK(TextColor.fromLegacyFormat(ChatFormatting.BLACK)),
-    DARK_BLUE(TextColor.fromLegacyFormat(ChatFormatting.DARK_BLUE)),
-    DARK_GREEN(TextColor.fromLegacyFormat(ChatFormatting.DARK_GREEN)),
-    DARK_AQUA(TextColor.fromLegacyFormat(ChatFormatting.DARK_AQUA)),
-    DARK_RED(TextColor.fromLegacyFormat(ChatFormatting.DARK_RED)),
-    DARK_PURPLE(TextColor.fromLegacyFormat(ChatFormatting.DARK_PURPLE)),
-    GOLD(TextColor.fromLegacyFormat(ChatFormatting.GOLD)),
-    GRAY(TextColor.fromLegacyFormat(ChatFormatting.GRAY)),
-    DARK_GRAY(TextColor.fromLegacyFormat(ChatFormatting.DARK_GRAY)),
-    BLUE(TextColor.fromLegacyFormat(ChatFormatting.BLUE)),
-    GREEN(TextColor.fromLegacyFormat(ChatFormatting.GREEN)),
-    AQUA(TextColor.fromLegacyFormat(ChatFormatting.AQUA)),
-    RED(TextColor.fromLegacyFormat(ChatFormatting.RED)),
-    LIGHT_PURPLE(TextColor.fromLegacyFormat(ChatFormatting.LIGHT_PURPLE)),
-    YELLOW(TextColor.fromLegacyFormat(ChatFormatting.YELLOW)),
-    WHITE(TextColor.fromLegacyFormat(ChatFormatting.WHITE)),
+    BLACK(TextColor.BLACK),
+    DARK_BLUE(TextColor.DARK_BLUE),
+    DARK_GREEN(TextColor.DARK_GREEN),
+    DARK_AQUA(TextColor.DARK_AQUA),
+    DARK_RED(TextColor.DARK_RED),
+    DARK_PURPLE(TextColor.DARK_PURPLE),
+    GOLD(TextColor.GOLD),
+    GRAY(TextColor.GRAY),
+    DARK_GRAY(TextColor.DARK_GRAY),
+    BLUE(TextColor.BLUE),
+    GREEN(TextColor.GREEN),
+    AQUA(TextColor.AQUA),
+    RED(TextColor.RED),
+    LIGHT_PURPLE(TextColor.LIGHT_PURPLE),
+    YELLOW(TextColor.YELLOW),
+    WHITE(TextColor.WHITE),
     INDIGO(TextColor.fromRgb(0x864DEB)),
     AZURE(TextColor.fromRgb(0x03A9F4)),
+    DINOCOIN(TextColor.fromRgb(0xFFC414)),
+    DIRT(TextColor.fromRgb(0xBF8240)),
     SKY(TextColor.fromRgb(0x60C6FF)),
     CRIMSON(TextColor.fromRgb(0xFF5F79)),
     SILVER(TextColor.fromRgb(0xD5D5D5)),

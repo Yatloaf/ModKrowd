@@ -11,6 +11,8 @@ public enum MinigameMode {
     _5V5("5v5"),
     _6V6("6v6"),
     _10V10("10v10"),
+    _1PLUS("1+"),
+    _2PLUS("2+"),
     UNKNOWN(""),
     ;
 

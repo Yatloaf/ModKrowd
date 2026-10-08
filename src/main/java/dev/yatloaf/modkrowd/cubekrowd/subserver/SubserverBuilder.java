@@ -10,6 +10,7 @@ public class SubserverBuilder {
 
     private boolean allowCheats = false;
     private boolean hasChattymotes = false;
+    private boolean tabPrefixes = false;
     private boolean isMinigame = false;
     private boolean isCubeKrowd = true;
     private boolean isReal = true;
@@ -58,6 +59,11 @@ public class SubserverBuilder {
         return this;
     }
 
+    public SubserverBuilder tabPrefixes() {
+        this.tabPrefixes = true;
+        return this;
+    }
+
     public SubserverBuilder minigame(Minigame minigame) {
         this.minigame = minigame;
         this.isMinigame = true;
@@ -83,6 +89,7 @@ public class SubserverBuilder {
                 this.formatChat,
                 this.allowCheats,
                 this.hasChattymotes,
+                this.tabPrefixes,
                 this.isMinigame,
                 this.isCubeKrowd,
                 this.isReal

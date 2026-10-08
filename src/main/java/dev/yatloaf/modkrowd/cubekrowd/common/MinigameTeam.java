@@ -14,6 +14,10 @@ public enum MinigameTeam {
     CC_SPECTATOR(CKColor.DARK_GRAY),
     CC_PURPLE(CKColor.DARK_PURPLE),
     CC_ORANGE(CKColor.GOLD),
+    FF_LOBBY(CKColor.WHITE),
+    FF_SPECTATOR(CKColor.GRAY),
+    FF_GUARD(CKColor.GOLD),
+    FF_THIEF(CKColor.RED),
     SS_LOBBY(CKColor.GRAY),
     SS_SPECTATOR(CKColor.BLUE),
     SS_GREEN(CKColor.GREEN),
@@ -22,6 +26,10 @@ public enum MinigameTeam {
     IR_RED(CKColor.RED),
     IR_GREEN(CKColor.GREEN),
     FS(CKColor.WHITE),
+    PU_LOBBY(CKColor.GRAY),
+    PU_SPECTATOR(CKColor.DARK_GRAY),
+    PU_SURVIVOR(CKColor.GREEN),
+    PU_PURPLE(CKColor.DARK_PURPLE),
     UNKNOWN(CKColor.WHITE),
     ;
 

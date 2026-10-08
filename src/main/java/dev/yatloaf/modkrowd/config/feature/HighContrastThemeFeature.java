@@ -174,6 +174,7 @@ public class HighContrastThemeFeature extends ThemeFeature {
     protected TextCache minigameTabName(MinigameTabName minigameTabName) {
         return TextCache.of(StyledString.concat(
                 this.afkStar(minigameTabName.afk()),
+                minigameTabName.prefix(),
                 minigameTabName.teamName().appearance()
         ));
     }
