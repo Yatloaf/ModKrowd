@@ -4,11 +4,6 @@
       {
         "texture": "minecraft:chainmail_slim"
       }
-    ],
-    "humanoid_leggings": [
-      {
-        "texture": "minecraft:chainmail"
-      }
     ]
   }
 }

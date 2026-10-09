@@ -4,7 +4,6 @@ import dev.yatloaf.modkrowd.config.Features;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.BarrierBlock;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jspecify.annotations.NonNull;
@@ -18,8 +17,9 @@ public class BarrierBlockMixin extends Block {
 	// TANGIBLE_BARRIERS
 
 	// Don't block vision
+    // Usually this delegates to whether the block suffocates, but we don't want to change that
 	public BarrierBlockMixin(Properties settings) {
-		super(settings.isViewBlocking(Blocks::never));
+		super(settings.isViewBlocking((_, _, _, _) -> false));
 	}
 
 	// Actually render the model

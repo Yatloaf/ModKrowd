@@ -4,11 +4,6 @@
       {
         "texture": "minecraft:gold_slim"
       }
-    ],
-    "humanoid_leggings": [
-      {
-        "texture": "minecraft:gold"
-      }
     ]
   }
 }

@@ -1,5 +1,6 @@
 package dev.yatloaf.modkrowd.mixin;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import dev.yatloaf.modkrowd.config.Features;
 import dev.yatloaf.modkrowd.config.screen.MessageCopyScreen;
 import dev.yatloaf.modkrowd.cubekrowd.command.PreviewCommands;
@@ -19,6 +20,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(ChatScreen.class)
 public class ChatScreenMixin extends Screen {
+    // MESSAGE_COPY
     // MESSAGE_PREVIEW
 
     protected ChatScreenMixin(Component title) {
@@ -49,7 +51,7 @@ public class ChatScreenMixin extends Screen {
 
     @Inject(method = "mouseClicked", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screens/Screen;mouseClicked(Lnet/minecraft/client/input/MouseButtonEvent;Z)Z"))
     private void mouseClickedInject(MouseButtonEvent event, boolean doubleClick, CallbackInfoReturnable<Boolean> cir) {
-        if (Features.MESSAGE_COPY.active && event.button() == 1) {
+        if (Features.MESSAGE_COPY.active && event.button() == InputConstants.MOUSE_BUTTON_RIGHT) {
             ChatComponentDuck chat = (ChatComponentDuck) this.minecraft.gui.hud.getChat();
             MessageCache message = chat.modKrowd$getMessageAt(event.x(), event.y());
             if (message != null) {

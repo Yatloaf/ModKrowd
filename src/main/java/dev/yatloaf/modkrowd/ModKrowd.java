@@ -35,7 +35,6 @@ import net.minecraft.client.multiplayer.ServerData;
 import net.minecraft.network.chat.FontDescription;
 import net.minecraft.network.chat.Style;
 import net.minecraft.resources.Identifier;
-import org.lwjgl.glfw.GLFW;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -87,9 +86,9 @@ public class ModKrowd implements ClientModInitializer {
 
 		KeyMapping.Category category = KeyMapping.Category.register(Identifier.fromNamespaceAndPath("modkrowd", "modkrowd"));
 		OPTIONS_KEY = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.modkrowd.options",
-				InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_UNKNOWN, category));
+				InputConstants.Type.KEYBOARD, InputConstants.UNKNOWN.getValue(), category));
 		NEXT_SUBSERVER_KEY = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.modkrowd.next_subserver",
-				InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_UNKNOWN, category));
+				InputConstants.Type.KEYBOARD, InputConstants.UNKNOWN.getValue(), category));
 		INIT = true;
 
 		ClientConfigurationConnectionEvents.COMPLETE.register(ModKrowd::onConfigurationComplete);

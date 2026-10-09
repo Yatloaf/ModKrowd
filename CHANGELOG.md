@@ -2,6 +2,8 @@
 
 ## 0.3.2: Unreleased
 
+- Update to 26.3.
+
 ### Added
 
 - MiniMessage support for Message Preview.

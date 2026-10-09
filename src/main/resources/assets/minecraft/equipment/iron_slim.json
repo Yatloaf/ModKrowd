@@ -4,11 +4,6 @@
       {
         "texture": "minecraft:iron_slim"
       }
-    ],
-    "humanoid_leggings": [
-      {
-        "texture": "minecraft:iron"
-      }
     ]
   }
 }

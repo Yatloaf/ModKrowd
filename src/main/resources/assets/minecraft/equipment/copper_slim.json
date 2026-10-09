@@ -4,11 +4,6 @@
       {
         "texture": "minecraft:copper_slim"
       }
-    ],
-    "humanoid_leggings": [
-      {
-        "texture": "minecraft:copper"
-      }
     ]
   }
 }
